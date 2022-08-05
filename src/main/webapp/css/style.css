@@ -1,0 +1,48 @@
+h1 {
+background-color: #c76ba2;
+color: #fff;
+border: 5px solid #000;
+text-align: center;
+opacity: 0.7;
+}
+
+h2 {
+	text-align: center;
+}
+
+th {
+	color: #e57078;
+	background-color: f5edee;
+	text-align: center;
+	font-size: 20px;
+	border: 1px solid #000;
+}
+
+td {
+	text-align: center;
+	border: 1px solid #000;
+}
+
+.error {
+	background-color: red;
+color: white;
+border: 5px solid #000;
+text-align: center;
+}
+
+.allbooks {
+	background-color: #f2c9d5;
+color: #fff;
+text-align: center;
+}
+
+.allusers {
+	background-color: #f2c9d5;
+color: #fff;
+text-align: center;
+}
+
+table{
+	margin: auto;
+	border: 1px solid black;
+}

@@ -1,0 +1,11 @@
+# Eclipse files:
+*.jar
+*.class
+*.log
+.classpath
+.project
+bin/
+target/
+logs/
+.settings/
+scripts/
