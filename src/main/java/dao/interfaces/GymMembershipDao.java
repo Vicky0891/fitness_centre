@@ -10,10 +10,14 @@ public interface GymMembershipDao {
 
     List<GymMembership> getAll();
 
+    List<GymMembership> getAll(int limit, Long offset);
+    
     GymMembership create(GymMembership gymMembership);
 
     GymMembership update(GymMembership gymMembership);
 
     boolean delete(Long id);
+    
+    long count();
 
 }

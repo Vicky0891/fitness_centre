@@ -22,6 +22,9 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     private static final String SELECT_ALL = "SELECT oi.id, oi.order_id, oi.gymmembership_id, "
             + "oi.gymmembership_quantity, oi.gymmembership_price FROM orderinfo oi JOIN orders o ON o.id = oi.order_id"
             + " WHERE o.deleted = false";
+    private static final String SELECT_BY_ID = "SELECT oi.id, oi.order_id, oi.gymmembership_id, "
+            + "oi.gymmembership_quantity, oi.gymmembership_price FROM orderinfo oi "
+            + " WHERE oi.id = ?";
     private static final String SELECT_BY_ORDER_ID = "SELECT oi.id, oi.order_id, oi.gymmembership_id, "
             + "oi.gymmembership_quantity, oi.gymmembership_price FROM orderinfo oi JOIN orders o ON o.id = oi.order_id"
             + " WHERE o.id = ? AND o.deleted = false";
@@ -36,7 +39,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public OrderInfo get(Long id) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_BY_ORDER_ID)) {
+        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -50,17 +53,17 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     
     @Override
     public List<OrderInfo> getAllByOrderId(Long id) {
-        List<OrderInfo> orderInfos = new ArrayList<>();
+        List<OrderInfo> orderInfo = new ArrayList<>();
         try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_BY_ORDER_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                orderInfos.add(processOrderInfo(result));
+                orderInfo.add(processOrderInfo(result));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
         }
-        return orderInfos;
+        return orderInfo;
     }
 
     @Override
@@ -79,13 +82,12 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public OrderInfo create(OrderInfo orderInfo) {
-        try {
-            PreparedStatement statement = dataSource.getConnection().prepareStatement(INSERT,
-                    Statement.RETURN_GENERATED_KEYS);
+        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(INSERT,
+                    Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, orderInfo.getOrderId());
             statement.setLong(2, orderInfo.getGymMembership().getId());
-            statement.setInt(4, orderInfo.getGymMembershipQuantity());
-            statement.setBigDecimal(3, orderInfo.getGymMembershipPrice());
+            statement.setInt(3, orderInfo.getGymMembershipQuantity());
+            statement.setBigDecimal(4, orderInfo.getGymMembershipPrice());
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
@@ -101,8 +103,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public OrderInfo update(OrderInfo orderInfo) {
-        try {
-            PreparedStatement statement = dataSource.getConnection().prepareStatement(UPDATE);
+        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(UPDATE)) {
             statement.setInt(1, orderInfo.getGymMembershipQuantity());
             statement.setBigDecimal(2, orderInfo.getGymMembershipPrice());
             statement.setLong(2, orderInfo.getId());
@@ -117,8 +118,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public boolean delete(Long id) {
-        try {
-            PreparedStatement statement = dataSource.getConnection().prepareStatement(DELETE);
+        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(DELETE)) {
             statement.setLong(1, id);
             int rowsDeleted = statement.executeUpdate();
             return rowsDeleted == 1;

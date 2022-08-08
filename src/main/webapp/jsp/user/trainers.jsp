@@ -7,6 +7,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+
+<jsp:include page="../navbar.jsp"/>
+
 <h1>Our trainers</h1>
 <table>
 <c:if test="${trainers.size() == 0}">
@@ -24,6 +27,5 @@
 </c:forEach>
 </c:if>
 </table>           
-<h3 class="alltrainers"><a href="/fitness_centre">Main page</a></h3>
 </body>
 </html>

@@ -8,7 +8,6 @@ import lombok.Data;
 public class GymMembershipDto {
 
     private Long id;
-    private TrainerDto trainerDto;
     private Integer numberOfVisits;
     private String typeOfTraining;
     private BigDecimal cost;

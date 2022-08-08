@@ -7,7 +7,9 @@
 <link href="css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<h1>Welcome to our fitness centre!</h1>
-<h3 class="alltrainers"><i><a href="controller?command=trainers">All trainers</a></i></h3>
+<h1>Welcome to our fitness centre, Dear ${sessionScope.user != null ? sessionScope.user.firstName : 'Guest'}!</h1>
+
+<jsp:include page="jsp/navbar.jsp"/>
+
 </body>
 </html>

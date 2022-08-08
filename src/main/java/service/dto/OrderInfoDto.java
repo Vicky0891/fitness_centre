@@ -8,9 +8,9 @@ import lombok.Data;
 public class OrderInfoDto {
 
     private Long id;
+    private Long orderId;
     private GymMembershipDto gymMembershipDto;
     private Integer gymMembershipQuantity;
     private BigDecimal gymMembershipPrice;
-    private Long orderId;
 
 }

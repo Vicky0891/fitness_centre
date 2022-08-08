@@ -7,12 +7,11 @@ import lombok.Data;
 public class Prescription {
     
     private Long id;
-    private Customer customer;
-    private Trainer trainer;
+    private Long userId;
+    private Long trainerId;
     private String typeOfTraining;
     private String equipment;
     private String diet;
     private Status status;
-    private Order order;
     
 }

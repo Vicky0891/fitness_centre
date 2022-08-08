@@ -1,26 +1,26 @@
-package controller.impl;
+package controller.command.impl.user;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
-import service.TrainerService;
-import service.dto.TrainerDto;
+import service.UserService;
+import service.dto.UserDto;
 import controller.command.Command;
 @Log4j2
 public class TrainerCommand implements Command{
  
-        private TrainerService trainerService;
+    private UserService userService;
 
-        public TrainerCommand(TrainerService trainerService) {
-            this.trainerService = trainerService;
-        }
+    public TrainerCommand(UserService userService) {
+        this.userService = userService;
+    }
 
         @Override
         public String execute(HttpServletRequest req) {
             try {
                 Long id = Long.parseLong(req.getParameter("id"));
-                TrainerDto trainer = trainerService.getById(id);
+                UserDto trainer = userService.getById(id);
                 req.setAttribute("trainer", trainer);
-                return "jsp/trainer.jsp";
+                return "jsp/user/trainer.jsp";
             } catch (NumberFormatException e) {
                 log.error("Request isn't correct" + e);
                 return "jsp/error.jsp";

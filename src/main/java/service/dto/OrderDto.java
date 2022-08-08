@@ -11,11 +11,11 @@ public class OrderDto {
 
     private Long id;
     private LocalDate dateOfOrder;
-    private CustomerDto customerDto;
+    private Long userId;
     private BigDecimal totalCost;
     private StatusDto statusDto;
     private String feedback;
-    private List<OrderInfoDto> orderInfoDto;
+    private List<OrderInfoDto> details;
 
     public enum StatusDto {
         PENDING, CONFIRMED

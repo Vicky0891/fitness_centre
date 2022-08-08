@@ -7,12 +7,11 @@ import service.dto.OrderDto.StatusDto;
 public class PrescriptionDto {
 
     private Long id;
-    private CustomerDto customerDto;
-    private TrainerDto trainerDto;
+    private Long userId;
+    private Long trainerId;
     private String typeOfTraining;
     private String equipment;
     private String diet;
     private StatusDto statusDto;
-    private OrderDto orderDto;
 
 }

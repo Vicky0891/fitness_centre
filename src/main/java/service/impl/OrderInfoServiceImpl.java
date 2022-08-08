@@ -7,13 +7,11 @@ import org.apache.logging.log4j.Logger;
 
 import dao.entity.GymMembership;
 import dao.entity.OrderInfo;
-import dao.entity.Trainer;
 import dao.interfaces.OrderInfoDao;
 import lombok.extern.log4j.Log4j2;
 import service.OrderInfoService;
 import service.dto.GymMembershipDto;
 import service.dto.OrderInfoDto;
-import service.dto.TrainerDto;
 @Log4j2
 public class OrderInfoServiceImpl implements OrderInfoService {
 
@@ -35,6 +33,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     public List<OrderInfoDto> getAll() {
         return orderInfoDao.getAll().stream().map(e -> toDto(e)).toList();
     }
+    
+    
 
     @Override
     public OrderInfoDto create(OrderInfoDto orderInfoDto) {
@@ -88,7 +88,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private GymMembership toGymMembership(GymMembershipDto gymMembershipDto) {
         GymMembership gymMembership = new GymMembership();
         gymMembership.setId(gymMembershipDto.getId());
-        gymMembership.setTrainer(toTrainer(gymMembershipDto.getTrainerDto()));
         gymMembership.setNumberOfVisits(gymMembershipDto.getNumberOfVisits());
         gymMembership.setTypeOfTraining(gymMembershipDto.getTypeOfTraining());
         gymMembership.setCost(gymMembershipDto.getCost());
@@ -99,7 +98,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         try {
             gymMembershipDto.setId(gymMembership.getId());
-            gymMembershipDto.setTrainerDto(toTrainerDto(gymMembership.getTrainer()));
             gymMembershipDto.setNumberOfVisits(gymMembership.getNumberOfVisits());
             gymMembershipDto.setTypeOfTraining(gymMembership.getTypeOfTraining());
             gymMembershipDto.setCost(gymMembership.getCost());
@@ -109,34 +107,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return gymMembershipDto;
     }
 
-    private Trainer toTrainer(TrainerDto trainerDto) {
-        Trainer trainer = new Trainer();
-        trainer.setId(trainerDto.getId());
-        trainer.setFirstName(trainerDto.getFirstName());
-        trainer.setLastName(trainerDto.getLastName());
-        trainer.setEmail(trainerDto.getEmail());
-        trainer.setPassword(trainerDto.getPassword());
-        trainer.setBirthDate(trainerDto.getBirthDate());
-        trainer.setPhoneNumber(trainerDto.getPhoneNumber());
-        trainer.setAdditionalInfo(trainerDto.getAdditionalInfo());
-        return trainer;
+    @Override
+    public List<OrderInfoDto> getAllByOrderId(Long orderId) {
+        return orderInfoDao.getAllByOrderId(orderId).stream().map(e -> toDto(e)).toList();
     }
 
-    private TrainerDto toTrainerDto(Trainer trainer) {
-        TrainerDto trainerDto = new TrainerDto();
-        try {
-            trainerDto.setId(trainer.getId());
-            trainerDto.setFirstName(trainer.getFirstName());
-            trainerDto.setLastName(trainer.getLastName());
-            trainerDto.setEmail(trainer.getEmail());
-            trainerDto.setPassword(trainer.getPassword());
-            trainerDto.setBirthDate(trainer.getBirthDate());
-            trainerDto.setPhoneNumber(trainer.getPhoneNumber());
-            trainerDto.setAdditionalInfo(trainer.getAdditionalInfo());
-        } catch (NullPointerException e) {
-            logger.error("TrainerDto wasn't create " + e);
-        }
-        return trainerDto;
     }
-
-}

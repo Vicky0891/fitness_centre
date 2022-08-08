@@ -7,6 +7,7 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<jsp:include page="../navbar.jsp"/>
 <c:if test="${trainer.id != null}">
 <h1>Info about trainer</h1>
 <h3>Id: ${trainer.id}</h3>

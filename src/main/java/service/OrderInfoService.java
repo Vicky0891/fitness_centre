@@ -11,6 +11,8 @@ public interface OrderInfoService extends AbstractService<Long, OrderInfoDto>{
 
     @Override
     List<OrderInfoDto> getAll();
+    
+    List<OrderInfoDto> getAllByOrderId(Long orderId);
 
     @Override
     OrderInfoDto create(OrderInfoDto orderInfoDto);

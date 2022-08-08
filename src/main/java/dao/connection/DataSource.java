@@ -1,15 +1,11 @@
 package dao.connection;
 
-import java.io.Closeable;
 import java.sql.Connection;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import lombok.extern.log4j.Log4j2;
-import service.impl.UserServiceImpl;
 @Log4j2
-public class DataSource implements Closeable {
+public class DataSource implements AutoCloseable {
     public static final DataSource INSTANCE = new DataSource();
     private ConnectionPool connectionPool;
     private final String url;

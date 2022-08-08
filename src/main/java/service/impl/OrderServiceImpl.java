@@ -1,28 +1,37 @@
 package service.impl;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import dao.entity.Customer;
 import dao.entity.Order;
-import dao.entity.Trainer;
-import dao.entity.Customer.Type;
+import dao.entity.OrderInfo;
+import dao.entity.GymMembership;
 import dao.entity.Order.Status;
+import dao.interfaces.GymMembershipDao;
 import dao.interfaces.OrderDao;
+import dao.interfaces.OrderInfoDao;
 import lombok.extern.log4j.Log4j2;
 import service.OrderService;
-import service.dto.CustomerDto;
 import service.dto.OrderDto;
-import service.dto.TrainerDto;
-import service.dto.CustomerDto.TypeDto;
+import service.dto.UserDto;
+import service.dto.GymMembershipDto;
 import service.dto.OrderDto.StatusDto;
+import service.dto.OrderInfoDto;
 
 @Log4j2
 public class OrderServiceImpl implements OrderService {
 
     private OrderDao orderDao;
+    private GymMembershipDao gymMembershipDao;
+    private OrderInfoDao orderInfoDao;
 
-    public OrderServiceImpl(OrderDao orderDao) {
+    public OrderServiceImpl(OrderDao orderDao, GymMembershipDao gymMembershipDao, OrderInfoDao orderInfoDao) {
         this.orderDao = orderDao;
+        this.gymMembershipDao = gymMembershipDao;
+        this.orderInfoDao = orderInfoDao;
     }
 
     @Override
@@ -39,17 +48,90 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> getAll() {
         return orderDao.getAll().stream().map(e -> toDto(e)).toList();
     }
+    
+
+    @Override
+    public List<OrderDto> getAllOrdersDtoByClient(Long id) {
+        return orderDao.getAllOrdersByClient(id).stream().map(e -> toDto(e)).toList();
+    }
+    
+    @Override
+    public List<OrderDto> getAllByStatus(String statusName) {
+        return orderDao.getAllByStatus(statusName).stream().map(e -> toDto(e)).toList();
+    }
 
     @Override
     public OrderDto create(OrderDto orderDto) {
-        Order existing = orderDao.get(orderDto.getId());
-        if (existing != null) {
-            log.error("Prescription with id " + orderDto.getId() + " already exists");
-            throw new RuntimeException("Prescription with id " + orderDto.getId() + " already exists");
-        }
         Order order = toOrder(orderDto);
         Order createdOrder = orderDao.create(order);
+        Long orderId = createdOrder.getId();
+        
+        List<OrderInfoDto> detailsDto = new ArrayList<>();
+        detailsDto = orderDto.getDetails();
+             
+        List<OrderInfo> details = new ArrayList<>();
+        for(OrderInfoDto detailDto: detailsDto){
+            OrderInfo orderInfo = toOrderInfo(detailDto);
+            orderInfo.setOrderId(orderId);
+            OrderInfo created = orderInfoDao.create(orderInfo);
+            details.add(created);
+        }
+        createdOrder.setDetails(details);
         return toDto(createdOrder);
+    }
+    
+    @Override
+    public OrderDto processCart(Map<Long, Integer> cart, UserDto userDto) {
+        OrderDto orderDto = createDto(cart, userDto);
+        return orderDto;
+    }
+   
+    public OrderDto createDto(Map<Long, Integer> cart, UserDto userDto) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setStatusDto(StatusDto.PENDING);
+        orderDto.setDateOfOrder(LocalDate.now());
+        List<OrderInfoDto> details = new ArrayList<>();
+        cart.forEach((gymmembershipId, quantity) -> {
+            OrderInfoDto orderInfoDto = new OrderInfoDto();
+            GymMembership gymMembership = gymMembershipDao.get(gymmembershipId);
+            GymMembershipDto gymmembershipDto = toGymMembershipDto(gymMembership);
+            orderInfoDto.setGymMembershipDto(gymmembershipDto);
+            orderInfoDto.setGymMembershipPrice(gymmembershipDto.getCost());
+            orderInfoDto.setGymMembershipQuantity(quantity);
+            details.add(orderInfoDto);
+        });
+        orderDto.setDetails(details);
+        BigDecimal totalCost = calculatePrice(details);
+        orderDto.setTotalCost(totalCost);
+        orderDto.setFeedback("");
+        if(userDto == null) {
+        return orderDto;
+        }
+        orderDto.setUserId(userDto.getId());
+        return orderDto;
+    }
+    
+    private BigDecimal calculatePrice(List<OrderInfoDto> details) {
+        BigDecimal totalCost = BigDecimal.ZERO;
+        for (OrderInfoDto detail: details) {
+            BigDecimal gymmembershipPrice = detail.getGymMembershipPrice();
+            BigDecimal itemPrice = gymmembershipPrice.multiply(BigDecimal.valueOf(detail.getGymMembershipQuantity()));
+            totalCost = totalCost.add(itemPrice);
+        }
+        return totalCost;
+    }
+    
+    private GymMembershipDto toGymMembershipDto(GymMembership gymMembership) {
+        GymMembershipDto gymMembershipDto = new GymMembershipDto();
+        try {
+            gymMembershipDto.setId(gymMembership.getId());
+            gymMembershipDto.setNumberOfVisits(gymMembership.getNumberOfVisits());
+            gymMembershipDto.setTypeOfTraining(gymMembership.getTypeOfTraining());
+            gymMembershipDto.setCost(gymMembership.getCost());
+        } catch (NullPointerException e) {
+            log.error("GymMembershipDto wasn't create " + e);
+        }
+        return gymMembershipDto;
     }
 
     @Override
@@ -76,15 +158,6 @@ public class OrderServiceImpl implements OrderService {
         return toDto(createdOrder);
     }
 
-    @Override
-    public List<OrderDto> getAllOrdersDtoByCustomer(Long id) {
-        return orderDao.getAllOrdersByCustomer(id).stream().map(e -> toDto(e)).toList();
-    }
-
-    @Override
-    public List<OrderDto> getAllByStatus(String statusName) {
-        return orderDao.getAllByStatus(statusName).stream().map(e -> toDto(e)).toList();
-    }
 
     @Override
     public void delete(Long id) {
@@ -95,13 +168,20 @@ public class OrderServiceImpl implements OrderService {
 
     private Order toOrder(OrderDto orderDto) {
         Order order = new Order();
-        order.setId(orderDto.getId());
         order.setDateOfOrder(orderDto.getDateOfOrder());
-        order.setCustomer(toCustomer(orderDto.getCustomerDto()));
+        order.setUserId(orderDto.getUserId());
         order.setTotalCost(orderDto.getTotalCost());
         Status status = Status.valueOf(orderDto.getStatusDto().toString());
         order.setStatus(status);
         order.setFeedback(orderDto.getFeedback());
+        List<OrderInfoDto> detailsDto = orderDto.getDetails();
+        List<OrderInfo> details = new ArrayList<>();
+        for(OrderInfoDto orderInfoDto: detailsDto) {
+            OrderInfo orderInfo = toOrderInfo(orderInfoDto);
+            details.add(orderInfo);
+        }
+        order.setDetails(details);
+//        order.setId(orderDto.getId());
         return order;
     }
 
@@ -110,81 +190,57 @@ public class OrderServiceImpl implements OrderService {
         try {
             orderDto.setId(order.getId());
             orderDto.setDateOfOrder(order.getDateOfOrder());
-            orderDto.setCustomerDto(toCustomerDto(order.getCustomer()));
+            orderDto.setUserId(order.getUserId());
             orderDto.setTotalCost(order.getTotalCost());
             StatusDto statusDto = StatusDto.valueOf(order.getStatus().toString());
             orderDto.setStatusDto(statusDto);
             orderDto.setFeedback(order.getFeedback());
+            List<OrderInfo> details = order.getDetails();
+            List<OrderInfoDto> detailsDto = new ArrayList<>();
+            for(OrderInfo orderInfo: details) {
+                OrderInfoDto orderInfoDto = toOrderInfoDto(orderInfo);
+                detailsDto.add(orderInfoDto);
+            }
+            orderDto.setDetails(detailsDto);
         } catch (NullPointerException e) {
             log.error("OrderDto wasn't create " + e);
         }
         return orderDto;
     }
 
-    private Customer toCustomer(CustomerDto customerDto) {
-        Customer customer = new Customer();
-        customer.setId(customerDto.getId());
-        customer.setFirstName(customerDto.getFirstName());
-        customer.setLastName(customerDto.getLastName());
-        customer.setEmail(customerDto.getEmail());
-        customer.setPassword(customerDto.getPassword());
-        customer.setBirthDate(customerDto.getBirthDate());
-        customer.setPhoneNumber(customerDto.getPhoneNumber());
-        Type type = Type.valueOf(customerDto.getTypeDto().toString());
-        customer.setType(type);
-        Trainer trainer = toTrainer(customerDto.getTrainerDto());
-        customer.setTrainer(trainer);
-        return customer;
+    private OrderInfo toOrderInfo(OrderInfoDto orderInfoDto) {
+        OrderInfo orderInfo = new OrderInfo();
+//        orderInfo.setId(orderInfoDto.getId());
+//        orderInfo.setOrderId(orderInfoDto.getOrderId());
+        orderInfo.setGymMembership(toGymMembership(orderInfoDto.getGymMembershipDto()));
+        orderInfo.setGymMembershipQuantity(orderInfoDto.getGymMembershipQuantity());
+        orderInfo.setGymMembershipPrice(orderInfoDto.getGymMembershipPrice());
+        return orderInfo;
     }
-
-    private Trainer toTrainer(TrainerDto trainerDto) {
-        Trainer trainer = new Trainer();
-        trainer.setId(trainerDto.getId());
-        trainer.setFirstName(trainerDto.getFirstName());
-        trainer.setLastName(trainerDto.getLastName());
-        trainer.setEmail(trainerDto.getEmail());
-        trainer.setPassword(trainerDto.getPassword());
-        trainer.setBirthDate(trainerDto.getBirthDate());
-        trainer.setPhoneNumber(trainerDto.getPhoneNumber());
-        trainer.setAdditionalInfo(trainerDto.getAdditionalInfo());
-        return trainer;
-    }
-
-    private CustomerDto toCustomerDto(Customer customer) {
-        CustomerDto customerDto = new CustomerDto();
+    
+    private OrderInfoDto toOrderInfoDto(OrderInfo orderInfo) {
+        OrderInfoDto orderInfoDto = new OrderInfoDto();
         try {
-            customerDto.setId(customer.getId());
-            customerDto.setFirstName(customer.getFirstName());
-            customerDto.setLastName(customer.getLastName());
-            customerDto.setEmail(customer.getEmail());
-            customerDto.setPassword(customer.getPassword());
-            customerDto.setBirthDate(customer.getBirthDate());
-            customerDto.setPhoneNumber(customer.getPhoneNumber());
-            TypeDto typeDto = TypeDto.valueOf(customer.getType().toString());
-            customerDto.setTypeDto(typeDto);
-            TrainerDto trainerDto = toTrainerDto(customer.getTrainer());
-            customerDto.setTrainerDto(trainerDto);
+//            orderInfoDto.setId(orderInfo.getId());
+            orderInfoDto.setGymMembershipDto(toGymMembershipDto(orderInfo.getGymMembership()));
+            orderInfoDto.setOrderId(orderInfo.getOrderId());
+            orderInfoDto.setGymMembershipQuantity(orderInfo.getGymMembershipQuantity());
+            orderInfoDto.setGymMembershipPrice(orderInfo.getGymMembershipPrice());
+
         } catch (NullPointerException e) {
-            log.error("CustomerDto wasn't create " + e);
+            log.error("OrderInfoDto wasn't create " + e);
         }
-        return customerDto;
+        return orderInfoDto;
     }
 
-    private TrainerDto toTrainerDto(Trainer trainer) {
-        TrainerDto trainerDto = new TrainerDto();
-        try {
-            trainerDto.setId(trainer.getId());
-            trainerDto.setFirstName(trainer.getFirstName());
-            trainerDto.setLastName(trainer.getLastName());
-            trainerDto.setEmail(trainer.getEmail());
-            trainerDto.setPassword(trainer.getPassword());
-            trainerDto.setBirthDate(trainer.getBirthDate());
-            trainerDto.setPhoneNumber(trainer.getPhoneNumber());
-            trainerDto.setAdditionalInfo(trainer.getAdditionalInfo());
-        } catch (NullPointerException e) {
-            log.error("TrainerDto wasn't create " + e);
-        }
-        return trainerDto;
+
+    private GymMembership toGymMembership(GymMembershipDto gymMembershipDto) {
+        GymMembership gymMembership = new GymMembership();
+        gymMembership.setId(gymMembershipDto.getId());
+        gymMembership.setNumberOfVisits(gymMembershipDto.getNumberOfVisits());
+        gymMembership.setTypeOfTraining(gymMembershipDto.getTypeOfTraining());
+        gymMembership.setCost(gymMembershipDto.getCost());
+        return gymMembership;
     }
 
 }

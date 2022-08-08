@@ -16,7 +16,7 @@ public interface OrderDao {
     
     Order addFeedback(Order order);
     
-    List<Order> getAllOrdersByCustomer(Long id);
+    List<Order> getAllOrdersByClient(Long id);
     
     List<Order> getAllByStatus(String name);
 

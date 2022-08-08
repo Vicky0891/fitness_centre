@@ -11,12 +11,11 @@ public class Order {
     
     private Long id;
     private LocalDate dateOfOrder;
-    private Customer customer;
+    private Long userId;
     private BigDecimal totalCost;
     private Status status;
     private String feedback;
     private List<OrderInfo> details;
-//    private Prescription prescription;
     
     public enum Status {
         PENDING, CONFIRMED

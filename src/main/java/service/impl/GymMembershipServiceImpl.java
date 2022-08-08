@@ -2,13 +2,12 @@ package service.impl;
 
 import java.util.List;
 
+import controller.util.PagingUtil.Paging;
 import dao.entity.GymMembership;
-import dao.entity.Trainer;
 import dao.interfaces.GymMembershipDao;
 import lombok.extern.log4j.Log4j2;
 import service.GymMembershipService;
 import service.dto.GymMembershipDto;
-import service.dto.TrainerDto;
 @Log4j2
 public class GymMembershipServiceImpl implements GymMembershipService {
 
@@ -67,7 +66,6 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     private GymMembership toGymMembership(GymMembershipDto gymMembershipDto) {
         GymMembership gymMembership = new GymMembership();
         gymMembership.setId(gymMembershipDto.getId());
-        gymMembership.setTrainer(toTrainer(gymMembershipDto.getTrainerDto()));
         gymMembership.setNumberOfVisits(gymMembershipDto.getNumberOfVisits());
         gymMembership.setTypeOfTraining(gymMembershipDto.getTypeOfTraining());
         gymMembership.setCost(gymMembershipDto.getCost());
@@ -78,7 +76,6 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         try {
             gymMembershipDto.setId(gymMembership.getId());
-            gymMembershipDto.setTrainerDto(toTrainerDto(gymMembership.getTrainer()));
             gymMembershipDto.setNumberOfVisits(gymMembership.getNumberOfVisits());
             gymMembershipDto.setTypeOfTraining(gymMembership.getTypeOfTraining());
             gymMembershipDto.setCost(gymMembership.getCost());
@@ -88,34 +85,15 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         return gymMembershipDto;
     }
 
-    private Trainer toTrainer(TrainerDto trainerDto) {
-        Trainer trainer = new Trainer();
-        trainer.setId(trainerDto.getId());
-        trainer.setFirstName(trainerDto.getFirstName());
-        trainer.setLastName(trainerDto.getLastName());
-        trainer.setEmail(trainerDto.getEmail());
-        trainer.setPassword(trainerDto.getPassword());
-        trainer.setBirthDate(trainerDto.getBirthDate());
-        trainer.setPhoneNumber(trainerDto.getPhoneNumber());
-        trainer.setAdditionalInfo(trainerDto.getAdditionalInfo());
-        return trainer;
+    @Override
+    public List<GymMembershipDto> getAll(Paging paging) {
+        return gymMembershipDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
-    private TrainerDto toTrainerDto(Trainer trainer) {
-        TrainerDto trainerDto = new TrainerDto();
-        try {
-            trainerDto.setId(trainer.getId());
-            trainerDto.setFirstName(trainer.getFirstName());
-            trainerDto.setLastName(trainer.getLastName());
-            trainerDto.setEmail(trainer.getEmail());
-            trainerDto.setPassword(trainer.getPassword());
-            trainerDto.setBirthDate(trainer.getBirthDate());
-            trainerDto.setPhoneNumber(trainer.getPhoneNumber());
-            trainerDto.setAdditionalInfo(trainer.getAdditionalInfo());
-        } catch (NullPointerException e) {
-            log.error("TrainerDto wasn't create " + e);
-        }
-        return trainerDto;
+    @Override
+    public long count() {
+        return gymMembershipDao.count();
     }
+
 
 }
