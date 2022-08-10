@@ -30,11 +30,14 @@ CREATE TABLE IF NOT EXISTS users (
 id BIGSERIAL PRIMARY KEY,
 email VARCHAR(30) NOT NULL,
 password text NOT NULL,
-first_name text NOT NULL,
-last_name text NOT NULL,
-type_id BIGINT NOT NULL REFERENCES types,
+first_name text,
+last_name text,
+birth_date date,
+phone_number VARCHAR(13),
+additional_info text,
+type_id BIGINT REFERENCES types,
 role_id BIGINT NOT NULL REFERENCES roles,
-trainer_id BIGINT NOT NULL,
+trainer_id BIGINT,
 deleted BOOLEAN NOT NULL DEFAULT FALSE);
 
 CREATE TABLE IF NOT EXISTS orders (

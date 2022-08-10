@@ -10,10 +10,10 @@
 <jsp:include page="../navbar.jsp"/>
 <c:if test="${trainer.id != null}">
 <h1>Info about trainer</h1>
-<h3>Id: ${trainer.id}</h3>
-<h3>First name: ${trainer.firstName}</h3>
-<h3>Last name: ${trainer.lastName}</h3>
-<h3>Email: ${trainer.email}</h3>
+<h3>Id: <c:out value="${trainer.id}"/></h3>
+<h3>First name: <c:out value="${trainer.firstName}"/></h3>
+<h3>Last name: <c:out value="${trainer.lastName}"/></h3>
+<h3>Email: <c:out value="${trainer.email}"/></h3>
 <br/>
 <h3 class="alltrainers"><a href="controller?command=trainers">All trainers</a></h3>
 </c:if>

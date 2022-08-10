@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 
-<h3 class="alltrainers"><a href="/fitness_centre">Main page</a>   |   
+<h3 class="alltrainers"><a href="/fitness_centre/">Main page</a>   |   
 <a href="controller?command=trainers">Our trainers</a>   | 
 <a href="controller?command=gymmemberships">Our gymmemberships</a>   |   
 <a href="controller?command=cart">Cart</a>   |   

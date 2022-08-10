@@ -15,7 +15,6 @@ import service.OrderService;
 import service.PrescriptionService;
 import service.UserService;
 import service.impl.GymMembershipServiceImpl;
-import service.impl.OrderInfoServiceImpl;
 import service.impl.OrderServiceImpl;
 import service.impl.PrescriptionServiceImpl;
 import service.impl.UserServiceImpl;
@@ -30,8 +29,6 @@ public class ServiceFactory {
         map.put(GymMembershipService.class,
                 new GymMembershipServiceImpl(DaoFactory.INSTANCE.getDao(GymMembershipDao.class)));
         map.put(OrderInfoService.class,
-                new OrderInfoServiceImpl(DaoFactory.INSTANCE.getDao(OrderInfoDao.class)));
-        map.put(PrescriptionService.class,
                 new PrescriptionServiceImpl(DaoFactory.INSTANCE.getDao(PrescriptionDao.class)));
         map.put(OrderService.class, new OrderServiceImpl(DaoFactory.INSTANCE.getDao(OrderDao.class), (DaoFactory.INSTANCE.getDao(GymMembershipDao.class)), (DaoFactory.INSTANCE.getDao(OrderInfoDao.class))));
     }

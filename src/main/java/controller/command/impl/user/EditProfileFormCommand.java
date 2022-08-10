@@ -1,18 +1,14 @@
 package controller.command.impl.user;
 
-import java.util.List;
-
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.log4j.Log4j2;
 import service.UserService;
 import service.dto.UserDto;
 
-@Log4j2
-public class EditUserFormCommand implements Command {
+public class EditProfileFormCommand implements Command{
     private UserService userService;
 
-    public EditUserFormCommand(UserService userService) {
+    public EditProfileFormCommand(UserService userService) {
         this.userService = userService;
     }
 
@@ -21,9 +17,7 @@ public class EditUserFormCommand implements Command {
         Long id = Long.parseLong(req.getParameter("id"));
         UserDto userDto = userService.getById(id);
         req.setAttribute("user", userDto);
-        List<UserDto> trainers = userService.getAllTrainers();
-        req.setAttribute("trainers", trainers);
-        return "jsp/user/edituserform.jsp";
+        return "jsp/user/editprofileform.jsp";
     }
 
 }

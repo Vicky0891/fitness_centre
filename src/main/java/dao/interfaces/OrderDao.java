@@ -7,6 +7,8 @@ import dao.entity.Order;
 public interface OrderDao {
     
     Order get(Long id);
+    
+    int getDiscount(String name);
 
     List<Order> getAll();
     

@@ -19,10 +19,10 @@
 <th>Id</th><th>First Name</th><th>Last Name</th><th>Email</th>  
 <c:forEach items="${trainers}" var="trainer">
 <tr>
-<td><a href="controller?command=trainer&id=${trainer.id}">${trainer.id}</a></td>
-<td><a href="controller?command=trainer&id=${trainer.id}">${trainer.firstName}</a></td>
-<td>${trainer.lastName}</td>
-<td>${trainer.email}</td>
+<td><a href="controller?command=trainer&id=${trainer.id}"><c:out value="${trainer.id}"/></a></td>
+<td><a href="controller?command=trainer&id=${trainer.id}"><c:out value="${trainer.firstName}"/></a></td>
+<td><c:out value="${trainer.lastName}"/></td>
+<td><c:out value="${trainer.email}"/></td>
 </tr>
 </c:forEach>
 </c:if>

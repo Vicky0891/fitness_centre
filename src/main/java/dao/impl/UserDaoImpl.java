@@ -1,9 +1,12 @@
 package dao.impl;
 
+
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,32 +20,33 @@ import lombok.extern.log4j.Log4j2;
 public class UserDaoImpl implements UserDao {
 
     private static final String DELETE = "UPDATE users u SET deleted = true WHERE u.id = ?";
-    private static final String UPDATE = "UPDATE users SET email = ?, password = ?, first_name = ?, last_name = ?, type_id = ?, role_id = ?, trainer_id = ?"
+    private static final String UPDATE = "UPDATE users SET first_name = ?, last_name = ?, birth_date = ?, phone_number = ?, additional_info = ?, type_id = ?, role_id = ?, trainer_id = ?"
             + "WHERE id = ? AND deleted = false";
-    private static final String INSERT = "INSERT INTO users (email, password, first_name, last_name, type_id, role_id, trainer_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, t.name "
+    private static final String INSERT = "INSERT INTO users (email, password, first_name, last_name, type_id, role_id) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, u.birth_date, u.phone_number, u.additional_info, t.name "
             + "AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id JOIN roles r "
             + "ON u.role_id = r.id WHERE u.deleted = false";
-    private static final String SELECT_ALL_CLIENTS = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, t.name "
+    private static final String SELECT_ALL_CLIENTS = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, u.birth_date, u.phone_number, u.additional_info, t.name "
             + "AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id "
             + "JOIN roles r ON u.role_id = r.id WHERE r.name = 'CLIENT' AND u.deleted = false";
-    private static final String SELECT_CLIENTS_BY_TYPE = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, t.name "
+    private static final String SELECT_CLIENTS_BY_TYPE = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, u.birth_date, u.phone_number, u.additional_info, t.name "
             + "AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id "
             + "JOIN roles r ON u.role_id = r.id WHERE t.name = ? AND u.deleted = false";
-    private static final String SELECT_CLIENTS_BY_TRAINER = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, t.name "
+    private static final String SELECT_CLIENTS_BY_TRAINER = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, u.birth_date, u.phone_number, u.additional_info, t.name "
             + "AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id "
             + "JOIN roles r ON u.role_id = r.id WHERE u.trainer_id = ? AND u.deleted = false";
-    private static final String SELECT_ALL_TRAINERS = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, t.name "
+    private static final String SELECT_ALL_TRAINERS = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, u.birth_date, u.phone_number, u.additional_info, t.name "
             + "AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id "
             + "JOIN roles r ON u.role_id = r.id WHERE r.name = 'TRAINER' AND u.deleted = false";
-    private static final String SELECT_BY_ID = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, t.name "
+    private static final String SELECT_BY_ID = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, u.birth_date, u.phone_number, u.additional_info, t.name "
             + "AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id JOIN roles r "
             + "ON u.role_id = r.id WHERE u.id = ? AND u.deleted = false";
-    private static final String SELECT_BY_EMAIL = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, t.name AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id JOIN roles r ON u.role_id = r.id WHERE u.email = ? "
+    private static final String SELECT_BY_EMAIL = "SELECT u.id, u.email, u.password, u.first_name, u.last_name, u.birth_date, u.phone_number, u.additional_info, t.name AS type, r.name AS role, u.trainer_id FROM users u JOIN types t ON u.type_id = t.id JOIN roles r ON u.role_id = r.id WHERE u.email = ? "
             + "AND u.deleted = false";
     private static final String SELECT_TYPE_ID = "SELECT t.id FROM types t WHERE name = ?";
     private static final String SELECT_ROLE_ID = "SELECT r.id FROM roles r WHERE name = ?";
-    private static final Long DEFAULT = (long) -1;
+//    private static final Long DEFAULT = (long) -1;
+    private static final String DEFAULT_BIRTHDATE = "2000-01-01";
 
     private DataSource dataSource;
 
@@ -158,9 +162,11 @@ public class UserDaoImpl implements UserDao {
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getFirstName());
             statement.setString(4, user.getLastName());
+//            statement.setDate(5, Date.valueOf(user.getBirthDate()));
+//            statement.setString(5, user.getPhoneNumber());
+//            statement.setString(6, user.getAdditionalInfo());
             statement.setInt(5, getTypeId(user.getType().name()));
             statement.setInt(6, getRoleId(user.getRole().name()));
-            statement.setLong(7, DEFAULT);
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
@@ -177,14 +183,17 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User update(User user) {
         try (PreparedStatement statement = dataSource.getConnection().prepareStatement(UPDATE)) {
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getPassword());
-            statement.setString(3, user.getFirstName());
-            statement.setString(4, user.getLastName());
-            statement.setInt(5, getTypeId(user.getType().name()));
-            statement.setInt(6, getRoleId(user.getRole().name()));
-            statement.setLong(7, user.getTrainerId());
-            statement.setLong(8, user.getId());
+//            statement.setString(1, user.getEmail());
+//            statement.setString(2, user.getPassword());
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
+            statement.setDate(3, Date.valueOf(user.getBirthDate()));
+            statement.setString(4, user.getPhoneNumber());
+            statement.setString(5, user.getAdditionalInfo());
+            statement.setInt(6, getTypeId(user.getType().name()));
+            statement.setInt(7, getRoleId(user.getRole().name()));
+            statement.setLong(8, user.getTrainerId());
+            statement.setLong(9, user.getId());
 
             statement.executeUpdate();
             return get(user.getId());
@@ -214,6 +223,13 @@ public class UserDaoImpl implements UserDao {
         user.setPassword(result.getString("password"));
         user.setFirstName(result.getString("first_name"));
         user.setLastName(result.getString("last_name"));
+        if(result.getDate("birth_date") == null) {
+            user.setBirthDate(LocalDate.parse(DEFAULT_BIRTHDATE));
+        } else {
+            user.setBirthDate(result.getDate("birth_date").toLocalDate());
+        }
+        user.setPhoneNumber(result.getString("phone_number"));
+        user.setAdditionalInfo(result.getString("additional_info"));
         user.setType(Type.valueOf(result.getString("type")));
         user.setRole(Role.valueOf(result.getString("role")));
         user.setTrainerId(result.getLong("trainer_id"));

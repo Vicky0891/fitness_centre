@@ -1,5 +1,7 @@
 package service.dto;
 
+import java.time.LocalDate;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +12,9 @@ public class UserDto {
     private String password;
     private String firstName;
     private String lastName;
+    private LocalDate birthDate;
+    private String phoneNumber;
+    private String additionalInfo;
     private TypeDto typeDto;
     private RoleDto roleDto;
     private Long trainerId;
@@ -19,7 +24,7 @@ public class UserDto {
     }
         
     public enum TypeDto {
-        NEW, REGULAR, CORPORATE, OTHER
+        NEW, REGULAR, CORPORATE
     }
     
 }

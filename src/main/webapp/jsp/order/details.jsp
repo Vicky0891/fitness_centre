@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Gymmemberships</title>
+<title>Details</title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <jsp:include page="../navbar.jsp"/>
-<h1>Our gymmemberships</h1>
+<h1>Details of order</h1>
 <table>
 <jsp:include page="../pagination.jsp"/>
 

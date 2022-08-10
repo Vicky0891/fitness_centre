@@ -18,6 +18,7 @@ public class AddToCartCommand implements Command {
         if(cart == null) {
             cart = new HashMap();
         }
+        
         Integer quantity = cart.get(gymmembershipId);
         if(quantity == null) {
             cart.put(gymmembershipId, 1);

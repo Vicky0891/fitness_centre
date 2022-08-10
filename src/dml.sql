@@ -14,8 +14,7 @@ TRUNCATE TABLE prescriptions CASCADE;
 INSERT INTO types (name, discount)
 VALUES ('NEW', '0'),
 ('REGULAR', '10'),
-('CORPORATE', '15'),
-('OTHER', '0');
+('CORPORATE', '15');
 
 INSERT INTO roles (name)
 VALUES ('ADMIN'),
@@ -26,13 +25,13 @@ INSERT INTO status (name)
 VALUES ('PENDING'),
 ('CONFIRM');
 
-INSERT INTO users (email, password, first_name, last_name, type_id, role_id, trainer_id)
-VALUES ('ant@gmail.com', 'dsfhih1542', 'Anton', 'Petrov', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'CLIENT'), -1),
-('sorok40@gmail.com', '45487sefsdfdsf', 'Dmitry', 'Sorokin', (SELECT id FROM types WHERE name = 'REGULAR'), (SELECT id FROM roles WHERE name = 'CLIENT'), 5),
-('ritylja256@mail.com', '4564fdg6f4', 'Rita', 'Lopatina', (SELECT id FROM types WHERE name = 'CORPORATE'), (SELECT id FROM roles WHERE name = 'CLIENT'), 5),
-('admin@mail.com', 'admin', 'Admin', 'Adminov', (SELECT id FROM types WHERE name = 'OTHER'), (SELECT id FROM roles WHERE name = 'ADMIN'), -2),
-('valera@mail.com', 'valera', 'Valeria', 'Reshenik', (SELECT id FROM types WHERE name = 'OTHER'), (SELECT id FROM roles WHERE name = 'TRAINER'), -2),
-('jana@mail.com', 'janajana', 'Jana', 'Vashkevich', (SELECT id FROM types WHERE name = 'OTHER'), (SELECT id FROM roles WHERE name = 'TRAINER'), -2);
+INSERT INTO users (email, password, first_name, last_name, birth_date, phone_number, additional_info, type_id, role_id)
+VALUES ('ant@gmail.com', 'dsfhih1542', 'Anton', 'Petrov', '1995-05-20', '+375296544565', 'no contraindications', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'CLIENT')),
+('sorok40@gmail.com', '45487sefsdfdsf', 'Dmitry', 'Sorokin', '1990-04-15', '+375291112233', 'no contraindications', (SELECT id FROM types WHERE name = 'REGULAR'), (SELECT id FROM roles WHERE name = 'CLIENT')),
+('ritylja256@mail.com', '4564fdg6f4', 'Rita', 'Lopatina', '1999-10-12', '+375291256598', 'joint problems', (SELECT id FROM types WHERE name = 'CORPORATE'), (SELECT id FROM roles WHERE name = 'CLIENT')),
+('admin@mail.com', 'admin', 'Admin', 'Adminov', '1995-11-12', '+375291111111', 'no', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'ADMIN')),
+('valera@mail.com', 'valera', 'Valeria', 'Reshenik', '1989-05-15', '+37529956545', 'no', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'TRAINER')),
+('jana@mail.com', 'janajana', 'Jana', 'Vashkevich', '1990-03-04', '+375335645689', 'no', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'TRAINER'));
 
 INSERT INTO orders (date_of_order, user_id, total_cost, status_id, feedback)
 VALUES ('2022-08-02', 2, 5, (SELECT id FROM status WHERE name = 'PENDING'), 'ok');

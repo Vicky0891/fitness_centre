@@ -9,10 +9,10 @@ import service.OrderService;
 import service.dto.OrderDto;
 import service.dto.UserDto;
 
-public class OrdersByClientCommand implements Command{
+public class OrdersCommand implements Command{
     private OrderService orderService;
 
-    public OrdersByClientCommand(OrderService orderService) {
+    public OrdersCommand(OrderService orderService) {
         this.orderService = orderService;
     }
 
@@ -21,11 +21,8 @@ public class OrdersByClientCommand implements Command{
         HttpSession session = req.getSession();
         UserDto userDto = (UserDto)session.getAttribute("user");
         List<OrderDto> orders = orderService.getAllOrdersDtoByClient(userDto.getId());
-        
-//        Long id = Long.parseLong(req.getParameter("id"));
-//        List<OrderDto> orders = orderService.getAllOrdersDtoByClient(id);
         req.setAttribute("orders", orders);
-        return "jsp/order/ordersbyclient.jsp";
+        return "jsp/order/orders.jsp";
     }
 
 

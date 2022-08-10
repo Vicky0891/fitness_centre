@@ -1,5 +1,7 @@
 package dao.entity;
 
+import java.time.LocalDate;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +12,9 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
+    private LocalDate birthDate;
+    private String phoneNumber;
+    private String additionalInfo;
     private Type type;
     private Role role;
     private Long trainerId;
@@ -19,7 +24,7 @@ public class User {
     }
         
     public enum Type {
-        NEW, REGULAR, CORPORATE, OTHER
+        NEW, REGULAR, CORPORATE
     }
     
 }

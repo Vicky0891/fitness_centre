@@ -35,6 +35,7 @@ public class OrderDaoImpl implements OrderDao {
     private static final String SELECT_ALL_BY_STATUS = "SELECT o.id, o.date_of_order, o.user_id, o.feedback, "
             + "o.total_cost, s.name AS status FROM orders o JOIN status s ON s.id = o.status_id "
             + "WHERE s.name = ? AND o.deleted = false";
+    private static final String SELECT_DISCOUNT = "SELECT t.discount FROM types t WHERE name = ?";
 
     private DataSource dataSource;
     private OrderInfoDao orderInfoDao;
@@ -207,7 +208,7 @@ public class OrderDaoImpl implements OrderDao {
         return order;
     }
 
-    private int getStatusId(String name) {
+    public int getStatusId(String name) {
         try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_STATUS_ID)) {
             statement.setString(1, name);
             ResultSet result = statement.executeQuery();
@@ -218,6 +219,20 @@ public class OrderDaoImpl implements OrderDao {
             log.error("SQL Exception: " + e);
         }
         log.error("Unable to establish connection or error in id");
+        throw new RuntimeException();
+    }
+    
+    public int getDiscount(String name) {
+        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_DISCOUNT)) {
+            statement.setString(1, name);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return result.getInt("discount");
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+        }
+        log.error("Unable to establish connection or error with name");
         throw new RuntimeException();
     }
 

@@ -53,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAllOrdersDtoByClient(Long id) {
         return orderDao.getAllOrdersByClient(id).stream().map(e -> toDto(e)).toList();
+        
     }
     
     @Override
@@ -102,6 +103,9 @@ public class OrderServiceImpl implements OrderService {
         });
         orderDto.setDetails(details);
         BigDecimal totalCost = calculatePrice(details);
+        if(userDto != null) {
+            totalCost = calculateDiscount(userDto, totalCost);
+        }
         orderDto.setTotalCost(totalCost);
         orderDto.setFeedback("");
         if(userDto == null) {
@@ -109,6 +113,13 @@ public class OrderServiceImpl implements OrderService {
         }
         orderDto.setUserId(userDto.getId());
         return orderDto;
+    }
+
+    private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) {
+        int discount = orderDao.getDiscount(userDto.getTypeDto().toString());
+        double totalCostInDouble = totalCost.doubleValue();
+        totalCostInDouble = (totalCost.doubleValue() - ((totalCost.doubleValue() / (double)100) * (double)discount));
+        return BigDecimal.valueOf(totalCostInDouble);
     }
     
     private BigDecimal calculatePrice(List<OrderInfoDto> details) {

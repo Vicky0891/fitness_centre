@@ -9,6 +9,8 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1>Register new user</h1>
+<h3>${requestScope.message}</h3>
+
 <form method="post" action="controller">
 <input name="command" type="hidden" value="create_user"/>
 <label for="email-input">Email: </label>
@@ -17,10 +19,10 @@
 <label for="password-input">Password: </label>
 <input id="password-input" name="password" type="password" minlength="4"/>
 <br/>
-<label for="firstName-input">First name: </label>
+<label for="firstName-input">First name: (optional) </label>
 <input id="firstName-input" name="firstName" type="text"/>
 <br/>
-<label for="lastName-input">Last name: </label>
+<label for="lastName-input">Last name:  (optional) </label>
 <input id="lastName-input" name="lastName" type="text"/>
 <br/>
 

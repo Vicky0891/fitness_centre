@@ -19,13 +19,17 @@ public class EditUserCommand implements Command{
     public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         UserDto currentUserDto = (UserDto)session.getAttribute("user");
-            String firstName = req.getParameter("firstName");
-            String lastName = req.getParameter("lastName");
+//            String firstName = req.getParameter("firstName");
+//            String lastName = req.getParameter("lastName");
+            
+            
+            
+            
             String role = req.getParameter("role");
             String type = req.getParameter("type");
             String trainerId = req.getParameter("trainerId");
-            currentUserDto.setFirstName(firstName);
-            currentUserDto.setLastName(lastName);
+//            currentUserDto.setFirstName(firstName);
+//            currentUserDto.setLastName(lastName);
             currentUserDto.setTypeDto(TypeDto.valueOf(type));
             currentUserDto.setRoleDto(RoleDto.valueOf(role));
             currentUserDto.setTrainerId(Long.parseLong(trainerId));
