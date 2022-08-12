@@ -19,6 +19,7 @@
 <h3>Additional information: <c:out value="${user.additionalInfo}"/></h3>
 <br/>
 <h3><a href="controller?command=orders">My orders</a></h3>
+<h3><a href="controller?command=prescription">Personal prescription</a></h3>
 </c:if>
 
 

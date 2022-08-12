@@ -18,6 +18,9 @@ import controller.command.impl.order.CreateOrderCommand;
 import controller.command.impl.order.OrderCommand;
 import controller.command.impl.order.OrdersCommand;
 import controller.command.impl.order.RemoveOrderCommand;
+import controller.command.impl.prescription.CreatePrescriptionFormCommand;
+import controller.command.impl.prescription.EditPrescriptionCommand;
+import controller.command.impl.prescription.EditPrescriptionFormCommand;
 import controller.command.impl.user.CreateUserCommand;
 import controller.command.impl.user.CreateUserFormCommand;
 import controller.command.impl.user.EditProfileCommand;
@@ -43,6 +46,7 @@ public class CommandFactory {
         commands = new HashMap<>();
         commands.put("gymmemberships", new GymmembershipsCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class), PagingUtil.INSTANCE));
         commands.put("gymmembership", new GymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
+        
         commands.put("trainers", new TrainersCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("trainer", new TrainerCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("user", new UserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
@@ -52,19 +56,25 @@ public class CommandFactory {
         commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("edit_user_form", new EditUserFormCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("edit_user", new EditUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
-        commands.put("add_feedback_form", new AddFeedbackFormCommand());
-        commands.put("add_feedback", new AddFeedbackCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
-        commands.put("orders", new OrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
-        commands.put("order", new OrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        
         commands.put("login_form", new LoginFormCommand());
         commands.put("login", new LoginCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("logout", new LogoutCommand());
+        
         commands.put("prescription", new PrescriptionCommand(ServiceFactory.INSTANCE.getService(PrescriptionService.class)));
+        commands.put("edit_prescription", new EditPrescriptionCommand(ServiceFactory.INSTANCE.getService(PrescriptionService.class)));
+        commands.put("edit_prescription_form", new EditPrescriptionFormCommand(ServiceFactory.INSTANCE.getService(PrescriptionService.class)));
+        commands.put("create_prescription_form", new CreatePrescriptionFormCommand());
+        commands.put("create_prescription", new CreatePrescriptionFormCommand());
+        
+        commands.put("orders", new OrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        commands.put("order", new OrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("add_to_cart", new AddToCartCommand());
         commands.put("cart", new CartCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("create_order", new CreateOrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("remove_order", new RemoveOrderCommand());
-        
+        commands.put("add_feedback_form", new AddFeedbackFormCommand());
+        commands.put("add_feedback", new AddFeedbackCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         
         commands.put("error", new ErrorCommand());
         
