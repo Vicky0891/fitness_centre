@@ -21,7 +21,7 @@ public class UserCommand implements Command{
             req.setAttribute("user", userDto);
             return "jsp/user/user.jsp";
         } catch (NumberFormatException e) {
-            log.error("Request isn't correct" + e);
+            log.error("Request isn't correct " + e);
             return "jsp/error.jsp";
         }
     }

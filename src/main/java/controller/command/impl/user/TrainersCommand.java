@@ -4,20 +4,20 @@ import java.util.List;
 
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
-import service.UserService;
-import service.dto.UserDto;
+import service.TrainerService;
+import service.dto.TrainerDto;
 
 public class TrainersCommand implements Command{
     
-    private UserService userService;
+    private TrainerService trainerService;
 
-    public TrainersCommand(UserService userService) {
-        this.userService = userService;
+    public TrainersCommand(TrainerService trainerService) {
+        this.trainerService = trainerService;
     }
 
     @Override
     public String execute(HttpServletRequest req) {
-        List<UserDto> trainers = userService.getAllTrainers();
+        List<TrainerDto> trainers = trainerService.getAll();
         req.setAttribute("trainers", trainers);
         return "jsp/user/trainers.jsp";
     }

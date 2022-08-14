@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpSession;
 import service.UserService;
 import service.dto.UserDto;
 import service.dto.UserDto.RoleDto;
-import service.dto.UserDto.TypeDto;
 
 public class EditUserCommand implements Command{
     private final UserService userService;
@@ -30,9 +29,7 @@ public class EditUserCommand implements Command{
             String trainerId = req.getParameter("trainerId");
 //            currentUserDto.setFirstName(firstName);
 //            currentUserDto.setLastName(lastName);
-            currentUserDto.setTypeDto(TypeDto.valueOf(type));
             currentUserDto.setRoleDto(RoleDto.valueOf(role));
-            currentUserDto.setTrainerId(Long.parseLong(trainerId));
                 UserDto updated = userService.update(currentUserDto);
             req.setAttribute("user", updated);
             req.setAttribute("message", "User updated");

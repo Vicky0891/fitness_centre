@@ -11,7 +11,7 @@
 <h1>Change what you want</h1>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="edit_prescription"/>
-<input name="id" type="hidden" value="${requestScope.prescription.id}"/>
+<input name="userId" type="hidden" value="${sessionScope.prescription.userId}"/>
 
 
 <label for="typeOfTraining-input">Type of training: </label>

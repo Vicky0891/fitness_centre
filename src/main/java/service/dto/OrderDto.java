@@ -18,7 +18,7 @@ public class OrderDto {
     private List<OrderInfoDto> details;
 
     public enum StatusDto {
-        PENDING, CONFIRMED
+        PENDING, CONFIRM
     }
 
 }

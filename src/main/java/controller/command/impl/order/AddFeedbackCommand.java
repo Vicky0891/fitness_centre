@@ -15,8 +15,10 @@ public class AddFeedbackCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
+        Long orderId = Long.parseLong(req.getParameter("orderId"));
         HttpSession session = req.getSession();
-        OrderDto currentOrderDto = (OrderDto) session.getAttribute("order");
+        OrderDto currentOrderDto = orderService.getById(orderId);
+//        OrderDto currentOrderDto = (OrderDto) session.getAttribute("orders");
         String feedback = req.getParameter("feedback");
         currentOrderDto.setFeedback(feedback);
         OrderDto updated = orderService.addFeedback(currentOrderDto);

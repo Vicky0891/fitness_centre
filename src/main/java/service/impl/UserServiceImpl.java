@@ -4,17 +4,16 @@ import java.util.List;
 
 import dao.entity.User;
 import dao.entity.User.Role;
-import dao.entity.User.Type;
 import dao.interfaces.UserDao;
 import lombok.extern.log4j.Log4j2;
 import service.DigestUtil;
 import service.UserService;
 import service.dto.UserDto;
 import service.dto.UserDto.RoleDto;
-import service.dto.UserDto.TypeDto;
+
 @Log4j2
-public class UserServiceImpl implements UserService{
-    
+public class UserServiceImpl implements UserService {
+
     private UserDao userDao;
     private final DigestUtil digestUtil = DigestUtil.INSTANCE;
 
@@ -25,31 +24,31 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto getById(Long id) {
         User user = userDao.get(id);
-        if(user == null) {
+        if (user == null) {
             throw new RuntimeException("No user with id " + id);
         }
         UserDto userDto = toDto(user);
         return userDto;
     }
-    
+
     @Override
     public UserDto getUserDtoByEmail(String email) {
         User user = userDao.getByEmail(email);
-        if(user == null) {
+        if (user == null) {
             throw new RuntimeException("No user with email " + email);
         }
         UserDto userDto = toDto(user);
         return userDto;
     }
-    
+
     @Override
     public UserDto login(String email, String password) {
         User user = userDao.getByEmail(email);
-        if(user == null) {
+        if (user == null) {
             throw new RuntimeException("No user with email " + email);
         }
-        String hashedPassword = digestUtil.hash(password); 
-        if(!user.getPassword().equals(hashedPassword)) {
+        String hashedPassword = digestUtil.hash(password);
+        if (!user.getPassword().equals(hashedPassword)) {
             throw new RuntimeException("Wrong password for user " + email);
         }
         UserDto userDto = toDto(user);
@@ -59,26 +58,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDto> getAll() {
         return userDao.getAll().stream().map(e -> toDto(e)).toList();
-    }
-    
-    @Override
-    public List<UserDto> getAllClients() {
-        return userDao.getAllClients().stream().map(e -> toDto(e)).toList();
-    }
-
-    @Override
-    public List<UserDto> getAllTrainers() {
-        return userDao.getAllTrainers().stream().map(e -> toDto(e)).toList();
-    }
-
-    @Override
-    public List<UserDto> getAllClientsDtoByTrainer(Long trainerId) {
-        return userDao.getAllClientsByTrainer(trainerId).stream().map(e -> toDto(e)).toList();
-    }
-
-    @Override
-    public List<UserDto> getAllClientsByType(String typeOfClient) {
-        return userDao.getAllClientsByType(typeOfClient).stream().map(e -> toDto(e)).toList();
     }
 
     @Override
@@ -102,44 +81,28 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void delete(Long id) {
-        if(!userDao.delete(id)) {
+        if (!userDao.delete(id)) {
             throw new RuntimeException("Couldn't delete user with id " + id);
-        };
+        }
+        ;
     }
-    
+
     private User toUsercreated(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
         user.setEmail(userDto.getEmail());
         String hashedPassword = digestUtil.hash(userDto.getPassword());
         user.setPassword(hashedPassword);
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setBirthDate(userDto.getBirthDate());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        user.setAdditionalInfo(userDto.getAdditionalInfo());
-        Type type = Type.valueOf(userDto.getTypeDto().toString());
-        user.setType(type);
-        Role role = Role.valueOf(userDto.getRoleDto().toString());
-        user.setRole(role);
-        user.setTrainerId(userDto.getTrainerId());
+        user.setRole(Role.CLIENT);
         return user;
     }
-    
+
     private User toUserupdated(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
         user.setEmail(userDto.getEmail());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setBirthDate(userDto.getBirthDate());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        user.setAdditionalInfo(userDto.getAdditionalInfo());
-        Type type = Type.valueOf(userDto.getTypeDto().toString());
-        user.setType(type);
         Role role = Role.valueOf(userDto.getRoleDto().toString());
         user.setRole(role);
-        user.setTrainerId(userDto.getTrainerId());
         return user;
     }
 
@@ -148,19 +111,23 @@ public class UserServiceImpl implements UserService{
         try {
             userDto.setId(user.getId());
             userDto.setEmail(user.getEmail());
-            userDto.setFirstName(user.getFirstName());
-            userDto.setLastName(user.getLastName());
-            userDto.setBirthDate(user.getBirthDate());
-            userDto.setPhoneNumber(user.getPhoneNumber());
-            userDto.setAdditionalInfo(user.getAdditionalInfo());
-            TypeDto typeDto = TypeDto.valueOf(user.getType().toString());
-            userDto.setTypeDto(typeDto);
             RoleDto roleDto = RoleDto.valueOf(user.getRole().toString());
             userDto.setRoleDto(roleDto);
-            userDto.setTrainerId(user.getTrainerId());
         } catch (NullPointerException e) {
             log.error("UserDto wasn't create " + e);
         }
         return userDto;
+    }
+
+    @Override
+    public String getTypeOfUser(Long id) {
+        User u = userDao.get(id);
+        String role = u.getRole().toString();
+        return switch (role) {
+        case "CLIENT" -> "CLIENT";
+        case "TRAINER" -> "TRAINER";
+        case "ADMIN" -> "ADMIN";
+        default -> "CLIENT";
+        };
     }
 }

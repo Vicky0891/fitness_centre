@@ -9,6 +9,9 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1>My prescription</h1>
+
+<c:if test="${prescription.id != null}">
+
 <h3>Type of training: <c:out value="${prescription.typeOfTraining}"/></h3>
 <h3>Equipment: <c:out value="${prescription.equipment}"/></h3>
 <h3>Diet: <c:out value="${prescription.diet}"/></h3>
@@ -16,9 +19,13 @@
 <br/>
 <form method="post" action="controller">
 <input type="hidden" name="command" value="edit_prescription_form"/>
-<input type="hidden" name="id" value="${prescription.id}"/>
+<input type="hidden" name="userId" value="${requestScope.prescription.userId}"/>
 <input type="submit" value="Edit prescription"/>
 </form>
+</c:if>
+<c:if test="${prescription.id == null}">
+<h2>No prescription at this moment. Please wait some time</h2>
+</c:if>
 
 </body>
 </html>

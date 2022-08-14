@@ -4,15 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dao.connection.DataSource;
+import dao.impl.ClientDaoImpl;
 import dao.impl.GymMembershipDaoImpl;
 import dao.impl.OrderDaoImpl;
 import dao.impl.OrderInfoDaoImpl;
 import dao.impl.PrescriptionDaoImpl;
+import dao.impl.TrainerDaoImpl;
 import dao.impl.UserDaoImpl;
+import dao.interfaces.ClientDao;
 import dao.interfaces.GymMembershipDao;
 import dao.interfaces.OrderDao;
 import dao.interfaces.OrderInfoDao;
 import dao.interfaces.PrescriptionDao;
+import dao.interfaces.TrainerDao;
 import dao.interfaces.UserDao;
 
 public class DaoFactory {
@@ -22,6 +26,8 @@ public class DaoFactory {
     private DaoFactory() {
         map = new HashMap<>();
         map.put(UserDao.class, new UserDaoImpl(DataSource.INSTANCE));
+        map.put(ClientDao.class, new ClientDaoImpl(DataSource.INSTANCE));
+        map.put(TrainerDao.class, new TrainerDaoImpl(DataSource.INSTANCE, getDao(ClientDao.class)));
         map.put(GymMembershipDao.class, new GymMembershipDaoImpl(DataSource.INSTANCE));
         map.put(PrescriptionDao.class, new PrescriptionDaoImpl(DataSource.INSTANCE));
         map.put(OrderInfoDao.class, new OrderInfoDaoImpl(DataSource.INSTANCE, getDao(GymMembershipDao.class)));

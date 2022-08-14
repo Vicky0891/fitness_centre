@@ -25,13 +25,15 @@ INSERT INTO status (name)
 VALUES ('PENDING'),
 ('CONFIRM');
 
-INSERT INTO users (email, password, first_name, last_name, birth_date, phone_number, additional_info, type_id, role_id)
-VALUES ('ant@gmail.com', 'dsfhih1542', 'Anton', 'Petrov', '1995-05-20', '+375296544565', 'no contraindications', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'CLIENT')),
-('sorok40@gmail.com', '45487sefsdfdsf', 'Dmitry', 'Sorokin', '1990-04-15', '+375291112233', 'no contraindications', (SELECT id FROM types WHERE name = 'REGULAR'), (SELECT id FROM roles WHERE name = 'CLIENT')),
-('ritylja256@mail.com', '4564fdg6f4', 'Rita', 'Lopatina', '1999-10-12', '+375291256598', 'joint problems', (SELECT id FROM types WHERE name = 'CORPORATE'), (SELECT id FROM roles WHERE name = 'CLIENT')),
-('admin@mail.com', 'admin', 'Admin', 'Adminov', '1995-11-12', '+375291111111', 'no', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'ADMIN')),
-('valera@mail.com', 'valera', 'Valeria', 'Reshenik', '1989-05-15', '+37529956545', 'no', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'TRAINER')),
-('jana@mail.com', 'janajana', 'Jana', 'Vashkevich', '1990-03-04', '+375335645689', 'no', (SELECT id FROM types WHERE name = 'NEW'), (SELECT id FROM roles WHERE name = 'TRAINER'));
+INSERT INTO users (email, password, role_id)
+VALUES ('ant@gmail.com', 'dsfhih1542', (SELECT id FROM roles WHERE name = 'CLIENT')),
+('valera@mail.com', 'valera', (SELECT id FROM roles WHERE name = 'TRAINER'));
+
+INSERT INTO clients (user_id, first_name, last_name, birth_date, phone_number, type_id, trainer_id, additional_info)
+VALUES (3, 'Anton', 'Petrov', '1995-05-20', '+375296544565', (SELECT id FROM types WHERE name = 'NEW'), 4, 'no contraindications');
+
+INSERT INTO trainers (user_id, first_name, last_name, birth_date, category)
+VALUES (4, 'Valeria', 'Reshenik', '1989-05-15', 'high');
 
 INSERT INTO orders (date_of_order, user_id, total_cost, status_id, feedback)
 VALUES ('2022-08-02', 2, 5, (SELECT id FROM status WHERE name = 'PENDING'), 'ok');
@@ -47,8 +49,8 @@ VALUES (1, 'crossfit', 5),
 (10, 'fitness', 45);
 
 INSERT INTO orderinfo (order_id, gymmembership_id, gymmembership_quantity, gymmembership_price)
-VALUES (3, 17, 1, 5);
+VALUES (2, 10, 1, 27);
 
-INSERT INTO prescriptions (trainer_id, user_id, type_of_training, equipment, diet, status_id)
-VALUES (19, 16, 'crossfit', 'ribbons', 'ordinary', (SELECT id FROM status WHERE name = 'PENDING'));
+INSERT INTO prescriptions (trainer_id, client_id, type_of_training, equipment, diet, status_id)
+VALUES (4, 3, 'crossfit', 'ribbons', 'ordinary', (SELECT id FROM status WHERE name = 'PENDING'));
 

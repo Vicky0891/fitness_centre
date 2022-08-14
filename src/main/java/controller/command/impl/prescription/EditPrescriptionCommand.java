@@ -1,14 +1,10 @@
 package controller.command.impl.prescription;
 
-import java.time.LocalDate;
-
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import service.PrescriptionService;
-import service.UserService;
 import service.dto.PrescriptionDto;
-import service.dto.UserDto;
 
 public class EditPrescriptionCommand implements Command{
 

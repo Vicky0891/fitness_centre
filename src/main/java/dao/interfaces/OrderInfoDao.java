@@ -1,5 +1,6 @@
 package dao.interfaces;
 
+import java.sql.Connection;
 import java.util.List;
 
 import dao.entity.OrderInfo;
@@ -12,7 +13,7 @@ public interface OrderInfoDao {
     
     List<OrderInfo> getAllByOrderId(Long id);
 
-    OrderInfo create(OrderInfo orderInfo);
+    OrderInfo create(OrderInfo orderInfo, Connection connection);
 
     OrderInfo update(OrderInfo orderInfo);
 

@@ -32,9 +32,11 @@ import controller.command.impl.user.TrainersCommand;
 import controller.command.impl.user.UserCommand;
 import controller.util.PagingUtil;
 import service.UserService;
+import service.ClientService;
 import service.GymMembershipService;
 import service.OrderService;
 import service.PrescriptionService;
+import service.TrainerService;
 import service.factory.ServiceFactory;
 
 public class CommandFactory {
@@ -47,18 +49,18 @@ public class CommandFactory {
         commands.put("gymmemberships", new GymmembershipsCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class), PagingUtil.INSTANCE));
         commands.put("gymmembership", new GymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
         
-        commands.put("trainers", new TrainersCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
-        commands.put("trainer", new TrainerCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("trainers", new TrainersCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
+        commands.put("trainer", new TrainerCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("user", new UserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("create_user_form", new CreateUserFormCommand());
         commands.put("create_user", new CreateUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("edit_profile_form", new EditProfileFormCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
-        commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
-        commands.put("edit_user_form", new EditUserFormCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(UserService.class), ServiceFactory.INSTANCE.getService(ClientService.class)));
+        commands.put("edit_user_form", new EditUserFormCommand(ServiceFactory.INSTANCE.getService(UserService.class), ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("edit_user", new EditUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         
         commands.put("login_form", new LoginFormCommand());
-        commands.put("login", new LoginCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("login", new LoginCommand(ServiceFactory.INSTANCE.getService(UserService.class), ServiceFactory.INSTANCE.getService(TrainerService.class), ServiceFactory.INSTANCE.getService(ClientService.class)));
         commands.put("logout", new LogoutCommand());
         
         commands.put("prescription", new PrescriptionCommand(ServiceFactory.INSTANCE.getService(PrescriptionService.class)));

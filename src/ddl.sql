@@ -30,15 +30,25 @@ CREATE TABLE IF NOT EXISTS users (
 id BIGSERIAL PRIMARY KEY,
 email VARCHAR(30) NOT NULL,
 password text NOT NULL,
+role_id BIGINT NOT NULL REFERENCES roles,
+deleted BOOLEAN NOT NULL DEFAULT FALSE);
+
+CREATE TABLE IF NOT EXISTS trainers (
+user_id BIGINT NOT NULL REFERENCES users,
+first_name text,
+last_name text,
+birth_date date,
+category text);
+
+CREATE TABLE IF NOT EXISTS clients (
+user_id BIGINT NOT NULL REFERENCES users,
 first_name text,
 last_name text,
 birth_date date,
 phone_number VARCHAR(13),
-additional_info text,
 type_id BIGINT REFERENCES types,
-role_id BIGINT NOT NULL REFERENCES roles,
 trainer_id BIGINT,
-deleted BOOLEAN NOT NULL DEFAULT FALSE);
+additional_info text);
 
 CREATE TABLE IF NOT EXISTS orders (
 id BIGSERIAL PRIMARY KEY,
@@ -66,7 +76,7 @@ gymmembership_price BIGINT NOT NULL);
 CREATE TABLE IF NOT EXISTS prescriptions (
 id BIGSERIAL PRIMARY KEY,
 trainer_id BIGINT NOT NULL REFERENCES users,
-user_id BIGINT NOT NULL REFERENCES users,
+client_id BIGINT NOT NULL REFERENCES users,
 type_of_training text,
 equipment text,
 diet text,

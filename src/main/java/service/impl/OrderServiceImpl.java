@@ -8,8 +8,11 @@ import java.util.Map;
 
 import dao.entity.Order;
 import dao.entity.OrderInfo;
+import dao.entity.Client;
+import dao.entity.Client.Type;
 import dao.entity.GymMembership;
 import dao.entity.Order.Status;
+import dao.interfaces.ClientDao;
 import dao.interfaces.GymMembershipDao;
 import dao.interfaces.OrderDao;
 import dao.interfaces.OrderInfoDao;
@@ -17,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 import service.OrderService;
 import service.dto.OrderDto;
 import service.dto.UserDto;
+import service.dto.ClientDto;
 import service.dto.GymMembershipDto;
 import service.dto.OrderDto.StatusDto;
 import service.dto.OrderInfoDto;
@@ -27,11 +31,13 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     private GymMembershipDao gymMembershipDao;
     private OrderInfoDao orderInfoDao;
+    private ClientDao clientDao;
 
-    public OrderServiceImpl(OrderDao orderDao, GymMembershipDao gymMembershipDao, OrderInfoDao orderInfoDao) {
+    public OrderServiceImpl(OrderDao orderDao, GymMembershipDao gymMembershipDao, OrderInfoDao orderInfoDao, ClientDao clientDao) {
         this.orderDao = orderDao;
         this.gymMembershipDao = gymMembershipDao;
         this.orderInfoDao = orderInfoDao;
+        this.clientDao = clientDao;
     }
 
     @Override
@@ -65,19 +71,16 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto create(OrderDto orderDto) {
         Order order = toOrder(orderDto);
         Order createdOrder = orderDao.create(order);
-        Long orderId = createdOrder.getId();
         
-        List<OrderInfoDto> detailsDto = new ArrayList<>();
-        detailsDto = orderDto.getDetails();
-             
-        List<OrderInfo> details = new ArrayList<>();
-        for(OrderInfoDto detailDto: detailsDto){
-            OrderInfo orderInfo = toOrderInfo(detailDto);
-            orderInfo.setOrderId(orderId);
-            OrderInfo created = orderInfoDao.create(orderInfo);
-            details.add(created);
+        
+        Long userId = orderDto.getUserId();
+        Client existingClient = clientDao.get(userId);
+        if(existingClient == null) {
+            Client client = new Client();
+            client.setId(userId);
+            client.setType(Type.NEW);
+            clientDao.create(client);
         }
-        createdOrder.setDetails(details);
         return toDto(createdOrder);
     }
     
@@ -116,7 +119,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) {
-        int discount = orderDao.getDiscount(userDto.getTypeDto().toString());
+        Client existingClient = clientDao.get(userDto.getId());
+        if(existingClient == null) {
+            return totalCost;
+        }
+        String typeOfClient = existingClient.getType().toString();
+        int discount = orderDao.getDiscount(typeOfClient);
         double totalCostInDouble = totalCost.doubleValue();
         totalCostInDouble = (totalCost.doubleValue() - ((totalCost.doubleValue() / (double)100) * (double)discount));
         return BigDecimal.valueOf(totalCostInDouble);

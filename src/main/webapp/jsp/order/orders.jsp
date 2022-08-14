@@ -15,13 +15,21 @@
 </c:if>
 <c:if test="${orders.size() > 0}">
 <th>#</th><th>Date of order</th><th>Items</th><th>Total cost</th><th>Status</th><th>Feedback</th><th>Order details</th>
-<c:forEach items="${orders}" var="order">
+<c:forEach items="${requestScope.orders}" var="order">
 <tr>
 <td><a href="controller?command=order&id=${order.id}"><c:out value="${order.id}"/></a></td>
 <td><c:out value="${order.dateOfOrder}"/></td>
 <td><c:out value="${order.totalCost}"/> USD</td>
 <td><c:out value="${order.statusDto.toString()}"/></td>
 <td><c:out value="${order.feedback}"/></td>
+
+<td><form method="post" action="controller">
+<input type="hidden" name="command" value="add_feedback_form"/>
+<input type="hidden" name="orderId" value="${order.id}"/>
+<input type="submit" value="Add feedback"/>
+</form><td>
+
+
 <td><a href="controller?command=add_feedback_form">Add feedback</a></td>
 <td>
 <ul>

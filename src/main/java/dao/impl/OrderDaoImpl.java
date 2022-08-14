@@ -1,5 +1,6 @@
 package dao.impl;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import dao.entity.OrderInfo;
 import dao.interfaces.OrderDao;
 import dao.interfaces.OrderInfoDao;
 import lombok.extern.log4j.Log4j2;
+
 @Log4j2
 public class OrderDaoImpl implements OrderDao {
 
@@ -24,7 +26,7 @@ public class OrderDaoImpl implements OrderDao {
             + "VALUES (?, ?, ?, ?)";
     private static final String SELECT_ALL = "SELECT o.id, o.date_of_order, o.user_id, o.total_cost, o.feedback, "
             + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id WHERE o.deleted = false";
-    private static final String SELECT_BY_ID = "SELECT o.id, o.date_of_order, o.user_id, u.first_name, u.last_name, o.total_cost, o.feedback, "
+    private static final String SELECT_BY_ID = "SELECT o.id, o.date_of_order, o.user_id, o.total_cost, o.feedback, "
             + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id JOIN users u "
             + "ON u.id = o.user_id WHERE o.id = ? AND o.deleted = false";
     private static final String SELECT_ALL_BY_CLIENT = "SELECT o.id, o.date_of_order, o.user_id, o.feedback, o.total_cost, s.name AS status "
@@ -47,7 +49,9 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order get(Long id) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_BY_ID)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -55,6 +59,8 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         return null;
     }
@@ -62,21 +68,27 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> getAll() {
         List<Order> orders = new ArrayList<>();
-        try (Statement statement = dataSource.getConnection().createStatement()) {
+        Connection connection = dataSource.getConnection();
+        try {
+            Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
             while (result.next()) {
                 orders.add(processOrder(result));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         return orders;
     }
 
     @Override
     public Order create(Order order) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(INSERT,
-                    Statement.RETURN_GENERATED_KEYS)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, Date.valueOf(order.getDateOfOrder()));
             statement.setLong(2, order.getUserId());
             statement.setBigDecimal(3, order.getTotalCost());
@@ -84,47 +96,30 @@ public class OrderDaoImpl implements OrderDao {
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
-            
+
             if (result.next()) {
                 Long id = result.getLong("id");
-//                List<OrderInfo> orderDetails = new ArrayList<>();
-//                
-//                
-//                orderDetails = order.getDetails();
-//                for(OrderInfo detail: orderDetails){
-//                    System.out.println(detail);
-//                }
-//                
-//           
-//                List<OrderInfo> detailsNew = new ArrayList<>();
-//                for(OrderInfo detail: orderDetails) {
-//                    detail.setOrderId(id);
-//                    
-//                    System.out.println(detail.toString());
-//                    
-//                    OrderInfo newOI = orderInfoDao.create(detail);
-//                    
-//                    
-//                    detailsNew.add(newOI);
-//                }
-                
-//                for(OrderInfo detail: details) {
-//                    detail.setOrderId(id);
-//                    details.add(orderInfoDao.create(detail));
-//                }
-//                Order orderFinish = get(id);
-                
+                for (OrderInfo detail : order.getDetails()) {
+                    detail.setOrderId(id);
+                    orderInfoDao.create(detail, connection);
+                }
+                connection.commit();
                 return get(id);
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            rollback(connection);
+        } finally {
+            restore(connection);
         }
         return null;
     }
 
     @Override
     public Order update(Order order) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(UPDATE)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setInt(1, getStatusId(order.getStatus().name()));
             statement.setLong(2, order.getId());
 
@@ -132,13 +127,17 @@ public class OrderDaoImpl implements OrderDao {
             return get(order.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         return null;
     }
 
     @Override
     public Order addFeedback(Order order) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(UPDATE_FEEDBACK)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(UPDATE_FEEDBACK);
             statement.setString(1, order.getFeedback());
             statement.setLong(2, order.getId());
 
@@ -146,6 +145,8 @@ public class OrderDaoImpl implements OrderDao {
             return get(order.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         return null;
     }
@@ -153,7 +154,9 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> getAllOrdersByClient(Long id) {
         List<Order> orders = new ArrayList<>();
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_ALL_BY_CLIENT)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_CLIENT);
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
 
@@ -162,6 +165,8 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         return orders;
 
@@ -170,7 +175,9 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> getAllByStatus(String statusName) {
         List<Order> orders = new ArrayList<>();
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_ALL_BY_STATUS)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_STATUS);
             statement.setString(1, statusName);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
@@ -178,18 +185,24 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         return orders;
     }
 
     @Override
     public boolean delete(Long id) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(DELETE)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setLong(1, id);
             int rowsDeleted = statement.executeUpdate();
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         return false;
     }
@@ -202,14 +215,16 @@ public class OrderDaoImpl implements OrderDao {
         order.setTotalCost(result.getBigDecimal("total_cost"));
         order.setStatus(Status.valueOf(result.getString("status")));
         order.setFeedback(result.getString("feedback"));
-        List<OrderInfo> details = orderInfoDao.getAllByOrderId(order.getId());
+        List<OrderInfo> details = orderInfoDao.getAllByOrderId(result.getLong("id"));
         order.setDetails(details);
 
         return order;
     }
 
     public int getStatusId(String name) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_STATUS_ID)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_STATUS_ID);
             statement.setString(1, name);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -217,13 +232,18 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         log.error("Unable to establish connection or error in id");
         throw new RuntimeException();
     }
-    
+
+    @Override
     public int getDiscount(String name) {
-        try (PreparedStatement statement = dataSource.getConnection().prepareStatement(SELECT_DISCOUNT)) {
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_DISCOUNT);
             statement.setString(1, name);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -231,9 +251,36 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
         }
         log.error("Unable to establish connection or error with name");
         throw new RuntimeException();
+    }
+
+    private void restore(Connection connection) {
+        try {
+            connection.setAutoCommit(true);
+            connection.close();
+        } catch (SQLException e) {
+            log.error(e.getMessage() + e);
+        }
+    }
+
+    private void rollback(Connection connection) {
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            log.error(e.getMessage() + e);
+        }
+    }
+
+    private void close(Connection connection) {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            log.error(e.getMessage() + e);
+        }
     }
 
 }

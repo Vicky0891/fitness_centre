@@ -18,7 +18,7 @@ public class Order {
     private List<OrderInfo> details;
     
     public enum Status {
-        PENDING, CONFIRMED
+        PENDING, CONFIRM
     }
 
 

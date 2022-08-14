@@ -11,15 +11,15 @@
 <c:if test="${user.id != null}">
 <h1>My profile</h1>
 <h3>Account number: <c:out value="${user.id}"/></h3>
-<h3>First name: <c:out value="${user.firstName}"/></h3>
-<h3>Last name: <c:out value="${user.lastName}"/></h3>
 <h3>Email: <c:out value="${user.email}"/></h3>
-<h3>Birth date: <c:out value="${user.birthDate}"/></h3>
-<h3>Phone number: <c:out value="${user.phoneNumber}"/></h3>
-<h3>Additional information: <c:out value="${user.additionalInfo}"/></h3>
+
+
+
+
+
 <br/>
 <h3><a href="controller?command=orders">My orders</a></h3>
-<h3><a href="controller?command=prescription">Personal prescription</a></h3>
+<h3><a href="controller?command=prescription&id=${user.id}">Personal prescription</a></h3>
 </c:if>
 
 
@@ -31,6 +31,9 @@
 </form>
 
 
+<c:if test="${user.roleDto.toString() == 'ADMIN'}">
+<h2>ADMIN</h2>
+</c:if>
 
 <c:if test="${user.id == null}">
 <h1 class="error">Something went wrong</h1>
