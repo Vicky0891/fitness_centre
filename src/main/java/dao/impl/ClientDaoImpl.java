@@ -121,7 +121,7 @@ public class ClientDaoImpl implements ClientDao {
 
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
-                Long id = result.getLong("id");
+                Long id = result.getLong("user_id");
                 return get(id);
             }
         } catch (SQLException e) {

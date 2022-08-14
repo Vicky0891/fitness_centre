@@ -160,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
             log.error("Order with id " + orderDto.getId() + " already exists");
             throw new RuntimeException("Order with id " + orderDto.getId() + " already exists");
         }
-        Order order = toOrder(orderDto);
+        Order order = toOrderForUpdate(orderDto);
         Order createdOrder = orderDao.update(order);
         return toDto(createdOrder);
     }
@@ -172,7 +172,7 @@ public class OrderServiceImpl implements OrderService {
             log.error("Order with id " + orderDto.getId() + " already exists");
             throw new RuntimeException("Order with id " + orderDto.getId() + " already exists");
         }
-        Order order = toOrder(orderDto);
+        Order order = toOrderForUpdate(orderDto);
         Order createdOrder = orderDao.addFeedback(order);
         return toDto(createdOrder);
     }
@@ -185,6 +185,25 @@ public class OrderServiceImpl implements OrderService {
         };
     }
 
+    private Order toOrderForUpdate(OrderDto orderDto) {
+        Order order = new Order();
+        order.setId(orderDto.getId());
+        order.setDateOfOrder(orderDto.getDateOfOrder());
+        order.setUserId(orderDto.getUserId());
+        order.setTotalCost(orderDto.getTotalCost());
+        Status status = Status.valueOf(orderDto.getStatusDto().toString());
+        order.setStatus(status);
+        order.setFeedback(orderDto.getFeedback());
+        List<OrderInfoDto> detailsDto = orderDto.getDetails();
+        List<OrderInfo> details = new ArrayList<>();
+        for(OrderInfoDto orderInfoDto: detailsDto) {
+            OrderInfo orderInfo = toOrderInfo(orderInfoDto);
+            details.add(orderInfo);
+        }
+        order.setDetails(details);
+        return order;
+    }
+    
     private Order toOrder(OrderDto orderDto) {
         Order order = new Order();
         order.setDateOfOrder(orderDto.getDateOfOrder());
@@ -200,7 +219,6 @@ public class OrderServiceImpl implements OrderService {
             details.add(orderInfo);
         }
         order.setDetails(details);
-//        order.setId(orderDto.getId());
         return order;
     }
 

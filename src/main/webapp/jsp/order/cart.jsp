@@ -20,7 +20,6 @@
 <h3><a href="controller?command=gymmemberships">Our gymmemberships</a></h3>
 </c:if>
 <c:if test="${requestScope.cart != null}">
-<h3>Login to make order and get discount</h3>
 
 <table>
 <th>Gymmembership</th><th>Quantity</th><th>Price</th><th></th><th></th>

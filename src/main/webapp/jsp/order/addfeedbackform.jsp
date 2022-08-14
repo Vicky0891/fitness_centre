@@ -17,7 +17,7 @@
 <br/>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="add_feedback"/>
-<input type="hidden" name="orderId" value="${requestScope.orderId}"/>
+<input type="hidden" name="orderId" value="${sessionScope.orderId}"/>
 <label for="feedback-input">Write something : </label>
 <input id="feedback-input" name="feedback" type="text"/>
 

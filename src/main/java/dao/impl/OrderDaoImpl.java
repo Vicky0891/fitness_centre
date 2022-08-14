@@ -55,6 +55,11 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
+                
+                
+                
+                
+                
                 return processOrder(result);
             }
         } catch (SQLException e) {
@@ -217,7 +222,6 @@ public class OrderDaoImpl implements OrderDao {
         order.setFeedback(result.getString("feedback"));
         List<OrderInfo> details = orderInfoDao.getAllByOrderId(result.getLong("id"));
         order.setDetails(details);
-
         return order;
     }
 

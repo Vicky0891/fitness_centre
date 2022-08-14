@@ -15,16 +15,15 @@ public class AddFeedbackCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        Long orderId = Long.parseLong(req.getParameter("orderId"));
-        HttpSession session = req.getSession();
+        HttpSession session = req.getSession(false);
+        Long orderId = (Long) session.getAttribute("orderId");
         OrderDto currentOrderDto = orderService.getById(orderId);
-//        OrderDto currentOrderDto = (OrderDto) session.getAttribute("orders");
         String feedback = req.getParameter("feedback");
         currentOrderDto.setFeedback(feedback);
         OrderDto updated = orderService.addFeedback(currentOrderDto);
         req.setAttribute("order", updated);
         req.setAttribute("message", "Information  updated successfully");
-        return "jsp/order/orders.jsp";
+        return "redirect:controller?command=orders";
     }
 
 }
