@@ -10,6 +10,11 @@
 <jsp:include page="../navbar.jsp"/>
 <h1>My prescription</h1>
 
+<c:if test="${requestScope.prescription == null}">
+<h2>No prescription at this moment. Please wait some time</h2>
+</c:if>
+
+
 <c:if test="${prescription.id != null}">
 
 <h3>Type of training: <c:out value="${prescription.typeOfTraining}"/></h3>
@@ -22,9 +27,6 @@
 <input type="hidden" name="userId" value="${requestScope.prescription.userId}"/>
 <input type="submit" value="Edit prescription"/>
 </form>
-</c:if>
-<c:if test="${prescription.id == null}">
-<h2>No prescription at this moment. Please wait some time</h2>
 </c:if>
 
 </body>

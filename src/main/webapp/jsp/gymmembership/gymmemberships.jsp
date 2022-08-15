@@ -29,15 +29,14 @@
 <input type="hidden" name="gymmembershipId" value="${gymmembership.id}"/>
 <input type="submit" value="Add to cart"/>
 </form>
+</td>
 <td>
 <form method="post" action="controller">
 <input type="hidden" name="command" value="remove_from_cart"/>
 <input type="hidden" name="gymmembershipId" value="${gymmembership.id}"/>
 <input type="submit" value="Remove from cart"/>
 </form>
-
-<td><c:out value="${sessionScope.cart.gymMembershipQuantity}"/></td>
-
+</td>
 </tr>
 </c:forEach>
 </c:if>

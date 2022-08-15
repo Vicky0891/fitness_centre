@@ -71,16 +71,16 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto create(OrderDto orderDto) {
         Order order = toOrder(orderDto);
         Order createdOrder = orderDao.create(order);
-        
-        
-        Long userId = orderDto.getUserId();
-        Client existingClient = clientDao.get(userId);
-        if(existingClient == null) {
-            Client client = new Client();
-            client.setId(userId);
-            client.setType(Type.NEW);
-            clientDao.create(client);
-        }
+//        
+//        
+//        Long userId = orderDto.getUserId();
+//        Client existingClient = clientDao.get(userId);
+//        if(existingClient == null) {
+//            Client client = new Client();
+//            client.setId(userId);
+//            client.setType(Type.NEW);
+//            clientDao.create(client);
+//        }
         return toDto(createdOrder);
     }
     

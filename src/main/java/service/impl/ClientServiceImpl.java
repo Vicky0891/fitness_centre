@@ -37,6 +37,11 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public ClientDto create(ClientDto clientDto) {
+        Client existing = clientDao.get(clientDto.getId());
+        if (existing != null) {
+            log.error("Client with this id=" + clientDto.getId() + " already exists");
+            throw new RuntimeException("Client with this id=" + clientDto.getId() + " already exists");
+        }
         Client client = toClient(clientDto);
         Client createdClient = clientDao.create(client);
         return toDto(createdClient);
@@ -91,8 +96,7 @@ public class ClientServiceImpl implements ClientService{
         client.setPhoneNumber(clientDto.getPhoneNumber());
         Type type = Type.valueOf(clientDto.getType().toString());
         client.setType(type);
-        Role role = Role.valueOf(clientDto.getRoleDto().toString());
-        client.setRole(role);
+        client.setRole(Role.CLIENT);
         client.setTrainerId(clientDto.getTrainerId());
         client.setAdditionalInfo(clientDto.getAdditionalInfo());
         return client;

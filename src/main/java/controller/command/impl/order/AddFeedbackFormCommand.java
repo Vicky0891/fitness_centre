@@ -11,7 +11,7 @@ public class AddFeedbackFormCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         Long orderId = Long.parseLong(req.getParameter("orderId"));
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         session.setAttribute("orderId", orderId);
         return "jsp/order/addfeedbackform.jsp";
     }

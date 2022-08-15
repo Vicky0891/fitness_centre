@@ -75,7 +75,7 @@ public class CommandFactory {
         commands.put("add_to_cart", new AddToCartCommand());
         commands.put("remove_from_cart", new RemoveFromCartCommand());
         commands.put("cart", new CartCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
-        commands.put("create_order", new CreateOrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        commands.put("create_order", new CreateOrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class), ServiceFactory.INSTANCE.getService(ClientService.class)));
         commands.put("remove_order", new RemoveOrderCommand());
         commands.put("add_feedback_form", new AddFeedbackFormCommand());
         commands.put("add_feedback", new AddFeedbackCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));

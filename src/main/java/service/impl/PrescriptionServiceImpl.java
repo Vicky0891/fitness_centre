@@ -22,7 +22,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public PrescriptionDto getById(Long id) {
         Prescription prescription = prescriptionDao.get(id);
         if(prescription == null) {
-            throw new RuntimeException("No order with prescription with id " + id);
+            throw new RuntimeException("No prescription for client with id=" + id);
         }
         PrescriptionDto prescriptionDto = toDto(prescription);
         return prescriptionDto;

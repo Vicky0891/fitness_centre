@@ -19,10 +19,8 @@ public class PrescriptionCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         try {
-            HttpSession session = req.getSession(false);
-
+            HttpSession session = req.getSession();
             ClientDto clientDto = (ClientDto) session.getAttribute("user");
-
             PrescriptionDto prescriptionDto = prescriptionService.getById(clientDto.getId());
             req.setAttribute("prescription", prescriptionDto);
             return "jsp/prescription/prescription.jsp";
