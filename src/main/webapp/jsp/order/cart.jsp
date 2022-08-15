@@ -22,12 +22,22 @@
 <c:if test="${requestScope.cart != null}">
 
 <table>
-<th>Gymmembership</th><th>Quantity</th><th>Price</th><th></th><th></th>
+<tr><th>Gymmembership</th><th>Quantity</th><th>Price</th><th></th><th></th></tr>
 <c:forEach items="${requestScope.cart.details}" var="item">
 <tr>
 <td><a href="controller?command=gymmembership&id=${item.gymMembershipDto.id}"><c:out value="${item.gymMembershipDto.typeOfTraining}"/></a></td>
 <td><c:out value="${item.gymMembershipQuantity}"/></td>
 <td><c:out value="${item.gymMembershipPrice}"/></td>
+<td></td>
+<td>
+<form method="post" action="controller">
+<input type="hidden" name="command" value="remove_from_cart"/>
+<input type="hidden" name="gymmembershipId" value="${item.gymMembershipDto.id}"/>
+<input type="submit" value="Remove"/>
+</form>
+</td>
+
+
 </tr>
 </c:forEach>
 <tr>

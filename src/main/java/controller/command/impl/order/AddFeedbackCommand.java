@@ -3,9 +3,11 @@ package controller.command.impl.order;
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.OrderService;
 import service.dto.OrderDto;
 
+@Log4j2
 public class AddFeedbackCommand implements Command {
     private final OrderService orderService;
 

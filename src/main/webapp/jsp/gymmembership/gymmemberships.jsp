@@ -16,7 +16,7 @@
 <h1>No available gymmemberships</h1>
 </c:if>
 <c:if test="${gymmemberships.size() > 0}">
-<th>Id</th><th>Number of visits</th><th>Type of training</th><th>Cost</th><th></th>     
+<tr><th>Id</th><th>Number of visits</th><th>Type of training</th><th>Cost</th><th></th><th></th></tr>    
 <c:forEach items="${requestScope.gymmemberships}" var="gymmembership">
 <tr>
 <td><c:out value="${gymmembership.id}"/></td>
@@ -29,6 +29,15 @@
 <input type="hidden" name="gymmembershipId" value="${gymmembership.id}"/>
 <input type="submit" value="Add to cart"/>
 </form>
+<td>
+<form method="post" action="controller">
+<input type="hidden" name="command" value="remove_from_cart"/>
+<input type="hidden" name="gymmembershipId" value="${gymmembership.id}"/>
+<input type="submit" value="Remove from cart"/>
+</form>
+
+<td><c:out value="${sessionScope.cart.gymMembershipQuantity}"/></td>
+
 </tr>
 </c:forEach>
 </c:if>

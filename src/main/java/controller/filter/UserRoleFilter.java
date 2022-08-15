@@ -50,7 +50,8 @@ public class UserRoleFilter extends HttpFilter {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
                 "cart", "login", "login_form", "logout", "create_order", "user", "edit_profile_form", "edit_profile",
-                "add_feedback_form", "add_feedback", "orders", "order", "remove_order", "prescription", "edit_prescription", "edit_prescription_form" ->
+                "add_feedback_form", "add_feedback", "orders", "order", "remove_order", "prescription",
+                "edit_prescription", "edit_prescription_form", "remove_from_cart" ->
             false;
         default -> true;
         };
@@ -59,7 +60,8 @@ public class UserRoleFilter extends HttpFilter {
     private boolean trainersAccess(String command) {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
-                "cart", "login", "login_form", "logout", "create_order", "user", "edit_profile_form", "edit_profile", "prescription" ->
+                "cart", "login", "login_form", "logout", "create_order", "user", "edit_profile_form", "edit_profile",
+                "prescription" ->
             false;
         default -> true;
         };

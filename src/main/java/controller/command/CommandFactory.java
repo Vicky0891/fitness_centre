@@ -17,6 +17,7 @@ import controller.command.impl.order.CartCommand;
 import controller.command.impl.order.CreateOrderCommand;
 import controller.command.impl.order.OrderCommand;
 import controller.command.impl.order.OrdersCommand;
+import controller.command.impl.order.RemoveFromCartCommand;
 import controller.command.impl.order.RemoveOrderCommand;
 import controller.command.impl.prescription.CreatePrescriptionFormCommand;
 import controller.command.impl.prescription.EditPrescriptionCommand;
@@ -72,6 +73,7 @@ public class CommandFactory {
         commands.put("orders", new OrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("order", new OrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("add_to_cart", new AddToCartCommand());
+        commands.put("remove_from_cart", new RemoveFromCartCommand());
         commands.put("cart", new CartCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("create_order", new CreateOrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("remove_order", new RemoveOrderCommand());

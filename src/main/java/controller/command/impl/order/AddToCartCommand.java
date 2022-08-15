@@ -16,7 +16,7 @@ public class AddToCartCommand implements Command {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>)session.getAttribute("cart");
         if(cart == null) {
-            cart = new HashMap();
+            cart = new HashMap<Long, Integer>();
         }
         
         Integer quantity = cart.get(gymmembershipId);
