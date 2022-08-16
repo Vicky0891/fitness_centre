@@ -21,7 +21,7 @@
 <a href="controller?command=user&id=${sessionScope.user.id}">My cabinet</a>   |   
 </c:if>
 <c:if test="${sessionScope.user.roleDto.toString() == 'ADMIN'}">
-<a href="controller?command=users">All users</a>   |   
+<a href="controller?command=all_users">All users</a>   |   
 <a href="controller?command=all_clients">All clients</a>   |   
 <a href="controller?command=all_orders">All orders</a>   |   
 

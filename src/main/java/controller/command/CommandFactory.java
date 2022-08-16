@@ -35,6 +35,7 @@ import controller.command.impl.user.EditUserFormCommand;
 import controller.command.impl.user.TrainerCommand;
 import controller.command.impl.user.TrainersCommand;
 import controller.command.impl.user.UserCommand;
+import controller.command.impl.user.AllUsersCommand;
 import controller.util.PagingUtil;
 import service.UserService;
 import service.ClientService;
@@ -58,6 +59,7 @@ public class CommandFactory {
         commands.put("trainer", new TrainerCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("clients", new ClientsCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("user", new UserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("all_users", new AllUsersCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("create_user_form", new CreateUserFormCommand());
         commands.put("create_user", new CreateUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("edit_profile_form", new EditProfileFormCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
