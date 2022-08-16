@@ -22,6 +22,13 @@
 <td><a href="controller?command=user&id=${user.id}"><c:out value="${user.id}"/></a></td>
 <td><a href="controller?command=user&id=${user.id}"><c:out value="${user.email}"/></a></td>
 <td><c:out value="${user.roleDto.toString().toLowerCase()}"/></td>
+<td>
+<form method="post" action="controller">
+<input type="hidden" name="command" value="edit_user_form"/>
+<input type="hidden" name="userId" value="${user.id}"/>
+<input type="submit" value="Edit"/>
+</form>
+</td>
 </tr>
 </c:forEach>
 </c:if>

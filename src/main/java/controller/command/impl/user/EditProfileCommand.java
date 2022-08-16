@@ -5,17 +5,15 @@ import java.time.LocalDate;
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.ClientService;
-import service.UserService;
 import service.dto.ClientDto;
-import service.dto.UserDto;
 
+@Log4j2
 public class EditProfileCommand implements Command {
-    private final UserService userService;
     private final ClientService clientService;
 
-    public EditProfileCommand(UserService userService, ClientService clientService) {
-        this.userService = userService;
+    public EditProfileCommand(ClientService clientService) {
         this.clientService = clientService;
     }
 
