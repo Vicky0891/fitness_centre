@@ -1,0 +1,37 @@
+package controller.command.impl.user;
+
+import java.time.LocalDate;
+
+import controller.command.Command;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import service.TrainerService;
+import service.dto.TrainerDto;
+
+public class EditCabinetCommand implements Command {
+    
+    private final TrainerService trainerService;
+
+    public EditCabinetCommand(TrainerService trainerService) {
+        this.trainerService = trainerService;
+    }
+
+    @Override
+    public String execute(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        TrainerDto currentTrainerDto = (TrainerDto) session.getAttribute("user");
+        String firstName = req.getParameter("firstName");
+        String lastName = req.getParameter("lastName");
+        String birthDate = req.getParameter("birthDate");
+        String category = req.getParameter("category");
+        currentTrainerDto.setFirstName(firstName);
+        currentTrainerDto.setLastName(lastName);
+        currentTrainerDto.setBirthDate(LocalDate.parse(birthDate));
+        currentTrainerDto.setCategory(category);
+        TrainerDto updated = trainerService.update(currentTrainerDto);
+        session.setAttribute("user", updated);
+        req.setAttribute("message", "Information  updated successfully");
+        return "jsp/user/user.jsp";
+    }
+
+}

@@ -10,11 +10,22 @@
 <jsp:include page="../navbar.jsp"/>
 
 <h1>My profile</h1>
+<c:if test="${requestScope.message != null}">
+<h3>${requestScope.message}</h3>
+</c:if>
+
 <h3>Account number: <c:out value="${user.id}"/></h3>
 <h3>Email: <c:out value="${user.email}"/></h3>
 
 
 <c:if test="${sessionScope.user['class'].simpleName == 'ClientDto'}">
+<br/>
+<h3>First name: <c:out value="${user.firstName}"/></h3>
+<h3>Last name: <c:out value="${user.lastName}"/></h3>
+<h3>Date of birth: <c:out value="${user.birthDate}"/></h3>
+<h3>Phone number: <c:out value="${user.phoneNumber}"/></h3>
+<h3>Account number: <c:out value="${user.id}"/></h3>
+<h3>Additional info: <c:out value="${user.additionalInfo}"/></h3>
 <br/>
 <form method="post" action="controller">
 <input type="hidden" name="command" value="edit_profile_form"/>
@@ -31,6 +42,11 @@
 
 
 <c:if test="${sessionScope.user.roleDto.toString() == 'TRAINER'}">
+<br/>
+<h3>First name: <c:out value="${user.firstName}"/></h3>
+<h3>Last name: <c:out value="${user.lastName}"/></h3>
+<h3>Date of birth: <c:out value="${user.birthDate}"/></h3>
+<h3>Category: <c:out value="${user.category}"/></h3>
 <br/>
 <form method="post" action="controller">
 <input type="hidden" name="command" value="edit_cabinet_form"/>
