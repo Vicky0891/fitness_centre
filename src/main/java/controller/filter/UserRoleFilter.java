@@ -61,7 +61,7 @@ public class UserRoleFilter extends HttpFilter {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
                 "cart", "login", "login_form", "logout", "create_order", "user", "edit_profile_form", "edit_profile",
-                "prescription", "edit_cabinet_form", "edit_cabinet" ->
+                "prescription", "edit_cabinet_form", "edit_cabinet", "clients" ->
             false;
         default -> true;
         };

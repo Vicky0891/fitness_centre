@@ -22,8 +22,11 @@ import controller.command.impl.order.RemoveOrderCommand;
 import controller.command.impl.prescription.CreatePrescriptionFormCommand;
 import controller.command.impl.prescription.EditPrescriptionCommand;
 import controller.command.impl.prescription.EditPrescriptionFormCommand;
+import controller.command.impl.user.ClientsCommand;
 import controller.command.impl.user.CreateUserCommand;
 import controller.command.impl.user.CreateUserFormCommand;
+import controller.command.impl.user.EditCabinetCommand;
+import controller.command.impl.user.EditCabinetFormCommand;
 import controller.command.impl.user.EditProfileCommand;
 import controller.command.impl.user.EditProfileFormCommand;
 import controller.command.impl.user.EditUserCommand;
@@ -52,11 +55,14 @@ public class CommandFactory {
         
         commands.put("trainers", new TrainersCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("trainer", new TrainerCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
+        commands.put("clients", new ClientsCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("user", new UserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("create_user_form", new CreateUserFormCommand());
         commands.put("create_user", new CreateUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("edit_profile_form", new EditProfileFormCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
-        commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(UserService.class), ServiceFactory.INSTANCE.getService(ClientService.class)));
+        commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
+        commands.put("edit_cabinet_form", new EditCabinetFormCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
+        commands.put("edit_cabinet", new EditCabinetCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("edit_user_form", new EditUserFormCommand(ServiceFactory.INSTANCE.getService(UserService.class), ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("edit_user", new EditUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         
