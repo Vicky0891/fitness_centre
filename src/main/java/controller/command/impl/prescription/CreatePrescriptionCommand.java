@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import service.PrescriptionService;
 import service.dto.PrescriptionDto;
-import service.dto.UserDto;
+import service.dto.TrainerDto;
 import service.dto.OrderDto.StatusDto;
 
 public class CreatePrescriptionCommand implements Command {
@@ -19,9 +19,9 @@ public class CreatePrescriptionCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
-        UserDto userDto = (UserDto) session.getAttribute("user");
-        Long trainerId = userDto.getId();
-        String userId = req.getParameter("userId");
+        TrainerDto trainerDto = (TrainerDto) session.getAttribute("user");
+        Long trainerId = trainerDto.getId();
+        String userId = req.getParameter("clientId");
         String typeOfTraining = req.getParameter("typeOfTraining");
         String equipment = req.getParameter("equipment");
         String diet = req.getParameter("diet");

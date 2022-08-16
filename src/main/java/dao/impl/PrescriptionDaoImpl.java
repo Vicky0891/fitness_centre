@@ -68,7 +68,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
-                Long id = result.getLong("id");
+                Long id = result.getLong("client_id");
                 return get(id);
             }
         } catch (SQLException e) {
@@ -90,7 +90,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             statement.setInt(4, getStatusConfirm());
             statement.setLong(5, prescription.getUserId());
             statement.executeUpdate();
-            return get(prescription.getId());
+            return get(prescription.getUserId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
         } finally {

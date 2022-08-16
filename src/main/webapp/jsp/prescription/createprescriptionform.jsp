@@ -10,10 +10,9 @@
 <jsp:include page="../navbar.jsp"/>
 <h1>Create prescription</h1>
 <form method="post" action="controller">
+<input type="hidden" name="clientId" value="${requestScope.clientId}"/>
 <input name="command" type="hidden" value="create_prescription"/>
 
-<label for="userId-input">For user with id (choose from table): </label>
-<input id="userId-input" name="userId" type="number"/>
 <br/>
 <label for="typeOfTraining-input">Type of training: </label>
 <input id="typeOfTraining-input" name="typeOfTraining" type="text"/>

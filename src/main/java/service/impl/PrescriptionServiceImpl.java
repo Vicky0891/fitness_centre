@@ -42,8 +42,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     public PrescriptionDto update(PrescriptionDto prescriptionDto) {
-        Prescription existing = prescriptionDao.get(prescriptionDto.getId());
-        if (existing != null && existing.getId() != prescriptionDto.getId()) {
+        Prescription existing = prescriptionDao.get(prescriptionDto.getUserId());
+        if (existing != null && existing.getUserId() != prescriptionDto.getUserId()) {
             log.error("Prescription with id \" + prescriptionDto.getId() + \" already exists");
             throw new RuntimeException("Prescription with id \" + prescriptionDto.getId() + \" already exists");
         }

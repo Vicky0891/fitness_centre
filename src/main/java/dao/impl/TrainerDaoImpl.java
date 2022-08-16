@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class TrainerDaoImpl implements TrainerDao{
     private static final String SELECT_CLIENTS_FOR_TRAINER = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, r.name AS role, c.birth_date, c.phone_number, "
             + "c.trainer_id, t.name AS type, c.additional_info FROM clients c JOIN types t ON t.id = c.type_id "
             + "JOIN trainers tr ON c.trainer_id = tr.user_id JOIN users u ON u.id = c.user_id JOIN roles r ON r.id = u.role_id WHERE tr.user_id = ? AND u.deleted = false";
+    private static final String DEFAULT_BIRTHDATE = "2000-01-01";
 
     private DataSource dataSource;
     private ClientDao clientDao;
@@ -48,7 +50,6 @@ public class TrainerDaoImpl implements TrainerDao{
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
-                connection.commit();
                 return processTrainer(result);
             }
         } catch (SQLException e) {
@@ -166,13 +167,14 @@ public class TrainerDaoImpl implements TrainerDao{
         trainer.setId(result.getLong("user_id"));
         trainer.setEmail(result.getString("email"));
         trainer.setPassword(result.getString("password"));
-        
         trainer.setRole(Role.valueOf(result.getString("role")));
-        
-        
         trainer.setFirstName(result.getString("first_name"));
         trainer.setLastName(result.getString("last_name"));
-        trainer.setBirthDate(result.getDate("birth_date").toLocalDate());
+        if (result.getDate("birth_date") == null) {
+            trainer.setBirthDate(LocalDate.parse(DEFAULT_BIRTHDATE));
+        } else {
+            trainer.setBirthDate(result.getDate("birth_date").toLocalDate());
+        }
         trainer.setCategory(result.getString("category"));
         List<Client> clients = getAllClientsByTrainer(result.getLong("user_id"));
         trainer.setClients(clients);

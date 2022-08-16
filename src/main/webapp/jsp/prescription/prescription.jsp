@@ -9,6 +9,9 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1>My prescription</h1>
+<c:if test="${requestScope.message != null}">
+<h2>${requestScope.message}</h2>
+</c:if>
 
 <c:if test="${requestScope.prescription == null}">
 <h2>No prescription at this moment. Please wait some time</h2>
@@ -22,11 +25,14 @@
 <h3>Diet: <c:out value="${prescription.diet}"/></h3>
 <h3>Status: <c:out value="${prescription.statusDto.toString().toLowerCase()}"/></h3>
 <br/>
+
+<c:if test="${prescription.statusDto.toString() == 'PENDING'}">
 <form method="post" action="controller">
 <input type="hidden" name="command" value="edit_prescription_form"/>
 <input type="hidden" name="userId" value="${requestScope.prescription.userId}"/>
 <input type="submit" value="Edit prescription"/>
 </form>
+</c:if>
 </c:if>
 
 </body>

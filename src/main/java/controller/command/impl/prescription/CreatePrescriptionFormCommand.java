@@ -7,6 +7,8 @@ public class CreatePrescriptionFormCommand implements Command{
 
     @Override
     public String execute(HttpServletRequest req) {
+        Long clientId = Long.parseLong(req.getParameter("clientId"));
+        req.setAttribute("clientId", clientId);
         return "jsp/prescription/createprescriptionform.jsp";
     }
 }

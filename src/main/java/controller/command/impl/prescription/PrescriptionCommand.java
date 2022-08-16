@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.PrescriptionService;
-import service.dto.ClientDto;
 import service.dto.PrescriptionDto;
+import service.dto.UserDto;
 
 @Log4j2
 public class PrescriptionCommand implements Command {
@@ -20,8 +20,8 @@ public class PrescriptionCommand implements Command {
     public String execute(HttpServletRequest req) {
         try {
             HttpSession session = req.getSession();
-            ClientDto clientDto = (ClientDto) session.getAttribute("user");
-            PrescriptionDto prescriptionDto = prescriptionService.getById(clientDto.getId());
+            UserDto userDto = (UserDto) session.getAttribute("user");
+            PrescriptionDto prescriptionDto = prescriptionService.getById(userDto.getId());
             req.setAttribute("prescription", prescriptionDto);
             return "jsp/prescription/prescription.jsp";
         } catch (NumberFormatException e) {

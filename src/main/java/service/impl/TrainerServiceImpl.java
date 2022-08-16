@@ -94,6 +94,7 @@ public class TrainerServiceImpl implements TrainerService{
         trainer.setFirstName(trainerDto.getFirstName());
         trainer.setLastName(trainerDto.getLastName());
         trainer.setBirthDate(trainerDto.getBirthDate());
+        trainer.setRole(Role.valueOf(trainer.getRole().name()));
         List<ClientDto> clientsDto = trainerDto.getClients();
         List<Client> clients = new ArrayList<>();
         for(ClientDto clientDto: clientsDto) {

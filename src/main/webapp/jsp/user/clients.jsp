@@ -26,6 +26,13 @@
 <td><c:out value="${client.birthDate}"/></td>
 <td><c:out value="${client.type.toString().toLowerCase()}"/></td>
 <td><c:out value="${client.additionalInfo}"/></td>
+<td>
+<form method="post" action="controller">
+<input type="hidden" name="command" value="create_prescription_form"/>
+<input type="hidden" name="clientId" value="${client.id}"/>
+<input type="submit" value="Create prescription"/>
+</form>
+</td>
 </tr>
 </c:forEach>
 </c:if>
