@@ -19,12 +19,7 @@
 <label for="password-input">Password: </label>
 <input id="password-input" name="password" type="password" minlength="4"/>
 <br/>
-<label for="firstName-input">First name: (optional) </label>
-<input id="firstName-input" name="firstName" type="text"/>
-<br/>
-<label for="lastName-input">Last name:  (optional) </label>
-<input id="lastName-input" name="lastName" type="text"/>
-<br/>
+
 
 <input type="submit" value="REGISTER"/>
 </form>

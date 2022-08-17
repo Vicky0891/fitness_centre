@@ -19,7 +19,7 @@ public class UserRole {
     }
 
     public Object getUserRole(UserDto userDto) {
-
+        
         switch (userDto.getRoleDto().toString()) {
         case "CLIENT":
             try {
@@ -37,7 +37,7 @@ public class UserRole {
                     return trainerDto;
                 }
             } catch (RuntimeException e) {
-
+                
             }
         case "ADMIN":
             return userDto;

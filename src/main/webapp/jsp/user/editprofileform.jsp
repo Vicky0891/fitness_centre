@@ -15,19 +15,19 @@
 
 
 <label for="firstName-input">First name: </label>
-<input id="firstName-input" name="firstName" type="text"/>
+<input id="firstName-input" name="firstName" type="text" value="${requestScope.user.firstName}"/>
 <br/>
 <label for="lastName-input">Last name: </label>
-<input id="lastName-input" name="lastName" type="text"/>
+<input id="lastName-input" name="lastName" type="text" value="${requestScope.user.lastName}"/>
 <br/>
 <label for="birthDate-input">Date of birth: </label>
-<input id="birthDate-input" name="birthDate" type="date"/>
+<input id="birthDate-input" name="birthDate" type="date" value="${requestScope.user.birthDate}"/>
 <br/>
 <label for="phoneNumber-input">Phone number: </label>
-<input id="phoneNumber-input" name="phoneNumber" type="tel"/>
+<input id="phoneNumber-input" name="phoneNumber" type="tel" value="${requestScope.user.phoneNumber}"/>
 <br/>
 <label for="additionalInfo-input">Additional information: </label>
-<input id="additionalInfo-input" name="additionalInfo" type="text"/>
+<input id="additionalInfo-input" name="additionalInfo" type="text" value="${requestScope.user.additionalInfo}"/>
 <br/>
 
 <input type="submit" value="SAVE"/>

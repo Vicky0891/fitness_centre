@@ -22,7 +22,9 @@
 <br/>
 <h3>First name: <c:out value="${user.firstName}"/></h3>
 <h3>Last name: <c:out value="${user.lastName}"/></h3>
+<c:if test="${user.birthDate != '0001-01-01'}">
 <h3>Date of birth: <c:out value="${user.birthDate}"/></h3>
+</c:if>
 <h3>Phone number: <c:out value="${user.phoneNumber}"/></h3>
 <h3>Account number: <c:out value="${user.id}"/></h3>
 <h3>Additional info: <c:out value="${user.additionalInfo}"/></h3>
@@ -34,18 +36,21 @@
 </form>
 <h3><a href="controller?command=orders">My orders</a></h3>
 
-<c:if test="${requestScope.prescription.id != null}">
+
 <br/>
+
 <h3><a href="controller?command=prescription&id=${user.id}">Personal prescription</a></h3>
 </c:if>
-</c:if>
 
 
-<c:if test="${sessionScope.user.roleDto.toString() == 'TRAINER'}">
+
+<c:if test="${sessionScope.user['class'].simpleName == 'TrainerDto'}">
 <br/>
 <h3>First name: <c:out value="${user.firstName}"/></h3>
 <h3>Last name: <c:out value="${user.lastName}"/></h3>
+<c:if test="${user.birthDate != '0001-01-01'}">
 <h3>Date of birth: <c:out value="${user.birthDate}"/></h3>
+</c:if>
 <h3>Category: <c:out value="${user.category}"/></h3>
 <br/>
 <form method="post" action="controller">

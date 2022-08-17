@@ -11,6 +11,7 @@ import service.dto.ClientDto;
 import service.dto.ClientDto.TypeDto;
 import service.dto.OrderDto;
 import service.dto.UserDto;
+import service.dto.UserDto.RoleDto;
 
 public class CreateOrderCommand implements Command {
     private final OrderService orderService;
@@ -36,12 +37,12 @@ public class CreateOrderCommand implements Command {
         req.setAttribute("order", created);
         req.setAttribute("message", "Order created successfully");
 
-        ClientDto ClientDto = new ClientDto();
-        ClientDto.setId(userDto.getId());
-        ClientDto.setType(TypeDto.NEW);
-        
+        ClientDto clientDto = new ClientDto();
+        clientDto.setId(userDto.getId());
+        clientDto.setType(TypeDto.NEW);
+        clientDto.setRoleDto(RoleDto.CLIENT);
         try {
-        ClientDto createdClient = clientService.create(ClientDto);
+        ClientDto createdClient = clientService.create(clientDto);
         session.setAttribute("user", createdClient);
         } catch (RuntimeException e) {
             return "jsp/order/order.jsp";

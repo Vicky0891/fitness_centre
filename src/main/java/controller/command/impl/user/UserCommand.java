@@ -16,9 +16,9 @@ public class UserCommand implements Command{
     @Override
     public String execute(HttpServletRequest req) {
         try {
-            Long id = Long.parseLong(req.getParameter("id"));
-            UserDto userDto = userService.getById(id);
-            req.setAttribute("user", userDto);
+//            Long id = Long.parseLong(req.getParameter("id"));
+//            UserDto userDto = userService.getById(id);
+//            req.setAttribute("user", userDto);
             return "jsp/user/user.jsp";
         } catch (NumberFormatException e) {
             log.error("Request isn't correct " + e);

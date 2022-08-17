@@ -34,6 +34,7 @@ import controller.command.impl.prescription.EditPrescriptionFormCommand;
 import controller.command.impl.user.ClientsCommand;
 import controller.command.impl.user.CreateUserCommand;
 import controller.command.impl.user.CreateUserFormCommand;
+import controller.command.impl.user.DeleteUserCommand;
 import controller.command.impl.user.EditCabinetCommand;
 import controller.command.impl.user.EditCabinetFormCommand;
 import controller.command.impl.user.EditClientCommand;
@@ -82,12 +83,13 @@ public class CommandFactory {
         commands.put("clients", new ClientsCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("all_clients", new AllClientsCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
         commands.put("user", new UserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("delete_user", new DeleteUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("all_users", new AllUsersCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("create_user_form", new CreateUserFormCommand());
         commands.put("create_user", new CreateUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("edit_user_form", new EditUserFormCommand(ServiceFactory.INSTANCE.getService(UserService.class),
                 ServiceFactory.INSTANCE.getService(TrainerService.class)));
-        commands.put("edit_user", new EditUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("edit_user", new EditUserCommand(ServiceFactory.INSTANCE.getService(UserService.class), (ServiceFactory.INSTANCE.getService(TrainerService.class))));
         commands.put("edit_profile_form",
                 new EditProfileFormCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));

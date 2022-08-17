@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +22,7 @@ public class TrainerDaoImpl implements TrainerDao {
     private static final String DELETE = "UPDATE users SET deleted = true WHERE id = ?";
     private static final String UPDATE = "UPDATE trainers SET first_name = ?, last_name = ?, birth_date = ?, "
             + "category = ? WHERE user_id = ?";
-    private static final String INSERT = "INSERT INTO trainers (user_id, first_name, last_name, birth_date, "
-            + "category) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO trainers (user_id) VALUES (?)";
     private static final String SELECT_ALL = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
             + " r.name AS role, tr.birth_date, tr.category FROM trainers tr JOIN users u ON u.id = tr.user_id "
             + "JOIN roles r ON r.id = u.role_id WHERE u.deleted = false ORDER BY tr.user_id";
@@ -35,8 +33,7 @@ public class TrainerDaoImpl implements TrainerDao {
             + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
             + "c.additional_info FROM clients c JOIN types t ON t.id = c.type_id JOIN trainers tr "
             + "ON c.trainer_id = tr.user_id JOIN users u ON u.id = c.user_id JOIN roles r ON r.id = u.role_id "
-            + "WHERE tr.user_id = ? AND u.deleted = false c.user_id";
-    private static final String DEFAULT_BIRTHDATE = "2000-01-01";
+            + "WHERE tr.user_id = ? AND u.deleted = false";
 
     private DataSource dataSource;
     private ClientDao clientDao;
@@ -88,10 +85,6 @@ public class TrainerDaoImpl implements TrainerDao {
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, trainer.getId());
-            statement.setString(2, trainer.getFirstName());
-            statement.setString(3, trainer.getLastName());
-            statement.setDate(4, Date.valueOf(trainer.getBirthDate()));
-            statement.setString(5, trainer.getCategory());
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
@@ -173,11 +166,7 @@ public class TrainerDaoImpl implements TrainerDao {
         trainer.setRole(Role.valueOf(result.getString("role")));
         trainer.setFirstName(result.getString("first_name"));
         trainer.setLastName(result.getString("last_name"));
-        if (result.getDate("birth_date") == null) {
-            trainer.setBirthDate(LocalDate.parse(DEFAULT_BIRTHDATE));
-        } else {
-            trainer.setBirthDate(result.getDate("birth_date").toLocalDate());
-        }
+        trainer.setBirthDate(result.getDate("birth_date").toLocalDate());
         trainer.setCategory(result.getString("category"));
         List<Client> clients = getAllClientsByTrainer(result.getLong("user_id"));
         trainer.setClients(clients);

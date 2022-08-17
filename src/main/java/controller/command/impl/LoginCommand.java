@@ -30,7 +30,6 @@ public class LoginCommand implements Command {
             Object user = userRole.getUserRole(userDto);
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
-
             return "index.jsp";
         } catch (Exception e) {
             req.setAttribute("message", "No user with this email. Please register");

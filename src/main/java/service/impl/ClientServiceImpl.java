@@ -42,9 +42,9 @@ public class ClientServiceImpl implements ClientService{
             log.error("Client with this id=" + clientDto.getId() + " already exists");
             throw new RuntimeException("Client with this id=" + clientDto.getId() + " already exists");
         }
-        Client client = toClient(clientDto);
+        Client client = toClientForCreate(clientDto);
         Client createdClient = clientDao.create(client);
-        return toDto(createdClient);
+        return toDtoForCreate(createdClient);
     }
 
     @Override
@@ -87,6 +87,21 @@ public class ClientServiceImpl implements ClientService{
         return clientDto;
     }
     
+    private ClientDto toDtoForCreate(Client client) {
+        ClientDto clientDto = new ClientDto();
+        try {
+            clientDto.setId(client.getId());
+            clientDto.setEmail(client.getEmail());
+            TypeDto typeDto = TypeDto.valueOf(client.getType().toString());
+            clientDto.setType(typeDto);
+            RoleDto roleDto = RoleDto.valueOf(client.getRole().toString());
+            clientDto.setRoleDto(roleDto);
+        } catch (NullPointerException e) {
+            log.error("UserDto wasn't create " + e);
+        }
+        return clientDto;
+    }
+    
     private Client toClient(ClientDto clientDto) {
         Client client = new Client();
         client.setId(clientDto.getId());
@@ -99,6 +114,15 @@ public class ClientServiceImpl implements ClientService{
         client.setRole(Role.CLIENT);
         client.setTrainerId(clientDto.getTrainerId());
         client.setAdditionalInfo(clientDto.getAdditionalInfo());
+        return client;
+    }
+    
+    private Client toClientForCreate(ClientDto clientDto) {
+        Client client = new Client();
+        client.setId(clientDto.getId());
+        Type type = Type.valueOf(clientDto.getType().toString());
+        client.setType(type);
+        client.setRole(Role.valueOf(clientDto.getRoleDto().toString()));
         return client;
     }
 

@@ -28,11 +28,15 @@ public class EditProfileCommand implements Command {
         String additionalInfo = req.getParameter("additionalInfo");
         currentClientDto.setFirstName(firstName);
         currentClientDto.setLastName(lastName);
-        currentClientDto.setBirthDate(LocalDate.parse(birthDate));
+        if(("").equals(birthDate)) {
+            currentClientDto.setBirthDate(LocalDate.parse("0001-01-01"));
+        } else {
+            currentClientDto.setBirthDate(LocalDate.parse(birthDate));
+        }
         currentClientDto.setPhoneNumber(phoneNumber);
         currentClientDto.setAdditionalInfo(additionalInfo);
         ClientDto updated = clientService.update(currentClientDto);
-        req.setAttribute("user", updated);
+        session.setAttribute("user", updated);
         req.setAttribute("message", "Information  updated successfully");
         return "jsp/user/user.jsp";
     }

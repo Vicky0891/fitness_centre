@@ -15,16 +15,16 @@
 
 
 <label for="firstName-input">First name: </label>
-<input id="firstName-input" name="firstName" type="text"/>
+<input id="firstName-input" name="firstName" type="text" value="${requestScope.user.firstName}"/>
 <br/>
 <label for="lastName-input">Last name: </label>
-<input id="lastName-input" name="lastName" type="text"/>
+<input id="lastName-input" name="lastName" type="text" value="${requestScope.user.lastName}"/>
 <br/>
 <label for="birthDate-input">Date of birth: </label>
-<input id="birthDate-input" name="birthDate" type="date"/>
+<input id="birthDate-input" name="birthDate" type="date" value="${requestScope.user.birthDate}"/>
 <br/>
 <label for="category-input">Category: </label>
-<input id="category-input" name="category" type="text"/>
+<input id="category-input" name="category" type="text" value="${requestScope.user.category}"/>
 <br/>
 
 <input type="submit" value="SAVE"/>

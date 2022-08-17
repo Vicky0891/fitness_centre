@@ -40,9 +40,14 @@ public class TrainerServiceImpl implements TrainerService{
 
     @Override
     public TrainerDto create(TrainerDto trainerDto) {
-        Trainer trainer = toTrainer(trainerDto);
+        Trainer existing = trainerDao.get(trainerDto.getId());
+        if (existing != null) {
+            log.error("Trainer with this id=" + trainerDto.getId() + " already exists");
+            throw new RuntimeException("Trainer with this id=" + trainerDto.getId() + " already exists");
+        }
+        Trainer trainer = toTrainerForCreate(trainerDto);
         Trainer createdTrainer = trainerDao.create(trainer);
-        return toDto(createdTrainer);
+        return toDtoForCreate(createdTrainer);
     }
 
     @Override
@@ -88,13 +93,33 @@ public class TrainerServiceImpl implements TrainerService{
         return trainerDto;
     }
     
+    private TrainerDto toDtoForCreate(Trainer trainer) {
+        TrainerDto trainerDto = new TrainerDto();
+        try {
+            trainerDto.setId(trainer.getId());
+            trainerDto.setEmail(trainer.getEmail());
+            trainerDto.setRoleDto(RoleDto.valueOf(trainer.getRole().name()));
+        } catch (NullPointerException e) {
+            log.error("UserDto wasn't create " + e);
+        }
+        return trainerDto;
+    }
+    
+    private Trainer toTrainerForCreate(TrainerDto trainerDto) {
+        Trainer trainer = new Trainer();
+        trainer.setId(trainerDto.getId());
+        trainer.setEmail(trainerDto.getEmail());
+        trainer.setRole(Role.valueOf(trainerDto.getRoleDto().name()));
+        return trainer;
+    }
+    
     private Trainer toTrainer(TrainerDto trainerDto) {
         Trainer trainer = new Trainer();
         trainer.setId(trainerDto.getId());
         trainer.setFirstName(trainerDto.getFirstName());
         trainer.setLastName(trainerDto.getLastName());
         trainer.setBirthDate(trainerDto.getBirthDate());
-        trainer.setRole(Role.valueOf(trainer.getRole().name()));
+        trainer.setRole(Role.valueOf(trainerDto.getRoleDto().name()));
         List<ClientDto> clientsDto = trainerDto.getClients();
         List<Client> clients = new ArrayList<>();
         for(ClientDto clientDto: clientsDto) {

@@ -29,6 +29,13 @@
 <input type="submit" value="Edit"/>
 </form>
 </td>
+<td>
+<form method="post" action="controller">
+<input type="hidden" name="command" value="delete_user"/>
+<input type="hidden" name="userId" value="${user.id}"/>
+<input type="submit" value="Delete"/>
+</form>
+</td>
 </tr>
 </c:forEach>
 </c:if>

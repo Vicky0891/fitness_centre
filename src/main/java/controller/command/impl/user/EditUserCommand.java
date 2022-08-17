@@ -2,38 +2,41 @@ package controller.command.impl.user;
 
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import service.TrainerService;
 import service.UserService;
 import service.dto.UserDto;
+import service.dto.TrainerDto;
 import service.dto.UserDto.RoleDto;
 
-public class EditUserCommand implements Command{
+public class EditUserCommand implements Command {
     private final UserService userService;
+    private final TrainerService trainerService;
 
-    public EditUserCommand(UserService userService) {
+    public EditUserCommand(UserService userService, TrainerService trainerService) {
         this.userService = userService;
+        this.trainerService = trainerService;
     }
 
     @Override
     public String execute(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        UserDto currentUserDto = (UserDto)session.getAttribute("user");
-//            String firstName = req.getParameter("firstName");
-//            String lastName = req.getParameter("lastName");
-            
-            
-            
-            
-            String role = req.getParameter("role");
-            String type = req.getParameter("type");
-            String trainerId = req.getParameter("trainerId");
-//            currentUserDto.setFirstName(firstName);
-//            currentUserDto.setLastName(lastName);
-            currentUserDto.setRoleDto(RoleDto.valueOf(role));
-                UserDto updated = userService.update(currentUserDto);
-            req.setAttribute("user", updated);
-            req.setAttribute("message", "User updated");
-            return "jsp/user/user.jsp";
+        Long userId = Long.parseLong(req.getParameter("id"));
+        UserDto currentUserDto = userService.getById(userId);
+        String role = req.getParameter("role");
+        currentUserDto.setRoleDto(RoleDto.valueOf(role));
+        UserDto updated = userService.update(currentUserDto);
+        if (role.equals("TRAINER")) {
+            TrainerDto trainerDto = new TrainerDto();
+            trainerDto.setId(updated.getId());
+            trainerDto.setRoleDto(updated.getRoleDto());
+            try {
+                trainerService.create(trainerDto);
+            } catch (RuntimeException e) {
+                System.out.println(e);
+                return "redirect:controller?command=all_users";
+            }
+        }
+        req.setAttribute("message", "User updated");
+        return "redirect:controller?command=all_users";
     }
 
 }

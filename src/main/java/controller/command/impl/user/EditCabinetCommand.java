@@ -26,7 +26,11 @@ public class EditCabinetCommand implements Command {
         String category = req.getParameter("category");
         currentTrainerDto.setFirstName(firstName);
         currentTrainerDto.setLastName(lastName);
-        currentTrainerDto.setBirthDate(LocalDate.parse(birthDate));
+        if(("").equals(birthDate)) {
+            currentTrainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
+        } else {
+            currentTrainerDto.setBirthDate(LocalDate.parse(birthDate));
+        }
         currentTrainerDto.setCategory(category);
         TrainerDto updated = trainerService.update(currentTrainerDto);
         session.setAttribute("user", updated);

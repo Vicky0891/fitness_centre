@@ -21,7 +21,7 @@ value="ADMIN" ${requestScope.user.roleDto=='ADMIN' ? 'checked' : ''}>
 <label for="role-input-client">CLIENT</label>
 <input id="role-input-trainer" name="role" type="radio"
 value="TRAINER" ${requestScope.user.roleDto=='TRAINER' ? 'checked' : ''}>
-<label for="role-input-admin">TRAINER</label>
+<label for="role-input-trainer">TRAINER</label>
 <br/>
 <input type="submit" value="SAVE"/>
 <br/>

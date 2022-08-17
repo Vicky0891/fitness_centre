@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
     private static final String UPDATE = "UPDATE users SET role_id = ? WHERE id = ? AND deleted = false";
     private static final String INSERT = "INSERT INTO users (email, password, role_id) VALUES (?, ?, ?)";
     private static final String SELECT_ALL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
-            + "JOIN roles r ON u.role_id = r.id WHERE u.deleted = false ORDRE BY u.id";
+            + "JOIN roles r ON u.role_id = r.id WHERE u.deleted = false ORDER BY u.id";
     private static final String SELECT_BY_ID = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
             + "JOIN roles r ON u.role_id = r.id WHERE u.id = ? AND u.deleted = false";
     private static final String SELECT_BY_EMAIL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "

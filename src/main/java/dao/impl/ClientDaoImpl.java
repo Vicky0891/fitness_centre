@@ -37,7 +37,6 @@ public class ClientDaoImpl implements ClientDao {
             + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
             + "c.additional_info FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id "
             + "JOIN roles r ON r.id = u.role_id WHERE t.name = ? AND u.deleted = false ORDER BY c.user_id";
-    private static final String DEFAULT_BIRTHDATE = "2000-01-01";
 
     private DataSource dataSource;
 
@@ -109,18 +108,6 @@ public class ClientDaoImpl implements ClientDao {
             statement.setInt(2, getTypeId(client.getType().name()));
             statement.executeUpdate();
 
-//        statement.setString(2, client.getFirstName());
-//        statement.setString(3, client.getLastName());
-//        if(client.getBirthDate() == null) {
-//            statement.setDate(4, Date.valueOf(LocalDate.parse(DEFAULT_BIRTHDATE)));
-//        } else {
-//            statement.setDate(4, Date.valueOf(client.getBirthDate()));
-//        }
-//        statement.setDate(4, Date.valueOf(client.getBirthDate()));
-//        statement.setString(5, client.getPhoneNumber());
-//        statement.setLong(6, client.getTrainerId());
-//        statement.setString(8, client.getAdditionalInfo());
-
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 Long id = result.getLong("user_id");
@@ -149,11 +136,7 @@ public class ClientDaoImpl implements ClientDao {
             statement.setLong(8, client.getId());
             statement.executeUpdate();
 
-//            ResultSet result = statement.getGeneratedKeys();
-//            if (result.next()) {
-//                Long id = result.getLong("user_id");
             return get(client.getId());
-//            }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
         } finally {
@@ -183,16 +166,10 @@ public class ClientDaoImpl implements ClientDao {
         client.setId(result.getLong("user_id"));
         client.setEmail(result.getString("email"));
         client.setPassword(result.getString("password"));
-
         client.setRole(Role.valueOf(result.getString("role")));
-
         client.setFirstName(result.getString("first_name"));
         client.setLastName(result.getString("last_name"));
-        if (result.getDate("birth_date") == null) {
-            client.setBirthDate(LocalDate.parse(DEFAULT_BIRTHDATE));
-        } else {
-            client.setBirthDate(result.getDate("birth_date").toLocalDate());
-        }
+        client.setBirthDate(result.getDate("birth_date").toLocalDate());
         client.setPhoneNumber(result.getString("phone_number"));
         client.setType(Type.valueOf(result.getString("type")));
         client.setTrainerId(result.getLong("trainer_id"));

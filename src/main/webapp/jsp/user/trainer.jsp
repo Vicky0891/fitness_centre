@@ -15,7 +15,6 @@
 <h3>Last name: <c:out value="${trainer.lastName}"/></h3>
 <h3>Email: <c:out value="${trainer.email}"/></h3>
 <br/>
-<h3 class="alltrainers"><a href="controller?command=trainers">All trainers</a></h3>
 </c:if>
 <c:if test="${trainer.id == null}">
 <h1 class="error">Trainer with this ID does not exist</h1>
