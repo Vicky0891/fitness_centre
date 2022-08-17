@@ -9,6 +9,13 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1>Our gymmemberships</h1>
+
+<c:if test="${sessionScope.user.roleDto.toString() == 'ADMIN'}">
+<form method="post" action="controller">
+<input type="hidden" name="command" value="create_gymmembership_form"/>
+<input type="submit" value="Create new gymmembership"/>
+</form>
+</c:if>
 <table>
 <jsp:include page="../pagination.jsp"/>
 
@@ -23,6 +30,7 @@
 <td><c:out value="${gymmembership.numberOfVisits}"/></td>
 <td><a href="controller?command=gymmembership&id=${gymmembership.id}"><c:out value="${gymmembership.typeOfTraining}"/></a></td>
 <td><c:out value="${gymmembership.cost}"/> USD</td>
+<c:if test="${sessionScope.user.roleDto.toString() != 'ADMIN' && sessionScope.user.roleDto.toString() != 'TRAINER'}">
 <td>
 <form method="post" action="controller">
 <input type="hidden" name="command" value="add_to_cart"/>
@@ -37,6 +45,16 @@
 <input type="submit" value="Remove from cart"/>
 </form>
 </td>
+</c:if>
+<c:if test="${sessionScope.user.roleDto.toString() == 'ADMIN'}">
+<td>
+<form method="post" action="controller">
+<input type="hidden" name="command" value="delete_gymmembership"/>
+<input type="hidden" name="gymmembershipId" value="${gymmembership.id}"/>
+<input type="submit" value="Delete"/>
+</form>
+</td>
+</c:if>
 </tr>
 </c:forEach>
 </c:if>

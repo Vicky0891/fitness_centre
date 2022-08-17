@@ -34,11 +34,6 @@ public class GymMembershipServiceImpl implements GymMembershipService {
 
     @Override
     public GymMembershipDto create(GymMembershipDto gymMembershipDto) {
-        GymMembership existing = gymMembershipDao.get(gymMembershipDto.getId());
-        if (existing != null) {
-            log.error("GymMembership with id " + gymMembershipDto.getId() + " already exists");
-            throw new RuntimeException("GymMembership with id " + gymMembershipDto.getId() + " already exists");
-        }
         GymMembership gymMembership = toGymMembership(gymMembershipDto);
         GymMembership createdGymMembership = gymMembershipDao.create(gymMembership);
         return toDto(createdGymMembership);

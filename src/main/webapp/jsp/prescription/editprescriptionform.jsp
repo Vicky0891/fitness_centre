@@ -15,13 +15,13 @@
 
 
 <label for="typeOfTraining-input">Type of training: </label>
-<input id="typeOfTraining-input" name="typeOfTraining" type="text"/>
+<input id="typeOfTraining-input" name="typeOfTraining" type="text" value="${sessionScope.prescription.userId}"/>
 <br/>
 <label for="equipment-input">Equipment: </label>
-<input id="equipment-input" name="equipment" type="text"/>
+<input id="equipment-input" name="equipment" type="text" value="${sessionScope.prescription.equipment}"/>
 <br/>
 <label for="diet-input">Diet: </label>
-<input id="diet-input" name="diet" type="text"/>
+<input id="diet-input" name="diet" type="text" value="${sessionScope.prescription.diet}"/>
 <br/>
 
 <input type="submit" value="SAVE"/>

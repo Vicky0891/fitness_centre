@@ -3,28 +3,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Create prescription</title>
+<title>Create gymmembership</title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <jsp:include page="../navbar.jsp"/>
-<h1>Create prescription</h1>
+<h1>Create gymmembership</h1>
 <form method="post" action="controller">
-<input type="hidden" name="clientId" value="${requestScope.clientId}"/>
-<input name="command" type="hidden" value="create_prescription"/>
+<input name="command" type="hidden" value="create_gymmembership"/>
 
+<br/>
+<label for="numberOfVisits-input">Number of visits: </label>
+<input id="numberOfVisits-input" name="numberOfVisits" type="number" min="1"/>
 <br/>
 <label for="typeOfTraining-input">Type of training: </label>
 <input id="typeOfTraining-input" name="typeOfTraining" type="text"/>
 <br/>
-<label for="equipment-input">Equipment: </label>
-<input id="equipment-input" name="equipment" type="text"/>
-<br/>
-<label for="diet-input">Diet: </label>
-<input id="diet-input" name="diet" type="text"/>
+<label for="cost-input">Cost USD: </label>
+<input id="cost-input" name="cost" type="text"/>
 <br/>
 
-<input type="submit" value="SAVE"/>
+<input type="submit" value="CREATE"/>
 </form>
 </body>
 </html>

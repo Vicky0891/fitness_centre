@@ -122,7 +122,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             statement.setInt(1, (gymMembership.getNumberOfVisits()));
             statement.setString(2, gymMembership.getTypeOfTraining());
             statement.setBigDecimal(3, gymMembership.getCost());
-            statement.setLong(5, gymMembership.getId());
+            statement.setLong(4, gymMembership.getId());
 
             statement.executeUpdate();
             return get(gymMembership.getId());
