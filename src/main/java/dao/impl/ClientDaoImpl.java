@@ -24,17 +24,19 @@ public class ClientDaoImpl implements ClientDao {
     private static final String UPDATE = "UPDATE clients SET first_name = ?, last_name = ?, birth_date = ?, "
             + "phone_number = ?, trainer_id = ?, type_id = ?, additional_info = ? WHERE user_id = ?";
     private static final String INSERT = "INSERT INTO clients (user_id, type_id) VALUES (?, ?)";
-    private static final String SELECT_ALL = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, r.name AS role, "
-            + "c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info FROM clients c"
-            + " JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id JOIN roles r ON r.id = u.role_id WHERE u.deleted = false";
-    private static final String SELECT_BY_ID = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, r.name AS role, "
-            + "c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info FROM clients c"
-            + " JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id JOIN roles r ON r.id = u.role_id WHERE c.user_id = ? AND "
-            + "u.deleted = false";
+    private static final String SELECT_ALL = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, "
+            + "r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info "
+            + "FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id JOIN roles r "
+            + "ON r.id = u.role_id WHERE u.deleted = false ORDER BY c.user_id";
+    private static final String SELECT_BY_ID = "SELECT c.user_id, c.first_name, c.last_name, u.email, "
+            + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
+            + "c.additional_info FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id "
+            + "JOIN roles r ON r.id = u.role_id WHERE c.user_id = ? AND u.deleted = false";
     private static final String SELECT_TYPE_ID = "SELECT t.id FROM types t WHERE name = ?";
-    private static final String SELECT_ALL_BY_TYPES = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, r.name AS role, "
-            + "c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info FROM clients c "
-            + " JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id JOIN roles r ON r.id = u.role_id WHERE t.name = ? AND u.deleted = false";
+    private static final String SELECT_ALL_BY_TYPES = "SELECT c.user_id, c.first_name, c.last_name, u.email, "
+            + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
+            + "c.additional_info FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id "
+            + "JOIN roles r ON r.id = u.role_id WHERE t.name = ? AND u.deleted = false ORDER BY c.user_id";
     private static final String DEFAULT_BIRTHDATE = "2000-01-01";
 
     private DataSource dataSource;
@@ -150,7 +152,7 @@ public class ClientDaoImpl implements ClientDao {
 //            ResultSet result = statement.getGeneratedKeys();
 //            if (result.next()) {
 //                Long id = result.getLong("user_id");
-                return get(client.getId());
+            return get(client.getId());
 //            }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);

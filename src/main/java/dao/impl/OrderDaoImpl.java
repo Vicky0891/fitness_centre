@@ -25,18 +25,19 @@ public class OrderDaoImpl implements OrderDao {
     private static final String INSERT = "INSERT INTO orders (date_of_order, user_id, total_cost, status_id) "
             + "VALUES (?, ?, ?, ?)";
     private static final String SELECT_ALL = "SELECT o.id, o.date_of_order, o.user_id, o.total_cost, o.feedback, "
-            + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id WHERE o.deleted = false";
+            + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id WHERE o.deleted = false "
+            + "ORDER BY o.id";
     private static final String SELECT_BY_ID = "SELECT o.id, o.date_of_order, o.user_id, o.total_cost, o.feedback, "
             + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id JOIN users u "
             + "ON u.id = o.user_id WHERE o.id = ? AND o.deleted = false";
-    private static final String SELECT_ALL_BY_CLIENT = "SELECT o.id, o.date_of_order, o.user_id, o.feedback, o.total_cost, s.name AS status "
-            + "FROM orders o JOIN status s ON s.id = o.status_id JOIN users u "
-            + "ON u.id = o.user_id WHERE o.user_id = ? AND o.deleted = false";
+    private static final String SELECT_ALL_BY_CLIENT = "SELECT o.id, o.date_of_order, o.user_id, o.feedback, "
+            + "o.total_cost, s.name AS status FROM orders o JOIN status s ON s.id = o.status_id JOIN users u "
+            + "ON u.id = o.user_id WHERE o.user_id = ? AND o.deleted = false ORDER BY o.id";
     private static final String SELECT_STATUS_ID = "SELECT s.id FROM status s WHERE name = ?";
     private static final String UPDATE_FEEDBACK = "UPDATE orders SET feedback = ? WHERE id = ? AND deleted = false";
     private static final String SELECT_ALL_BY_STATUS = "SELECT o.id, o.date_of_order, o.user_id, o.feedback, "
             + "o.total_cost, s.name AS status FROM orders o JOIN status s ON s.id = o.status_id "
-            + "WHERE s.name = ? AND o.deleted = false";
+            + "WHERE s.name = ? AND o.deleted = false ORDER BY o.id";
     private static final String SELECT_DISCOUNT = "SELECT t.discount FROM types t WHERE name = ?";
 
     private DataSource dataSource;
@@ -55,11 +56,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
-                
-                
-                
-                
-                
+
                 return processOrder(result);
             }
         } catch (SQLException e) {

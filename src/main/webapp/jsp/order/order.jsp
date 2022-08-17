@@ -17,16 +17,16 @@
 <h3>Total cost: <c:out value="${requestScope.order.totalCost}"/> USD</h3>
 
 <table>
-<th>Type of training</th><th>Number of visits</th><th>Cost</th>
+<tr><th>Type of training</th><th>Number of visits</th><th>Cost</th></tr>
 <c:forEach items="${order.details}" var="detail">
 <tr>
 <td><c:out value="${detail.gymMembershipDto.typeOfTraining}"/></td>
 <td><c:out value="${detail.gymMembershipDto.numberOfVisits}"/></td>
 <td><c:out value="${detail.gymMembershipDto.cost}"/> USD</td>
 </tr>          
+
+
 </c:forEach>
-
-
 </table>
           
 </body>

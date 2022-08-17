@@ -13,8 +13,11 @@ import controller.command.impl.gym.GymmembershipsCommand;
 import controller.command.impl.order.AddFeedbackCommand;
 import controller.command.impl.order.AddFeedbackFormCommand;
 import controller.command.impl.order.AddToCartCommand;
+import controller.command.impl.order.AllOrdersCommand;
 import controller.command.impl.order.CartCommand;
 import controller.command.impl.order.CreateOrderCommand;
+import controller.command.impl.order.EditOrderCommand;
+import controller.command.impl.order.EditOrderFormCommand;
 import controller.command.impl.order.OrderCommand;
 import controller.command.impl.order.OrdersCommand;
 import controller.command.impl.order.RemoveFromCartCommand;
@@ -100,7 +103,10 @@ public class CommandFactory {
                 new CreatePrescriptionCommand(ServiceFactory.INSTANCE.getService(PrescriptionService.class)));
 
         commands.put("orders", new OrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        commands.put("all_orders", new AllOrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("order", new OrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        commands.put("edit_order", new EditOrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        commands.put("edit_order_form", new EditOrderFormCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("add_to_cart", new AddToCartCommand());
         commands.put("remove_from_cart", new RemoveFromCartCommand());
         commands.put("cart", new CartCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));

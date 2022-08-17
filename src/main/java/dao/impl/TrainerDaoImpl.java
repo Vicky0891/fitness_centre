@@ -19,19 +19,23 @@ import dao.interfaces.TrainerDao;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class TrainerDaoImpl implements TrainerDao{
+public class TrainerDaoImpl implements TrainerDao {
     private static final String DELETE = "UPDATE users SET deleted = true WHERE id = ?";
     private static final String UPDATE = "UPDATE trainers SET first_name = ?, last_name = ?, birth_date = ?, "
             + "category = ? WHERE user_id = ?";
     private static final String INSERT = "INSERT INTO trainers (user_id, first_name, last_name, birth_date, "
             + "category) VALUES (?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password, r.name AS role, "
-            + "tr.birth_date, tr.category FROM trainers tr JOIN users u ON u.id = tr.user_id JOIN roles r ON r.id = u.role_id WHERE u.deleted = false";
-    private static final String SELECT_BY_ID = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password, r.name AS role, "
-            + "tr.birth_date, tr.category FROM trainers tr JOIN users u ON tr.user_id = u.id JOIN roles r ON r.id = u.role_id WHERE tr.user_id = ? AND u.deleted = false";
-    private static final String SELECT_CLIENTS_FOR_TRAINER = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, r.name AS role, c.birth_date, c.phone_number, "
-            + "c.trainer_id, t.name AS type, c.additional_info FROM clients c JOIN types t ON t.id = c.type_id "
-            + "JOIN trainers tr ON c.trainer_id = tr.user_id JOIN users u ON u.id = c.user_id JOIN roles r ON r.id = u.role_id WHERE tr.user_id = ? AND u.deleted = false";
+    private static final String SELECT_ALL = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
+            + " r.name AS role, tr.birth_date, tr.category FROM trainers tr JOIN users u ON u.id = tr.user_id "
+            + "JOIN roles r ON r.id = u.role_id WHERE u.deleted = false ORDER BY tr.user_id";
+    private static final String SELECT_BY_ID = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
+            + " r.name AS role, tr.birth_date, tr.category FROM trainers tr JOIN users u ON tr.user_id = u.id "
+            + "JOIN roles r ON r.id = u.role_id WHERE tr.user_id = ? AND u.deleted = false";
+    private static final String SELECT_CLIENTS_FOR_TRAINER = "SELECT c.user_id, c.first_name, c.last_name, u.email, "
+            + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
+            + "c.additional_info FROM clients c JOIN types t ON t.id = c.type_id JOIN trainers tr "
+            + "ON c.trainer_id = tr.user_id JOIN users u ON u.id = c.user_id JOIN roles r ON r.id = u.role_id "
+            + "WHERE tr.user_id = ? AND u.deleted = false c.user_id";
     private static final String DEFAULT_BIRTHDATE = "2000-01-01";
 
     private DataSource dataSource;
@@ -46,7 +50,7 @@ public class TrainerDaoImpl implements TrainerDao{
     public Trainer get(Long id) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -65,7 +69,7 @@ public class TrainerDaoImpl implements TrainerDao{
         List<Trainer> trainers = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
-                Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
             while (result.next()) {
                 trainers.add(processTrainer(result));
@@ -82,8 +86,7 @@ public class TrainerDaoImpl implements TrainerDao{
     public Trainer create(Trainer trainer) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(INSERT,
-                    Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, trainer.getId());
             statement.setString(2, trainer.getFirstName());
             statement.setString(3, trainer.getLastName());
@@ -108,7 +111,7 @@ public class TrainerDaoImpl implements TrainerDao{
     public Trainer update(Trainer trainer) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(UPDATE);
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setString(1, trainer.getFirstName());
             statement.setString(2, trainer.getLastName());
             statement.setDate(3, Date.valueOf(trainer.getBirthDate()));
@@ -129,7 +132,7 @@ public class TrainerDaoImpl implements TrainerDao{
     public boolean delete(Long id) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(DELETE);
+            PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setLong(1, id);
             int rowsDeleted = statement.executeUpdate();
             return rowsDeleted == 1;
@@ -147,7 +150,7 @@ public class TrainerDaoImpl implements TrainerDao{
 
         Connection connection = dataSource.getConnection();
         try {
-        PreparedStatement statement = connection.prepareStatement(SELECT_CLIENTS_FOR_TRAINER);
+            PreparedStatement statement = connection.prepareStatement(SELECT_CLIENTS_FOR_TRAINER);
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
 
@@ -188,6 +191,5 @@ public class TrainerDaoImpl implements TrainerDao{
             log.error(e.getMessage() + e);
         }
     }
-
 
 }

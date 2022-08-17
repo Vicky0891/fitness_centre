@@ -20,12 +20,12 @@ public class UserDaoImpl implements UserDao {
     private static final String DELETE = "UPDATE users u SET deleted = true WHERE u.id = ?";
     private static final String UPDATE = "UPDATE users SET role_id = ? WHERE id = ? AND deleted = false";
     private static final String INSERT = "INSERT INTO users (email, password, role_id) VALUES (?, ?, ?)";
-    private static final String SELECT_ALL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u JOIN roles r "
-            + "ON u.role_id = r.id WHERE u.deleted = false";
-    private static final String SELECT_BY_ID = "SELECT u.id, u.email, u.password, r.name AS role FROM users u JOIN roles r "
-            + "ON u.role_id = r.id WHERE u.id = ? AND u.deleted = false";
-    private static final String SELECT_BY_EMAIL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u JOIN roles r ON u.role_id = r.id WHERE u.email = ? "
-            + "AND u.deleted = false";
+    private static final String SELECT_ALL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
+            + "JOIN roles r ON u.role_id = r.id WHERE u.deleted = false ORDRE BY u.id";
+    private static final String SELECT_BY_ID = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
+            + "JOIN roles r ON u.role_id = r.id WHERE u.id = ? AND u.deleted = false";
+    private static final String SELECT_BY_EMAIL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
+            + "JOIN roles r ON u.role_id = r.id WHERE u.email = ? AND u.deleted = false";
     private static final String SELECT_ROLE_ID = "SELECT r.id FROM roles r WHERE name = ?";
 
     private DataSource dataSource;
@@ -38,7 +38,7 @@ public class UserDaoImpl implements UserDao {
     public User get(Long id) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -56,7 +56,7 @@ public class UserDaoImpl implements UserDao {
     public User getByEmail(String email) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL);
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL);
             statement.setString(1, email);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -75,7 +75,7 @@ public class UserDaoImpl implements UserDao {
         List<User> users = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
-                Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
             while (result.next()) {
                 users.add(processUser(result));
@@ -92,8 +92,7 @@ public class UserDaoImpl implements UserDao {
     public User create(User user) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(INSERT,
-                Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
             statement.setInt(3, getRoleId(user.getRole().name()));
@@ -116,7 +115,7 @@ public class UserDaoImpl implements UserDao {
     public User update(User user) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(UPDATE);
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setInt(1, getRoleId(user.getRole().name()));
             statement.setLong(2, user.getId());
 
@@ -134,7 +133,7 @@ public class UserDaoImpl implements UserDao {
     public boolean delete(Long id) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(DELETE);
+            PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setLong(1, id);
             int rowsDeleted = statement.executeUpdate();
             return rowsDeleted == 1;
@@ -158,7 +157,7 @@ public class UserDaoImpl implements UserDao {
     private int getRoleId(String name) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(SELECT_ROLE_ID);
+            PreparedStatement statement = connection.prepareStatement(SELECT_ROLE_ID);
             statement.setString(1, name);
             ResultSet result = statement.executeQuery();
             if (result.next()) {

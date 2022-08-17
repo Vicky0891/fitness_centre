@@ -12,6 +12,7 @@ import dao.connection.DataSource;
 import dao.entity.GymMembership;
 import dao.interfaces.GymMembershipDao;
 import lombok.extern.log4j.Log4j2;
+
 @Log4j2
 public class GymMembershipDaoImpl implements GymMembershipDao {
 
@@ -21,13 +22,12 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     private static final String INSERT = "INSERT INTO gymmemberships (number_of_visits, type_of_training,"
             + " cost) VALUES (?, ?, ?)";
     private static final String SELECT_ALL = "SELECT g.id, g.number_of_visits, g.type_of_training, g.cost "
-            + "FROM gymmemberships g WHERE g.deleted = false";
+            + "FROM gymmemberships g WHERE g.deleted = false ORDER BY g.number_of_visits";
     private static final String COUNT_ALL = "SELECT count(*) AS total FROM gymmemberships g WHERE g.deleted = false";
     private static final String SELECT_ALL_BY_PAGED = "SELECT g.id, g.number_of_visits, g.type_of_training, g.cost "
-            + "FROM gymmemberships g WHERE g.deleted = false LIMIT ? OFFSET ?";
+            + "FROM gymmemberships g WHERE g.deleted = false ORDER BY g.number_of_visits LIMIT ? OFFSET ?";
     private static final String SELECT_BY_ID = "SELECT g.id, g.number_of_visits, g.type_of_training, g.cost "
             + "FROM gymmemberships g WHERE g.id = ? AND g.deleted = false";
-    
 
     private DataSource dataSource;
 
@@ -39,7 +39,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     public GymMembership get(Long id) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -58,7 +58,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
-                Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
             while (result.next()) {
                 gymMemberships.add(processGymMembership(result));
@@ -70,13 +70,13 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
         }
         return gymMemberships;
     }
-    
+
     @Override
     public List<GymMembership> getAll(int limit, Long offset) {
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_PAGED);
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_PAGED);
             statement.setInt(1, limit);
             statement.setLong(2, offset);
             ResultSet result = statement.executeQuery();
@@ -95,8 +95,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     public GymMembership create(GymMembership gymMembership) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(INSERT,
-                    Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, (gymMembership.getNumberOfVisits()));
             statement.setString(2, gymMembership.getTypeOfTraining());
             statement.setBigDecimal(3, gymMembership.getCost());
@@ -119,7 +118,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     public GymMembership update(GymMembership gymMembership) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(UPDATE);
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setInt(1, (gymMembership.getNumberOfVisits()));
             statement.setString(2, gymMembership.getTypeOfTraining());
             statement.setBigDecimal(3, gymMembership.getCost());
@@ -139,7 +138,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     public boolean delete(Long id) {
         Connection connection = dataSource.getConnection();
         try {
-                PreparedStatement statement = connection.prepareStatement(DELETE);
+            PreparedStatement statement = connection.prepareStatement(DELETE);
             statement.setLong(1, id);
             int rowsDeleted = statement.executeUpdate();
             return rowsDeleted == 1;
@@ -164,7 +163,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     public long count() {
         Connection connection = dataSource.getConnection();
         try {
-                Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(COUNT_ALL);
             if (result.next()) {
                 return result.getLong("total");
@@ -176,7 +175,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
         }
         throw new RuntimeException("Couldn't count gymmemberships");
     }
-    
+
     private void close(Connection connection) {
         try {
             connection.close();
@@ -184,6 +183,5 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             log.error(e.getMessage() + e);
         }
     }
-
 
 }
