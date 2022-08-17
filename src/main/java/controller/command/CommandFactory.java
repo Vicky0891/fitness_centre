@@ -46,6 +46,7 @@ import controller.command.impl.user.EditUserFormCommand;
 import controller.command.impl.user.TrainerCommand;
 import controller.command.impl.user.TrainersCommand;
 import controller.command.impl.user.UserCommand;
+import controller.command.impl.user.AllClientsByTypeCommand;
 import controller.command.impl.user.AllClientsCommand;
 import controller.command.impl.user.AllUsersCommand;
 import controller.util.PagingUtil;
@@ -82,6 +83,7 @@ public class CommandFactory {
         commands.put("trainer", new TrainerCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("clients", new ClientsCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("all_clients", new AllClientsCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
+        commands.put("all_clients_by_type", new AllClientsByTypeCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
         commands.put("user", new UserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("delete_user", new DeleteUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("all_users", new AllUsersCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
