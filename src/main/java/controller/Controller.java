@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import controller.command.Command;
 import controller.command.CommandFactory;
+import controller.util.exception.ExceptionHandler;
 import dao.connection.DataSource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +18,8 @@ import lombok.extern.log4j.Log4j2;
 public class Controller extends HttpServlet {
 
     public static final String REDIRECT = "redirect:";
-
+    private ExceptionHandler exceptionHandler = ExceptionHandler.INSTANCE;
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         process(req, resp);
@@ -28,21 +30,22 @@ public class Controller extends HttpServlet {
         process(req, resp);
     }
 
-    private void process(HttpServletRequest req, HttpServletResponse resp) {
+    private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String command = req.getParameter("command");
+        String page;
         try {
             Command commandInstance = CommandFactory.getInstance().getCommand(command);
-            String page = commandInstance.execute(req);
+            page = commandInstance.execute(req);
 
             if (page.startsWith(REDIRECT)) {
                 resp.sendRedirect(req.getContextPath() + "/" + page.substring(REDIRECT.length()));
-            } else {
-                req.getRequestDispatcher(page).forward(req, resp);
-            }
+            } 
         } catch (Exception e) {
-            log.error("Request isn't correct" + e);
-
+            log.error("Request isn't correct " + e);
+            page = exceptionHandler.handleException(e, req);
         }
+            req.getRequestDispatcher(page).forward(req, resp);
+            
     }
 
     @Override

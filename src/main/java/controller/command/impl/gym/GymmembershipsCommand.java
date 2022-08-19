@@ -19,15 +19,22 @@ public class GymmembershipsCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
-        Paging paging = pagingUtil.getPaging(req);        
+    public String execute(HttpServletRequest req) throws Exception {
+        Paging paging = pagingUtil.getPaging(req);
         List<GymMembershipDto> gymMemberships = gymMembershipService.getAll(paging);
         long totalEntities = gymMembershipService.count();
         long totalPage = pagingUtil.getTotalPages(totalEntities, paging.getLimit());
+        
+        if(paging.getPage() > 0 && paging.getPage() <= totalPage) {
+            req.setAttribute("currentPage", paging.getPage());
+        } else {
+            req.setAttribute("currentPage", 1);
+        }
         req.setAttribute("gymmemberships", gymMemberships);
-        req.setAttribute("currentPage", paging.getPage());
         req.setAttribute("totalPages", totalPage);
         return "jsp/gymmembership/gymmemberships.jsp";
+        
+        
+        
     }
-
 }

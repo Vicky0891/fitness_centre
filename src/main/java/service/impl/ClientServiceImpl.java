@@ -2,6 +2,9 @@ package service.impl;
 
 import java.util.List;
 
+import controller.util.exception.impl.BadRequestException;
+import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.NotFoundException;
 import dao.entity.Client;
 import dao.entity.Client.Type;
 import dao.entity.User.Role;
@@ -11,9 +14,10 @@ import service.ClientService;
 import service.dto.ClientDto;
 import service.dto.ClientDto.TypeDto;
 import service.dto.UserDto.RoleDto;
+
 @Log4j2
-public class ClientServiceImpl implements ClientService{
-    
+public class ClientServiceImpl implements ClientService {
+
     private ClientDao clientDao;
 
     public ClientServiceImpl(ClientDao clientDao) {
@@ -21,13 +25,13 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public ClientDto getById(Long id) {
+    public ClientDto getById(Long id) throws Exception {
         Client client = clientDao.get(id);
-        if(client == null) {
-            throw new RuntimeException("No client with id " + id);
+        if (client == null) {
+            log.error("Trying to get not existing client, client id={}", id);
+            throw new NotFoundException("client with id " + id + " not found");
         }
-        ClientDto clientDto = toDto(client);
-        return clientDto;
+        return toDto(client);
     }
 
     @Override
@@ -36,36 +40,39 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public ClientDto create(ClientDto clientDto) {
+    public ClientDto create(ClientDto clientDto) throws Exception {
         Client existing = clientDao.get(clientDto.getId());
         if (existing != null) {
-            log.error("Client with this id=" + clientDto.getId() + " already exists");
-            throw new RuntimeException("Client with this id=" + clientDto.getId() + " already exists");
+            log.error("Trying to create an existing client, client={}", clientDto);
+            throw new BadRequestException("Such client already exists");
         }
-        Client client = toClientForCreate(clientDto);
+        Client client = toClient(clientDto);
         Client createdClient = clientDao.create(client);
-        return toDtoForCreate(createdClient);
+        log.info("Client was create, client={}", clientDto);
+        return toDto(createdClient);
     }
 
     @Override
-    public ClientDto update(ClientDto clientDto) {
+    public ClientDto update(ClientDto clientDto) throws Exception {
         Client client = toClient(clientDto);
         Client updatedClient = clientDao.update(client);
+        log.info("Client was update, client={}", clientDto);
         return toDto(updatedClient);
     }
 
     @Override
-    public void delete(Long id) {
-        if(!clientDao.delete(id)) {
-            throw new RuntimeException("Couldn't delete client with id " + id);
-        };
+    public void delete(Long id) throws InternalErrorException {
+        if (!clientDao.delete(id)) {
+            log.error("Client wasn't delete, client id={}", id);
+            throw new InternalErrorException("Internal Server Error. Client wasn't delete.");
+        }
     }
 
     @Override
     public List<ClientDto> getAllClientsByType(String typeOfClient) {
         return clientDao.getAllClientsByType(typeOfClient).stream().map(e -> toDto(e)).toList();
     }
-    
+
     private ClientDto toDto(Client client) {
         ClientDto clientDto = new ClientDto();
         try {
@@ -75,33 +82,16 @@ public class ClientServiceImpl implements ClientService{
             clientDto.setLastName(client.getLastName());
             clientDto.setBirthDate(client.getBirthDate());
             clientDto.setPhoneNumber(client.getPhoneNumber());
-            TypeDto typeDto = TypeDto.valueOf(client.getType().toString());
-            clientDto.setType(typeDto);
-            RoleDto roleDto = RoleDto.valueOf(client.getRole().toString());
-            clientDto.setRoleDto(roleDto);
+            clientDto.setType(TypeDto.valueOf(client.getType().toString()));
+            clientDto.setRoleDto(RoleDto.valueOf(client.getRole().toString()));
             clientDto.setTrainerId(client.getTrainerId());
             clientDto.setAdditionalInfo(client.getAdditionalInfo());
         } catch (NullPointerException e) {
-            log.error("UserDto wasn't create " + e);
+            log.error("Client wasn't create, client={} ", client);
         }
         return clientDto;
     }
-    
-    private ClientDto toDtoForCreate(Client client) {
-        ClientDto clientDto = new ClientDto();
-        try {
-            clientDto.setId(client.getId());
-            clientDto.setEmail(client.getEmail());
-            TypeDto typeDto = TypeDto.valueOf(client.getType().toString());
-            clientDto.setType(typeDto);
-            RoleDto roleDto = RoleDto.valueOf(client.getRole().toString());
-            clientDto.setRoleDto(roleDto);
-        } catch (NullPointerException e) {
-            log.error("UserDto wasn't create " + e);
-        }
-        return clientDto;
-    }
-    
+
     private Client toClient(ClientDto clientDto) {
         Client client = new Client();
         client.setId(clientDto.getId());
@@ -109,20 +99,10 @@ public class ClientServiceImpl implements ClientService{
         client.setLastName(clientDto.getLastName());
         client.setBirthDate(clientDto.getBirthDate());
         client.setPhoneNumber(clientDto.getPhoneNumber());
-        Type type = Type.valueOf(clientDto.getType().toString());
-        client.setType(type);
-        client.setRole(Role.CLIENT);
+        client.setType(Type.valueOf(clientDto.getType().toString()));
+        client.setRole(Role.valueOf(clientDto.getRoleDto().toString()));
         client.setTrainerId(clientDto.getTrainerId());
         client.setAdditionalInfo(clientDto.getAdditionalInfo());
-        return client;
-    }
-    
-    private Client toClientForCreate(ClientDto clientDto) {
-        Client client = new Client();
-        client.setId(clientDto.getId());
-        Type type = Type.valueOf(clientDto.getType().toString());
-        client.setType(type);
-        client.setRole(Role.valueOf(clientDto.getRoleDto().toString()));
         return client;
     }
 

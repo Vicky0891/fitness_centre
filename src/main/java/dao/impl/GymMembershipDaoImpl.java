@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
 import dao.connection.DataSource;
 import dao.entity.GymMembership;
 import dao.interfaces.GymMembershipDao;
@@ -37,6 +38,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
 
     @Override
     public GymMembership get(Long id) {
+        log.debug("Accessing to database using \"get\" method, gymMembership id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -55,6 +57,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
 
     @Override
     public List<GymMembership> getAll() {
+        log.debug("Accessing to database using \"getAll\" method");
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -73,6 +76,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
 
     @Override
     public List<GymMembership> getAll(int limit, Long offset) {
+        log.debug("Accessing to database using \"getAll\" method");
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -93,6 +97,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
 
     @Override
     public GymMembership create(GymMembership gymMembership) {
+        log.debug("Accessing to database using \"create\" method, gymMembership={}", gymMembership);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -116,6 +121,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
 
     @Override
     public GymMembership update(GymMembership gymMembership) {
+        log.debug("Accessing to database using \"update\" method, gymMembership={}", gymMembership);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -136,6 +142,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
 
     @Override
     public boolean delete(Long id) {
+        log.debug("Accessing to database using \"delete\" method, gymMembership id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -160,7 +167,8 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public long count() {
+    public long count() throws InternalErrorException {
+        log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {
             Statement statement = connection.createStatement();
@@ -173,12 +181,14 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
         } finally {
             close(connection);
         }
-        throw new RuntimeException("Couldn't count gymmemberships");
+        log.error("Couldn't count gymmemberships");
+        throw new InternalErrorException("Internal Server Error");
     }
 
     private void close(Connection connection) {
         try {
             connection.close();
+            log.debug("Connection closed");
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }

@@ -3,6 +3,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface Command {
     
-    public String execute(HttpServletRequest req);
+    public String execute(HttpServletRequest req) throws Exception;
 
 }

@@ -1,5 +1,7 @@
 package controller.command.impl.user;
 
+import java.time.LocalDate;
+
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
 import service.TrainerService;
@@ -18,7 +20,7 @@ public class EditUserCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long userId = Long.parseLong(req.getParameter("id"));
         UserDto currentUserDto = userService.getById(userId);
         String role = req.getParameter("role");
@@ -28,6 +30,7 @@ public class EditUserCommand implements Command {
             TrainerDto trainerDto = new TrainerDto();
             trainerDto.setId(updated.getId());
             trainerDto.setRoleDto(updated.getRoleDto());
+            trainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
             try {
                 trainerService.create(trainerDto);
             } catch (RuntimeException e) {

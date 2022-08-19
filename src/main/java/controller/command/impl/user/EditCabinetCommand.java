@@ -9,7 +9,7 @@ import service.TrainerService;
 import service.dto.TrainerDto;
 
 public class EditCabinetCommand implements Command {
-    
+
     private final TrainerService trainerService;
 
     public EditCabinetCommand(TrainerService trainerService) {
@@ -17,21 +17,23 @@ public class EditCabinetCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         TrainerDto currentTrainerDto = (TrainerDto) session.getAttribute("user");
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String birthDate = req.getParameter("birthDate");
         String category = req.getParameter("category");
+
         currentTrainerDto.setFirstName(firstName);
         currentTrainerDto.setLastName(lastName);
-        if(("").equals(birthDate)) {
+        if (("").equals(birthDate)) {
             currentTrainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
         } else {
             currentTrainerDto.setBirthDate(LocalDate.parse(birthDate));
         }
         currentTrainerDto.setCategory(category);
+
         TrainerDto updated = trainerService.update(currentTrainerDto);
         session.setAttribute("user", updated);
         req.setAttribute("message", "Information  updated successfully");

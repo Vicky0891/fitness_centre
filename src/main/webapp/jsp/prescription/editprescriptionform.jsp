@@ -15,7 +15,7 @@
 
 
 <label for="typeOfTraining-input">Type of training: </label>
-<input id="typeOfTraining-input" name="typeOfTraining" type="text" value="${sessionScope.prescription.userId}"/>
+<input id="typeOfTraining-input" name="typeOfTraining" type="text" value="${sessionScope.prescription.typeOfTraining}"/>
 <br/>
 <label for="equipment-input">Equipment: </label>
 <input id="equipment-input" name="equipment" type="text" value="${sessionScope.prescription.equipment}"/>

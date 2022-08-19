@@ -19,7 +19,7 @@ public class EditClientFormCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long clientId = Long.parseLong(req.getParameter("clientId"));
         ClientDto clientDto = clientService.getById(clientId);
         List<TrainerDto> trainers = trainerService.getAll();

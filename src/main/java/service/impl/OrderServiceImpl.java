@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.NotFoundException;
 import dao.entity.Order;
 import dao.entity.OrderInfo;
 import dao.entity.Client;
-import dao.entity.Client.Type;
 import dao.entity.GymMembership;
 import dao.entity.Order.Status;
 import dao.interfaces.ClientDao;
@@ -20,7 +21,6 @@ import lombok.extern.log4j.Log4j2;
 import service.OrderService;
 import service.dto.OrderDto;
 import service.dto.UserDto;
-import service.dto.ClientDto;
 import service.dto.GymMembershipDto;
 import service.dto.OrderDto.StatusDto;
 import service.dto.OrderInfoDto;
@@ -41,13 +41,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getById(Long id) {
+    public OrderDto getById(Long id) throws NotFoundException {
         Order order = orderDao.get(id);
         if(order == null) {
-            throw new RuntimeException("No order with id " + id);
+            log.error("Trying to get not existing order, order id={}", id);
+            throw new NotFoundException("Order with id " + id + " not found");
         }
-        OrderDto orderDto = toDto(order);
-        return orderDto;
+        return toDto(order);
     }
 
     @Override
@@ -68,19 +68,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto create(OrderDto orderDto) {
+    public OrderDto create(OrderDto orderDto) throws Exception {
         Order order = toOrder(orderDto);
         Order createdOrder = orderDao.create(order);
+        log.info("Order was update, order={}", orderDto);
         return toDto(createdOrder);
     }
     
     @Override
-    public OrderDto processCart(Map<Long, Integer> cart, UserDto userDto) {
+    public OrderDto processCart(Map<Long, Integer> cart, UserDto userDto) throws Exception {
         OrderDto orderDto = createDto(cart, userDto);
         return orderDto;
     }
    
-    public OrderDto createDto(Map<Long, Integer> cart, UserDto userDto) {
+    public OrderDto createDto(Map<Long, Integer> cart, UserDto userDto) throws Exception {
         OrderDto orderDto = new OrderDto();
         orderDto.setStatusDto(StatusDto.PENDING);
         orderDto.setDateOfOrder(LocalDate.now());
@@ -96,19 +97,19 @@ public class OrderServiceImpl implements OrderService {
         });
         orderDto.setDetails(details);
         BigDecimal totalCost = calculatePrice(details);
-        if(userDto != null) {
-            totalCost = calculateDiscount(userDto, totalCost);
-        }
         orderDto.setTotalCost(totalCost);
         orderDto.setFeedback("");
-        if(userDto == null) {
-        return orderDto;
+        if(userDto != null) {
+            totalCost = calculateDiscount(userDto, totalCost);
+            orderDto.setUserId(userDto.getId());
         }
-        orderDto.setUserId(userDto.getId());
+//        if(userDto == null) {
+//        return orderDto;
+//        }
         return orderDto;
     }
 
-    private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) {
+    private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) throws Exception {
         Client existingClient = clientDao.get(userDto.getId());
         if(existingClient == null) {
             return totalCost;
@@ -138,20 +139,21 @@ public class OrderServiceImpl implements OrderService {
             gymMembershipDto.setTypeOfTraining(gymMembership.getTypeOfTraining());
             gymMembershipDto.setCost(gymMembership.getCost());
         } catch (NullPointerException e) {
-            log.error("GymMembershipDto wasn't create " + e);
+            log.error("GymMembershipDto wasn't create, gymmembership={} ", gymMembership);
         }
         return gymMembershipDto;
     }
 
     @Override
-    public OrderDto update(OrderDto orderDto) {
+    public OrderDto update(OrderDto orderDto) throws Exception {
         Order existing = orderDao.get(orderDto.getId());
         if (existing != null && existing.getId() != orderDto.getId()) {
-            log.error("Order with id " + orderDto.getId() + " already exists");
-            throw new RuntimeException("Order with id " + orderDto.getId() + " already exists");
+            log.error("Trying to update not existing or incorrect order, order={}", orderDto);
+            throw new RuntimeException("Trying to update not existing or incorrect order id=" + orderDto.getId());
         }
         Order order = toOrderForUpdate(orderDto);
         Order createdOrder = orderDao.update(order);
+        log.info("Order was update, order={}", orderDto);
         return toDto(createdOrder);
     }
 
@@ -159,8 +161,8 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto addFeedback(OrderDto orderDto) {
         Order existing = orderDao.get(orderDto.getId());
         if (existing != null && existing.getId() != orderDto.getId()) {
-            log.error("Order with id " + orderDto.getId() + " already exists");
-            throw new RuntimeException("Order with id " + orderDto.getId() + " already exists");
+            log.error("Trying to add feedback to not existing or incorrect order, order={}", orderDto);
+            throw new RuntimeException("Trying to add feedback to not existing or incorrect order, order={}\", orderDto");
         }
         Order order = toOrderForUpdate(orderDto);
         Order createdOrder = orderDao.addFeedback(order);
@@ -169,10 +171,11 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws InternalErrorException {
         if(!orderDao.delete(id)) {
-            throw new RuntimeException("Couldn't delete user with id " + id);
-        };
+            log.error("Order wasn't delete, order id={}", id);
+            throw new InternalErrorException("Internal Server Error. Order wasn't delete.");
+        }
     }
 
     private Order toOrderForUpdate(OrderDto orderDto) {
@@ -230,15 +233,13 @@ public class OrderServiceImpl implements OrderService {
             }
             orderDto.setDetails(detailsDto);
         } catch (NullPointerException e) {
-            log.error("OrderDto wasn't create " + e);
+            log.error("OrderDto wasn't create, order={} ", order);
         }
         return orderDto;
     }
 
     private OrderInfo toOrderInfo(OrderInfoDto orderInfoDto) {
         OrderInfo orderInfo = new OrderInfo();
-//        orderInfo.setId(orderInfoDto.getId());
-//        orderInfo.setOrderId(orderInfoDto.getOrderId());
         orderInfo.setGymMembership(toGymMembership(orderInfoDto.getGymMembershipDto()));
         orderInfo.setGymMembershipQuantity(orderInfoDto.getGymMembershipQuantity());
         orderInfo.setGymMembershipPrice(orderInfoDto.getGymMembershipPrice());
@@ -248,14 +249,13 @@ public class OrderServiceImpl implements OrderService {
     private OrderInfoDto toOrderInfoDto(OrderInfo orderInfo) {
         OrderInfoDto orderInfoDto = new OrderInfoDto();
         try {
-//            orderInfoDto.setId(orderInfo.getId());
             orderInfoDto.setGymMembershipDto(toGymMembershipDto(orderInfo.getGymMembership()));
             orderInfoDto.setOrderId(orderInfo.getOrderId());
             orderInfoDto.setGymMembershipQuantity(orderInfo.getGymMembershipQuantity());
             orderInfoDto.setGymMembershipPrice(orderInfo.getGymMembershipPrice());
 
         } catch (NullPointerException e) {
-            log.error("OrderInfoDto wasn't create " + e);
+            log.error("OrderInfoDto wasn't create, order={}", orderInfo);
         }
         return orderInfoDto;
     }

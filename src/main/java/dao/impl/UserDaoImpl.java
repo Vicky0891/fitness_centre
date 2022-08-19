@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.NotFoundException;
 import dao.connection.DataSource;
 import dao.entity.User;
 import dao.entity.User.Role;
@@ -36,6 +38,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User get(Long id) {
+        log.debug("Accessing to database using \"get\" method, user id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -54,6 +57,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getByEmail(String email) {
+        log.debug("Accessing to database using \"getByEmail\" method, user email={}", email);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL);
@@ -72,6 +76,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAll() {
+        log.debug("Accessing to database using \"getAll\" method");
         List<User> users = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -89,7 +94,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user) throws InternalErrorException  {
+        log.debug("Accessing to database using \"create\" method, user={}", user);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -112,7 +118,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user) throws InternalErrorException {
+        log.debug("Accessing to database using \"update\" method, user={}", user);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -131,6 +138,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean delete(Long id) {
+        log.debug("Accessing to database using \"delete\" method, user id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -154,7 +162,8 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-    private int getRoleId(String name) {
+    private int getRoleId(String name) throws InternalErrorException {
+        log.debug("Accessing to database using \"getRoleId\" method, role name={}", name);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_ROLE_ID);
@@ -168,13 +177,14 @@ public class UserDaoImpl implements UserDao {
         } finally {
             close(connection);
         }
-        log.error("Unable to establish connection or error in id");
-        throw new RuntimeException();
+        log.error("Role of user with name={} didn't find", name);
+        throw new InternalErrorException("Internal Server Error");
     }
 
     private void close(Connection connection) {
         try {
             connection.close();
+            log.debug("Connection closed");
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }

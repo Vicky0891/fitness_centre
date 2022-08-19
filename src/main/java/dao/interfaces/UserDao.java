@@ -2,6 +2,7 @@ package dao.interfaces;
 
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
 import dao.entity.User;
 
 public interface UserDao {
@@ -12,9 +13,9 @@ public interface UserDao {
     
     List<User> getAll();
 
-    User create(User user);
+    User create(User user) throws InternalErrorException;
 
-    User update(User user);
+    User update(User user) throws InternalErrorException;
 
     boolean delete(Long id);
 

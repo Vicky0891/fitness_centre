@@ -9,7 +9,13 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1>Register new user</h1>
+
+<c:if test="${requestScope.message != null}">
 <h3>${requestScope.message}</h3>
+</c:if>
+<c:if test="${requestScope.errorStatus != null}">
+<h3>Error ${requestScope.errorStatus}</h3>
+</c:if>
 
 <form method="post" action="controller">
 <input name="command" type="hidden" value="create_user"/>

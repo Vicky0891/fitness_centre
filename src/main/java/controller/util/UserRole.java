@@ -7,7 +7,6 @@ import service.dto.ClientDto;
 import service.dto.TrainerDto;
 import service.dto.UserDto;
 
-
 @Log4j2
 public class UserRole {
     private ClientService clientService;
@@ -18,8 +17,8 @@ public class UserRole {
         this.trainerService = trainerService;
     }
 
-    public Object getUserRole(UserDto userDto) {
-        
+    public Object getUserRole(UserDto userDto) throws Exception {
+
         switch (userDto.getRoleDto().toString()) {
         case "CLIENT":
             try {
@@ -28,7 +27,7 @@ public class UserRole {
                     return clientDto;
                 }
             } catch (RuntimeException e) {
-
+                log.error("Client not exists or something went wrong. Exception: " + e);
             }
         case "TRAINER":
             try {
@@ -37,7 +36,7 @@ public class UserRole {
                     return trainerDto;
                 }
             } catch (RuntimeException e) {
-                
+                log.error("Trainer not exists or something went wrong. Exception: " + e);
             }
         case "ADMIN":
             return userDto;

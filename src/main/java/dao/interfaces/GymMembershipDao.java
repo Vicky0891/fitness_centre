@@ -2,6 +2,7 @@ package dao.interfaces;
 
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
 import dao.entity.GymMembership;
 
 public interface GymMembershipDao {
@@ -18,6 +19,6 @@ public interface GymMembershipDao {
 
     boolean delete(Long id);
     
-    long count();
+    long count() throws InternalErrorException;
 
 }

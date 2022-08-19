@@ -5,13 +5,10 @@ import java.util.Map;
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.log4j.Log4j2;
 import service.OrderService;
-import service.dto.ClientDto;
 import service.dto.OrderDto;
 import service.dto.UserDto;
 
-@Log4j2
 public class CartCommand implements Command {
     private OrderService orderService;
     private static final String PAGE = "jsp/order/cart.jsp";
@@ -21,7 +18,7 @@ public class CartCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");

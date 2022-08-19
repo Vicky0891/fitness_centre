@@ -8,8 +8,13 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
+<c:if test="${requestScope.message != null}">
+<h3>${requestScope.message}</h3>
+</c:if>
+<c:if test="${requestScope.errorStatus != null}">
+<h3>Error ${requestScope.errorStatus}</h3>
+</c:if>
 <h1 class="error">Something went wrong</h1>
-<br/>
-<h3 class="alltrainers"><a href="/fitness_centre">Main page</a></h3>
+
 </body>
 </html>

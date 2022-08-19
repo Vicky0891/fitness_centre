@@ -7,7 +7,7 @@ import controller.command.impl.ErrorCommand;
 import controller.command.impl.LoginCommand;
 import controller.command.impl.LoginFormCommand;
 import controller.command.impl.LogoutCommand;
-import controller.command.impl.PrescriptionCommand;
+import controller.command.impl.prescription.PrescriptionCommand;
 import controller.command.impl.gym.CreateGymmembershipCommand;
 import controller.command.impl.gym.CreateGymmembershipFormCommand;
 import controller.command.impl.gym.DeleteGymmembershipCommand;
@@ -18,6 +18,7 @@ import controller.command.impl.gym.GymmembershipsCommand;
 import controller.command.impl.order.AddFeedbackCommand;
 import controller.command.impl.order.AddFeedbackFormCommand;
 import controller.command.impl.order.AddToCartCommand;
+import controller.command.impl.order.AllOrdersByTypeCommand;
 import controller.command.impl.order.AllOrdersCommand;
 import controller.command.impl.order.CartCommand;
 import controller.command.impl.order.CreateOrderCommand;
@@ -84,7 +85,7 @@ public class CommandFactory {
         commands.put("clients", new ClientsCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("all_clients", new AllClientsCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
         commands.put("all_clients_by_type", new AllClientsByTypeCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
-        commands.put("user", new UserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("user", new UserCommand());
         commands.put("delete_user", new DeleteUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("all_users", new AllUsersCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
         commands.put("create_user_form", new CreateUserFormCommand());
@@ -122,6 +123,7 @@ public class CommandFactory {
 
         commands.put("orders", new OrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("all_orders", new AllOrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        commands.put("all_orders_by_type", new AllOrdersByTypeCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("order", new OrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("edit_order", new EditOrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("edit_order_form",

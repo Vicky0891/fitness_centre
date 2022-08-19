@@ -1,13 +1,16 @@
 package controller.command.impl.prescription;
 
 import controller.command.Command;
+import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.PrescriptionService;
 import service.dto.PrescriptionDto;
 import service.dto.TrainerDto;
 import service.dto.OrderDto.StatusDto;
 
+@Log4j2
 public class CreatePrescriptionCommand implements Command {
 
     private final PrescriptionService prescriptionService;
@@ -17,7 +20,7 @@ public class CreatePrescriptionCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         TrainerDto trainerDto = (TrainerDto) session.getAttribute("user");
         Long trainerId = trainerDto.getId();
@@ -25,13 +28,19 @@ public class CreatePrescriptionCommand implements Command {
         String typeOfTraining = req.getParameter("typeOfTraining");
         String equipment = req.getParameter("equipment");
         String diet = req.getParameter("diet");
+
         PrescriptionDto prescriptionDto = new PrescriptionDto();
-        prescriptionDto.setTrainerId(trainerId);
-        prescriptionDto.setUserId(Long.valueOf(userId));
-        prescriptionDto.setTypeOfTraining(typeOfTraining);
-        prescriptionDto.setEquipment(equipment);
-        prescriptionDto.setDiet(diet);
-        prescriptionDto.setStatusDto(StatusDto.PENDING);
+        try {
+            prescriptionDto.setTrainerId(trainerId);
+            prescriptionDto.setUserId(Long.valueOf(userId));
+            prescriptionDto.setTypeOfTraining(typeOfTraining);
+            prescriptionDto.setEquipment(equipment);
+            prescriptionDto.setDiet(diet);
+            prescriptionDto.setStatusDto(StatusDto.PENDING);
+        } catch (Exception e) {
+            log.error("prescription wasn't create. Exception: " + e);
+            throw new BadRequestException("The entered data is incorrect. Try again.");
+        }
         PrescriptionDto created = prescriptionService.create(prescriptionDto);
         req.setAttribute("prescription", created);
         req.setAttribute("message", "Prescription was created");

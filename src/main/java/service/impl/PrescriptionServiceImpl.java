@@ -2,6 +2,7 @@ package service.impl;
 
 import java.util.List;
 
+import controller.util.exception.impl.NotFoundException;
 import dao.entity.Order.Status;
 import dao.entity.Prescription;
 import dao.interfaces.PrescriptionDao;
@@ -9,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import service.PrescriptionService;
 import service.dto.OrderDto.StatusDto;
 import service.dto.PrescriptionDto;
+
 @Log4j2
 public class PrescriptionServiceImpl implements PrescriptionService {
 
@@ -19,42 +21,45 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    public PrescriptionDto getById(Long id) {
+    public PrescriptionDto getById(Long id) throws Exception {
         Prescription prescription = prescriptionDao.get(id);
-        if(prescription == null) {
-            throw new RuntimeException("No prescription for client with id=" + id);
+        if (prescription == null) {
+            log.error("Trying to get not existing prescription, prescription for client id={}", id);
+            throw new NotFoundException("Prescription for client with id " + id + " not found");
         }
-        PrescriptionDto prescriptionDto = toDto(prescription);
-        return prescriptionDto;
+        return toDto(prescription);
     }
 
     @Override
     public List<PrescriptionDto> getAll() {
         return prescriptionDao.getAll().stream().map(e -> toDto(e)).toList();
     }
-    
+
     @Override
-    public PrescriptionDto create(PrescriptionDto prescriptionDto) {
+    public PrescriptionDto create(PrescriptionDto prescriptionDto) throws Exception {
         Prescription prescription = toPrescription(prescriptionDto);
         Prescription createdPrescription = prescriptionDao.create(prescription);
+        log.info("Prescription was create, prescription={}", prescriptionDto);
         return toDto(createdPrescription);
     }
 
     @Override
-    public PrescriptionDto update(PrescriptionDto prescriptionDto) {
+    public PrescriptionDto update(PrescriptionDto prescriptionDto) throws Exception {
         Prescription existing = prescriptionDao.get(prescriptionDto.getUserId());
         if (existing != null && existing.getUserId() != prescriptionDto.getUserId()) {
-            log.error("Prescription with id \" + prescriptionDto.getId() + \" already exists");
-            throw new RuntimeException("Prescription with id \" + prescriptionDto.getId() + \" already exists");
+            log.error("Trying to update not existing or incorrect prescription, prescription={}", prescriptionDto);
+            throw new RuntimeException("Trying to update not existing or incorrect prescription");
         }
         Prescription prescription = toPrescription(prescriptionDto);
         Prescription createdPrescription = prescriptionDao.update(prescription);
+        log.info("Prescription was update, prescription={}", prescriptionDto);
         return toDto(createdPrescription);
     }
 
     @Override
     public void delete(Long id) {
         prescriptionDao.delete(prescriptionDao.get(id));
+        log.info("Prescription was delete, prescription id={}", id);
     }
 
     private Prescription toPrescription(PrescriptionDto prescriptionDto) {
@@ -82,7 +87,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             StatusDto statusDto = StatusDto.valueOf(prescription.getStatus().toString());
             prescriptionDto.setStatusDto(statusDto);
         } catch (NullPointerException e) {
-            log.error("PrescriptionDto wasn't create " + e);
+            log.error("PrescriptionDto wasn't create, prescription={}", prescription);
         }
         return prescriptionDto;
     }

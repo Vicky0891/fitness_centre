@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
 import dao.connection.DataSource;
 import dao.entity.Order;
 import dao.entity.Order.Status;
@@ -50,6 +51,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order get(Long id) {
+        log.debug("Accessing to database using \"get\" method, order id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -69,6 +71,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getAll() {
+        log.debug("Accessing to database using \"getAll\" method");
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -86,7 +89,8 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order create(Order order) {
+    public Order create(Order order) throws InternalErrorException {
+        log.debug("Accessing to database using \"create\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
             connection.setAutoCommit(false);
@@ -109,8 +113,8 @@ public class OrderDaoImpl implements OrderDao {
                 return get(id);
             }
         } catch (SQLException e) {
-            log.error("SQL Exception: " + e);
             rollback(connection);
+            log.error("SQL Exception: " + e + ". Rollback made");
         } finally {
             restore(connection);
         }
@@ -118,7 +122,8 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order update(Order order) {
+    public Order update(Order order) throws InternalErrorException {
+        log.debug("Accessing to database using \"update\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -137,6 +142,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order addFeedback(Order order) {
+        log.debug("Accessing to database using \"addFeedback\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE_FEEDBACK);
@@ -155,6 +161,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getAllOrdersByClient(Long id) {
+        log.debug("Accessing to database using \"getAllOrdersByClient\" method, id={}", id);
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -176,6 +183,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getAllByStatus(String statusName) {
+        log.debug("Accessing to database using \"getAllByStatus\" method, Status name={}", statusName);
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -195,6 +203,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean delete(Long id) {
+        log.debug("Accessing to database using \"delete\" method, id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -203,10 +212,10 @@ public class OrderDaoImpl implements OrderDao {
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            return false;
         } finally {
             close(connection);
         }
-        return false;
     }
 
     private Order processOrder(ResultSet result) throws SQLException {
@@ -222,7 +231,8 @@ public class OrderDaoImpl implements OrderDao {
         return order;
     }
 
-    public int getStatusId(String name) {
+    public int getStatusId(String name) throws InternalErrorException {
+        log.debug("Accessing to database using \"getStatusId\" method, name={}", name);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_STATUS_ID);
@@ -236,12 +246,13 @@ public class OrderDaoImpl implements OrderDao {
         } finally {
             close(connection);
         }
-        log.error("Unable to establish connection or error in id");
-        throw new RuntimeException();
+        log.error("Status id for order with name={} didn't find", name);
+        throw new InternalErrorException("Internal Server Error");
     }
 
     @Override
-    public int getDiscount(String name) {
+    public int getDiscount(String name) throws InternalErrorException {
+        log.debug("Accessing to database using \"getDiscount\" method, name={}", name);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_DISCOUNT);
@@ -255,8 +266,8 @@ public class OrderDaoImpl implements OrderDao {
         } finally {
             close(connection);
         }
-        log.error("Unable to establish connection or error with name");
-        throw new RuntimeException();
+        log.error("Discount id with name={} didn't find", name);
+        throw new InternalErrorException("Internal Server Error");
     }
 
     private void restore(Connection connection) {
@@ -279,6 +290,7 @@ public class OrderDaoImpl implements OrderDao {
     private void close(Connection connection) {
         try {
             connection.close();
+            log.debug("Connection closed");
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }

@@ -10,10 +10,16 @@ public class AddFeedbackFormCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        Long orderId = Long.parseLong(req.getParameter("orderId"));
-        HttpSession session = req.getSession();
-        session.setAttribute("orderId", orderId);
-        return "jsp/order/addfeedbackform.jsp";
+        try {
+            Long orderId = Long.parseLong(req.getParameter("orderId"));
+            HttpSession session = req.getSession();
+            session.setAttribute("orderId", orderId);
+            return "jsp/order/addfeedbackform.jsp";
+        } catch (RuntimeException e) {
+            log.error("Couldn't parse order id. Exception: " + e);
+            req.setAttribute("message", "Something went wrong. Try again");
+            return "jsp/error.jsp";
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+
 @Log4j2
 @Data
 public class ConnectionProperties {
@@ -30,7 +31,7 @@ public class ConnectionProperties {
 //            }
             driver = props.getProperty("db.driver");
         } catch (Exception e) {
-//            logger.error("Error with connection " + e);
+            log.error("Error with connection " + e);
         }
     }
 

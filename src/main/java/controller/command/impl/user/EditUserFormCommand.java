@@ -2,12 +2,10 @@ package controller.command.impl.user;
 
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.log4j.Log4j2;
 import service.TrainerService;
 import service.UserService;
 import service.dto.UserDto;
 
-@Log4j2
 public class EditUserFormCommand implements Command {
     private UserService userService;
 
@@ -16,7 +14,7 @@ public class EditUserFormCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long userId = Long.parseLong(req.getParameter("userId"));
         UserDto userDto = userService.getById(userId);
         req.setAttribute("user", userDto);

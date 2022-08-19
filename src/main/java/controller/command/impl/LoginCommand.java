@@ -21,8 +21,7 @@ public class LoginCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
-        try {
+    public String execute(HttpServletRequest req) throws Exception {
             String email = req.getParameter("email");
             String password = req.getParameter("password");
             UserDto userDto = userService.login(email, password);
@@ -31,10 +30,5 @@ public class LoginCommand implements Command {
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
             return "index.jsp";
-        } catch (Exception e) {
-            req.setAttribute("message", "No user with this email. Please register");
-
-            return "jsp/user/createuserform.jsp";
-        }
     }
 }

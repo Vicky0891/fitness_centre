@@ -19,11 +19,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import lombok.extern.log4j.Log4j2;
-import service.impl.UserServiceImpl;
+
 @Log4j2
 public class ProxyConnection implements Connection {
     private final Connection connection;
@@ -35,8 +32,9 @@ public class ProxyConnection implements Connection {
     void reallyClose() {
         try {
             connection.close();
+            log.info("Connection really close");
         } catch (SQLException e) {
-//            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 

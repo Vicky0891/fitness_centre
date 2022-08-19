@@ -5,11 +5,9 @@ import java.time.LocalDate;
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.log4j.Log4j2;
 import service.ClientService;
 import service.dto.ClientDto;
 
-@Log4j2
 public class EditProfileCommand implements Command {
     private final ClientService clientService;
 
@@ -18,7 +16,7 @@ public class EditProfileCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         ClientDto currentClientDto = (ClientDto) session.getAttribute("user");
         String firstName = req.getParameter("firstName");
@@ -28,7 +26,7 @@ public class EditProfileCommand implements Command {
         String additionalInfo = req.getParameter("additionalInfo");
         currentClientDto.setFirstName(firstName);
         currentClientDto.setLastName(lastName);
-        if(("").equals(birthDate)) {
+        if (("").equals(birthDate)) {
             currentClientDto.setBirthDate(LocalDate.parse("0001-01-01"));
         } else {
             currentClientDto.setBirthDate(LocalDate.parse(birthDate));

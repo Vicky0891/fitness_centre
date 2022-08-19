@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import service.OrderService;
 import service.dto.OrderInfoDto;
 
-public class OrderDetailsCommand implements Command{
+public class OrderDetailsCommand implements Command {
     private OrderService orderService;
 
     public OrderDetailsCommand(OrderService orderService) {
@@ -15,9 +15,7 @@ public class OrderDetailsCommand implements Command{
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
-//        HttpSession session = req.getSession();
-//        UserDto userDto = (UserDto)session.getAttribute("user");
+    public String execute(HttpServletRequest req) throws Exception {
         Long id = Long.parseLong(req.getParameter("id"));
         List<OrderInfoDto> details = orderService.getById(id).getDetails();
         req.setAttribute("details", details);

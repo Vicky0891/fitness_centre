@@ -7,7 +7,6 @@ public class LoginFormCommand implements Command{
     
     @Override
     public String execute(HttpServletRequest req) {
-        
     return "jsp/loginform.jsp";
     }
 

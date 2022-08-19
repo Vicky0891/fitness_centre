@@ -13,7 +13,7 @@ public class EditGymmembershipFormCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long gymmembershipId = Long.parseLong(req.getParameter("gymmembershipId"));
         GymMembershipDto gymMembershipDto = gymMembershipService.getById(gymmembershipId);
         req.setAttribute("gymmembership", gymMembershipDto);

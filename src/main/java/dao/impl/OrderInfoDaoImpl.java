@@ -40,6 +40,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public OrderInfo get(Long id) {
+        log.debug("Accessing to database using \"get\" method, orderInfo id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -58,6 +59,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public List<OrderInfo> getAllByOrderId(Long id) {
+        log.debug("Accessing to database using \"getAllByOrderId\" method, order id={}", id);
         List<OrderInfo> orderInfo = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -77,6 +79,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public List<OrderInfo> getAll() {
+        log.debug("Accessing to database using \"getAll\" method");
         List<OrderInfo> orderInfos = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -95,6 +98,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public OrderInfo create(OrderInfo orderInfo, Connection connection) {
+        log.debug("Accessing to database using \"create\" method, orderInfo={}", orderInfo);
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, orderInfo.getOrderId());
@@ -116,6 +120,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public OrderInfo update(OrderInfo orderInfo) {
+        log.debug("Accessing to database using \"update\" method, orderInfo={}", orderInfo);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -135,6 +140,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
 
     @Override
     public boolean delete(Long id) {
+        log.debug("Accessing to database using \"delete\" method, id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -163,6 +169,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     private void close(Connection connection) {
         try {
             connection.close();
+            log.debug("Connection closed");
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }

@@ -1,5 +1,6 @@
 package controller.command.impl.order;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import controller.command.Command;
@@ -23,7 +24,7 @@ public class CreateOrderCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         UserDto userDto = (UserDto) session.getAttribute("user");
         if (userDto == null) {
@@ -36,20 +37,14 @@ public class CreateOrderCommand implements Command {
         OrderDto created = orderService.create(processed);
         req.setAttribute("order", created);
         req.setAttribute("message", "Order created successfully");
-
+        session.removeAttribute("cart");
         ClientDto clientDto = new ClientDto();
         clientDto.setId(userDto.getId());
         clientDto.setType(TypeDto.NEW);
         clientDto.setRoleDto(RoleDto.CLIENT);
-        try {
+        clientDto.setBirthDate(LocalDate.parse("0001-01-01"));
         ClientDto createdClient = clientService.create(clientDto);
         session.setAttribute("user", createdClient);
-        } catch (RuntimeException e) {
-            return "jsp/order/order.jsp";
-        }
-        session.removeAttribute("cart");
-
         return "jsp/order/order.jsp";
     }
-
 }

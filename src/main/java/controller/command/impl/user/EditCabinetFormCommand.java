@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import service.TrainerService;
 import service.dto.TrainerDto;
 
-public class EditCabinetFormCommand implements Command{
+public class EditCabinetFormCommand implements Command {
     private TrainerService trainerService;
 
     public EditCabinetFormCommand(TrainerService trainerService) {
@@ -13,7 +13,7 @@ public class EditCabinetFormCommand implements Command{
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long id = Long.parseLong(req.getParameter("id"));
         TrainerDto trainerDto = trainerService.getById(id);
         req.setAttribute("user", trainerDto);

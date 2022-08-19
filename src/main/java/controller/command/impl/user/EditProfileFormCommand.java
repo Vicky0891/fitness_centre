@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import service.UserService;
 import service.dto.UserDto;
 
-public class EditProfileFormCommand implements Command{
+public class EditProfileFormCommand implements Command {
     private UserService userService;
 
     public EditProfileFormCommand(UserService userService) {
@@ -13,7 +13,7 @@ public class EditProfileFormCommand implements Command{
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long id = Long.parseLong(req.getParameter("id"));
         UserDto userDto = userService.getById(id);
         req.setAttribute("user", userDto);

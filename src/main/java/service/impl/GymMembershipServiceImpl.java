@@ -3,11 +3,14 @@ package service.impl;
 import java.util.List;
 
 import controller.util.PagingUtil.Paging;
+import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.NotFoundException;
 import dao.entity.GymMembership;
 import dao.interfaces.GymMembershipDao;
 import lombok.extern.log4j.Log4j2;
 import service.GymMembershipService;
 import service.dto.GymMembershipDto;
+
 @Log4j2
 public class GymMembershipServiceImpl implements GymMembershipService {
 
@@ -18,13 +21,13 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public GymMembershipDto getById(Long id) {
+    public GymMembershipDto getById(Long id) throws Exception {
         GymMembership gymMembership = gymMembershipDao.get(id);
-        if(gymMembership == null) {
-            throw new RuntimeException("No gymMembership with id " + id);
+        if (gymMembership == null) {
+            log.error("Trying to get not existing gymmembership, gymmembership id={}", id);
+            throw new NotFoundException("Gymmembership with id " + id + " not found");
         }
-        GymMembershipDto gymMembershipDto = toDto(gymMembership);
-        return gymMembershipDto;
+        return toDto(gymMembership);
     }
 
     @Override
@@ -36,6 +39,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     public GymMembershipDto create(GymMembershipDto gymMembershipDto) {
         GymMembership gymMembership = toGymMembership(gymMembershipDto);
         GymMembership createdGymMembership = gymMembershipDao.create(gymMembership);
+        log.info("Gymmembership was create, gymmembership={}", gymMembershipDto);
         return toDto(createdGymMembership);
     }
 
@@ -43,19 +47,21 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     public GymMembershipDto update(GymMembershipDto gymMembershipDto) {
         GymMembership existing = gymMembershipDao.get(gymMembershipDto.getId());
         if (existing != null && existing.getId() != gymMembershipDto.getId()) {
-            log.error("GymMembership with id " + gymMembershipDto.getId() + " already exists");
-            throw new RuntimeException("GymMembership with id " + gymMembershipDto.getId() + " already exists");
+            log.error("Trying to update not existing or incorrect gymmembership, gymmembership={}", gymMembershipDto);
+            throw new RuntimeException("Trying to update not existing or incorrect gymmembership");
         }
         GymMembership gymMembership = toGymMembership(gymMembershipDto);
         GymMembership createdGymMembership = gymMembershipDao.update(gymMembership);
+        log.info("Gymmembership was update, gymmembership={}", gymMembershipDto);
         return toDto(createdGymMembership);
     }
 
     @Override
     public void delete(Long id) {
-        if(!gymMembershipDao.delete(id)) {
+        if (!gymMembershipDao.delete(id)) {
+            log.error("Gymmembership wasn't delete, gymmembership id={}", id);
             throw new RuntimeException("Couldn't delete user with id " + id);
-        };
+        }
     }
 
     private GymMembership toGymMembership(GymMembershipDto gymMembershipDto) {
@@ -75,7 +81,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
             gymMembershipDto.setTypeOfTraining(gymMembership.getTypeOfTraining());
             gymMembershipDto.setCost(gymMembership.getCost());
         } catch (NullPointerException e) {
-            log.error("GymMembershipDto wasn't create " + e);
+            log.error("GymMembershipDto wasn't create, gymmembership={} ", gymMembership);
         }
         return gymMembershipDto;
     }
@@ -86,9 +92,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public long count() {
+    public long count() throws InternalErrorException {
         return gymMembershipDao.count();
     }
-
-
 }

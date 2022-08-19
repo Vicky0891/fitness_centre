@@ -14,13 +14,14 @@ public class EditClientCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long clientId = Long.parseLong(req.getParameter("id"));
         ClientDto currentClientDto = clientService.getById(clientId);
         String type = req.getParameter("type");
         String trainerId = req.getParameter("trainerId");
         currentClientDto.setType(TypeDto.valueOf(type));
         currentClientDto.setTrainerId(Long.valueOf(trainerId));
+
         ClientDto updated = clientService.update(currentClientDto);
         req.setAttribute("client", updated);
         req.setAttribute("message", "Client updated");

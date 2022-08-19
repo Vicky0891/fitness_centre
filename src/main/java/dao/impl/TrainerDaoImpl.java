@@ -22,7 +22,7 @@ public class TrainerDaoImpl implements TrainerDao {
     private static final String DELETE = "UPDATE users SET deleted = true WHERE id = ?";
     private static final String UPDATE = "UPDATE trainers SET first_name = ?, last_name = ?, birth_date = ?, "
             + "category = ? WHERE user_id = ?";
-    private static final String INSERT = "INSERT INTO trainers (user_id) VALUES (?)";
+    private static final String INSERT = "INSERT INTO trainers (user_id, birth_date) VALUES (?, ?)";
     private static final String SELECT_ALL = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
             + " r.name AS role, tr.birth_date, tr.category FROM trainers tr JOIN users u ON u.id = tr.user_id "
             + "JOIN roles r ON r.id = u.role_id WHERE u.deleted = false ORDER BY tr.user_id";
@@ -45,6 +45,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public Trainer get(Long id) {
+        log.debug("Accessing to database using \"get\" method, trainer id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -63,6 +64,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public List<Trainer> getAll() {
+        log.debug("Accessing to database using \"getAll\" method");
         List<Trainer> trainers = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -81,10 +83,12 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public Trainer create(Trainer trainer) {
+        log.debug("Accessing to database using \"create\" method, trainer={}", trainer);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, trainer.getId());
+            statement.setDate(2, Date.valueOf(trainer.getBirthDate()));
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
@@ -102,6 +106,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public Trainer update(Trainer trainer) {
+        log.debug("Accessing to database using \"update\" method, trainer={}", trainer);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -123,6 +128,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public boolean delete(Long id) {
+        log.debug("Accessing to database using \"delete\" method, trainer id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -139,6 +145,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public List<Client> getAllClientsByTrainer(Long id) {
+        log.debug("Accessing to database using \"getAllClientsByTrainer\" method, trainer id={}", id);
         List<Client> clients = new ArrayList<>();
 
         Connection connection = dataSource.getConnection();
@@ -176,6 +183,7 @@ public class TrainerDaoImpl implements TrainerDao {
     private void close(Connection connection) {
         try {
             connection.close();
+            log.debug("Connection closed");
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }

@@ -28,9 +28,9 @@
 <td><c:out value="${client.additionalInfo}"/></td>
 <td>
 <form method="post" action="controller">
-<input type="hidden" name="command" value="create_prescription_form"/>
+<input type="hidden" name="command" value="prescription"/>
 <input type="hidden" name="clientId" value="${client.id}"/>
-<input type="submit" value="Create prescription"/>
+<input type="submit" value="Check prescription"/>
 </form>
 </td>
 </tr>

@@ -12,7 +12,7 @@ public class DeleteUserCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         Long userId = Long.parseLong(req.getParameter("userId"));
         userService.delete(userId);
         req.setAttribute("message", "User deleted successfully");

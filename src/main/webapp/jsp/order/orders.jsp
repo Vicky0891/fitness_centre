@@ -29,8 +29,6 @@
 <input type="submit" value="Add feedback"/>
 </form><td>
 
-
-<td><a href="controller?command=add_feedback_form">Add feedback</a></td>
 <td>
 <ul>
 <c:forEach items="${order.details}" var="detail">

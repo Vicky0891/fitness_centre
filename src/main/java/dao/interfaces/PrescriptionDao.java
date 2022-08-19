@@ -2,6 +2,7 @@ package dao.interfaces;
 
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
 import dao.entity.Prescription;
 
 public interface PrescriptionDao {
@@ -10,9 +11,9 @@ public interface PrescriptionDao {
     
     List<Prescription> getAll();
 
-    Prescription create(Prescription prescription);
+    Prescription create(Prescription prescription) throws InternalErrorException;
 
-    Prescription update(Prescription prescription);
+    Prescription update(Prescription prescription) throws InternalErrorException;
     
     void delete(Prescription prescription);
 

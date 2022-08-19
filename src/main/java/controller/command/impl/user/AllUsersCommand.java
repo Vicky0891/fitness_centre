@@ -4,9 +4,11 @@ import java.util.List;
 
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.log4j.Log4j2;
 import service.UserService;
 import service.dto.UserDto;
 
+@Log4j2
 public class AllUsersCommand implements Command {
 
     private UserService userService;
@@ -17,9 +19,15 @@ public class AllUsersCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        List<UserDto> users = userService.getAll();
-        req.setAttribute("users", users);
-        return "jsp/user/allusers.jsp";
+        try {
+            List<UserDto> users = userService.getAll();
+            req.setAttribute("users", users);
+            return "jsp/user/allusers.jsp";
+        } catch (RuntimeException e) {
+            log.error("Couldn't got users. Exception: " + e);
+            req.setAttribute("message", "Something went wrong. Try again later");
+            return "jsp/error.jsp";
+        }
     }
 
 }

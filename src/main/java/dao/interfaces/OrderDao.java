@@ -2,19 +2,20 @@ package dao.interfaces;
 
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
 import dao.entity.Order;
 
 public interface OrderDao {
     
     Order get(Long id);
     
-    int getDiscount(String name);
+    int getDiscount(String name) throws InternalErrorException;
 
     List<Order> getAll();
     
-    Order create(Order order);
+    Order create(Order order) throws InternalErrorException;
 
-    Order update(Order order);
+    Order update(Order order) throws InternalErrorException;
     
     Order addFeedback(Order order);
     

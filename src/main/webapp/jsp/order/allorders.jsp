@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Orders</title>
+<title>All orders</title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -14,6 +14,21 @@
 <h1>No orders</h1>
 </c:if>
 <c:if test="${orders.size() > 0}">
+
+<h2>Select to view all orders with status</h2>
+<br/>
+<form method="post" action="controller">
+<input name="command" type="hidden" value="all_orders_by_type"/>
+<input id="status-input-pending" name="status" type="radio" value="PENDING">
+<label for="status-input-pending">PENDING</label>
+<input id="status-input-confirm" name="status" type="radio" value="CONFIRM">
+<label for="status-input-confirm">CONFIRM</label>
+
+<br/>
+<input type="submit" value="SELECT"/>
+</form>
+
+
 <tr><th>#</th><th>Date of order</th><th>Order details</th><th>Total cost</th><th>Client id</th><th>Status</th><th>Feedback</th><th></th></tr>
 <c:forEach items="${requestScope.orders}" var="order">
 <tr>

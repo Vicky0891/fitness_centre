@@ -6,10 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
 import dao.connection.DataSource;
 import dao.entity.Client;
 import dao.entity.Client.Type;
@@ -23,7 +23,7 @@ public class ClientDaoImpl implements ClientDao {
     private static final String DELETE = "UPDATE users SET deleted = true WHERE id = ?";
     private static final String UPDATE = "UPDATE clients SET first_name = ?, last_name = ?, birth_date = ?, "
             + "phone_number = ?, trainer_id = ?, type_id = ?, additional_info = ? WHERE user_id = ?";
-    private static final String INSERT = "INSERT INTO clients (user_id, type_id) VALUES (?, ?)";
+    private static final String INSERT = "INSERT INTO clients (user_id, birth_date, type_id) VALUES (?, ?, ?)";
     private static final String SELECT_ALL = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, "
             + "r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info "
             + "FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id JOIN roles r "
@@ -46,6 +46,7 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public Client get(Long id) {
+        log.debug("Accessing to database using \"get\" method, client id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -64,6 +65,7 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public List<Client> getAll() {
+        log.debug("Accessing to database using \"getAll\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -82,6 +84,7 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public List<Client> getAllClientsByType(String typeOfClient) {
+        log.debug("Accessing to database using \"getAllClientsByType\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -100,12 +103,14 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client create(Client client) {
+    public Client create(Client client) throws InternalErrorException {
+        log.debug("Accessing to database using \"create\" method, client={}", client);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, client.getId());
-            statement.setInt(2, getTypeId(client.getType().name()));
+            statement.setDate(2, Date.valueOf(client.getBirthDate()));
+            statement.setInt(3, getTypeId(client.getType().name()));
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
@@ -122,7 +127,8 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client update(Client client) {
+    public Client update(Client client) throws InternalErrorException {
+        log.debug("Accessing to database using \"update\" method, client=", client);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -147,6 +153,7 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public boolean delete(Long id) {
+        log.debug("Accessing to database using \"delete\" method, client id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -177,7 +184,8 @@ public class ClientDaoImpl implements ClientDao {
         return client;
     }
 
-    private int getTypeId(String name) {
+    private int getTypeId(String name) throws InternalErrorException {
+        log.debug("Accessing to database using \"getTypeId\" method, name={}", name);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_TYPE_ID);
@@ -192,13 +200,14 @@ public class ClientDaoImpl implements ClientDao {
         } finally {
             close(connection);
         }
-        log.error("Unable to establish connection or error in id");
-        throw new RuntimeException();
+        log.error("Type of client with name={} didn't find", name);
+        throw new InternalErrorException("Internal Server Error");
     }
 
     private void close(Connection connection) {
         try {
             connection.close();
+            log.debug("Connection closed");
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }

@@ -21,7 +21,7 @@
 <input id="lastName-input" name="lastName" type="text" value="${requestScope.user.lastName}"/>
 <br/>
 <label for="birthDate-input">Date of birth: </label>
-<input id="birthDate-input" name="birthDate" type="date" value="${requestScope.user.birthDate}"/>
+<input id="birthDate-input" name="birthDate" type="date"/>
 <br/>
 <label for="category-input">Category: </label>
 <input id="category-input" name="category" type="text" value="${requestScope.user.category}"/>

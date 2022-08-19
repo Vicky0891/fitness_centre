@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.NotFoundException;
 import dao.connection.DataSource;
 import dao.entity.Prescription;
 import dao.entity.Order.Status;
@@ -37,6 +39,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
     @Override
     public Prescription get(Long clientId) {
+        log.debug("Accessing to database using \"get\" method, client id={}", clientId);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -54,7 +57,8 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription create(Prescription prescription) {
+    public Prescription create(Prescription prescription) throws InternalErrorException {
+        log.debug("Accessing to database using \"create\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -80,7 +84,8 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription update(Prescription prescription) {
+    public Prescription update(Prescription prescription) throws InternalErrorException {
+        log.debug("Accessing to database using \"update\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -101,6 +106,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
     @Override
     public void delete(Prescription prescription) {
+        log.debug("Accessing to database using \"delete\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -125,7 +131,8 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         return prescription;
     }
 
-    private int getStatusPending() {
+    private int getStatusPending() throws InternalErrorException {
+        log.debug("Accessing to database using \"getStatusPending\"");
         Connection connection = dataSource.getConnection();
         try {
             Statement statement = connection.createStatement();
@@ -138,11 +145,12 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         } finally {
             close(connection);
         }
-        log.error("Unable to establish connection or error in id");
-        throw new RuntimeException();
+        log.error("Id status \"pending\" didn't find");
+        throw new InternalErrorException("Internal Server Error");
     }
 
-    private int getStatusConfirm() {
+    private int getStatusConfirm() throws InternalErrorException {
+        log.debug("Accessing to database using \"getStatusConfirm\"");
         Connection connection = dataSource.getConnection();
         try {
             Statement statement = connection.createStatement();
@@ -155,12 +163,13 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         } finally {
             close(connection);
         }
-        log.error("Unable to establish connection or error in id");
-        throw new RuntimeException();
+        log.error("Id status \"confirm\" didn't find");
+        throw new InternalErrorException("Internal Server Error");
     }
 
     @Override
     public List<Prescription> getAll() {
+        log.debug("Accessing to database using \"getAll\" method");
         List<Prescription> prescriptions = new ArrayList<>();
         Connection connection = dataSource.getConnection();
         try {
@@ -180,11 +189,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     private void close(Connection connection) {
         try {
             connection.close();
+            log.debug("Connection closed");
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
     }
-
-
-
 }
