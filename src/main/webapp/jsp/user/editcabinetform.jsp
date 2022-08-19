@@ -24,7 +24,7 @@
 <input id="birthDate-input" name="birthDate" type="date"/>
 <br/>
 <label for="category-option">Category: </label>
-<select id="category-option">
+<select id="category-option" name="category">
 <option value="first">First</option>
 <option value="second">Second</option>
 <option value="high">High</option>
