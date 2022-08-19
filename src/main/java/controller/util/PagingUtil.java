@@ -10,7 +10,7 @@ public enum PagingUtil {
         String limitStr = req.getParameter("limit");
         int limit;
         if(limitStr == null) {
-            limit = 7;
+            limit = 5;
         } else {
             limit = Integer.valueOf(limitStr);
         }

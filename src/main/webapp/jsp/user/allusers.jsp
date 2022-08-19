@@ -16,6 +16,8 @@
 <h1>No users</h1>
 </c:if>
 <c:if test="${users.size() > 0}">
+<br/>
+<jsp:include page="../pagination/userspagination.jsp"/>
 <tr><th>Id</th><th>Email</th><th>Role</th></tr>  
 <c:forEach items="${users}" var="user">
 <tr>

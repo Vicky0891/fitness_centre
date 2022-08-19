@@ -2,6 +2,8 @@ package service.impl;
 
 import java.util.List;
 
+import controller.util.PagingUtil.Paging;
+import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.LoginException;
 import controller.util.exception.impl.NotFoundException;
 import controller.util.exception.impl.RegistrationException;
@@ -64,6 +66,11 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAll() {
         return userDao.getAll().stream().map(e -> toDto(e)).toList();
     }
+    
+    @Override
+    public List<UserDto> getAll(Paging paging) {
+        return userDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
+    }
 
     @Override
     public UserDto create(UserDto userDto) throws Exception {
@@ -124,6 +131,11 @@ public class UserServiceImpl implements UserService {
             log.error("UserDto wasn't create, user={}", user);
         }
         return userDto;
+    }
+    
+    @Override
+    public long count() throws InternalErrorException {
+        return userDao.count();
     }
 
     @Override

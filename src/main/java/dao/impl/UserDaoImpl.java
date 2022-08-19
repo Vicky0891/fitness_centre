@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controller.util.exception.impl.InternalErrorException;
-import controller.util.exception.impl.NotFoundException;
 import dao.connection.DataSource;
 import dao.entity.User;
 import dao.entity.User.Role;
@@ -24,11 +23,14 @@ public class UserDaoImpl implements UserDao {
     private static final String INSERT = "INSERT INTO users (email, password, role_id) VALUES (?, ?, ?)";
     private static final String SELECT_ALL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
             + "JOIN roles r ON u.role_id = r.id WHERE u.deleted = false ORDER BY u.id";
+    private static final String SELECT_ALL_BY_PAGED = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
+            + "JOIN roles r ON u.role_id = r.id WHERE u.deleted = false ORDER BY u.id LIMIT ? OFFSET ?";
     private static final String SELECT_BY_ID = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
             + "JOIN roles r ON u.role_id = r.id WHERE u.id = ? AND u.deleted = false";
     private static final String SELECT_BY_EMAIL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
             + "JOIN roles r ON u.role_id = r.id WHERE u.email = ? AND u.deleted = false";
     private static final String SELECT_ROLE_ID = "SELECT r.id FROM roles r WHERE name = ?";
+    private static final String COUNT_ALL = "SELECT count(*) AS total FROM users u WHERE u.deleted = false";
 
     private DataSource dataSource;
 
@@ -82,6 +84,27 @@ public class UserDaoImpl implements UserDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
+            while (result.next()) {
+                users.add(processUser(result));
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
+        }
+        return users;
+    }
+    
+    @Override
+    public List<User> getAll(int limit, Long offset) {
+        log.debug("Accessing to database using \"getAll\" method");
+        List<User> users = new ArrayList<>();
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_PAGED);
+            statement.setInt(1, limit);
+            statement.setLong(2, offset);
+            ResultSet result = statement.executeQuery();
             while (result.next()) {
                 users.add(processUser(result));
             }
@@ -178,6 +201,25 @@ public class UserDaoImpl implements UserDao {
             close(connection);
         }
         log.error("Role of user with name={} didn't find", name);
+        throw new InternalErrorException("Internal Server Error");
+    }
+    
+    @Override
+    public long count() throws InternalErrorException {
+        log.debug("Accessing to database using \"count\" method");
+        Connection connection = dataSource.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(COUNT_ALL);
+            if (result.next()) {
+                return result.getLong("total");
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
+        }
+        log.error("Couldn't count users");
         throw new InternalErrorException("Internal Server Error");
     }
 
