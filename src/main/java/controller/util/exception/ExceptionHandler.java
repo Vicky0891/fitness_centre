@@ -14,7 +14,7 @@ public class ExceptionHandler {
     private String message;
     private int errorStatus;
     private String page;
-    private final static String DEFAULTPAGE = "jsp/error.jsp";
+    private final static String DEFAULTPAGE = "jsp/error/error.jsp";
     
     public String handleException (Exception e, HttpServletRequest req) {
         if (e instanceof NotFoundException) {
@@ -24,7 +24,7 @@ public class ExceptionHandler {
         } else if (e instanceof BadRequestException) {
             message = ((BadRequestException) e).errorMessage;
             errorStatus = 400;
-            page = "index.jsp";
+            page = "jsp/error/error400.jsp";
         } else if (e instanceof RegistrationException) {
             message = ((RegistrationException) e).errorMessage;
             errorStatus = 400;
@@ -36,7 +36,7 @@ public class ExceptionHandler {
         } else if (e instanceof InternalErrorException) {
             message = ((InternalErrorException) e).errorMessage;
             errorStatus = 500;
-            page = DEFAULTPAGE;
+            page = "jsp/error/error500.jsp";
         } else {
             message = "Internal server error";
             errorStatus = 500;

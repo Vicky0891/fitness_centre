@@ -34,7 +34,7 @@ public class AddToCartCommand implements Command {
             log.error("Couldn't parse gymmembership id or got \"cart\". Exception: " + e);
             req.setAttribute("message",
                     "The requested gymmembership doesn't exist or has been deleted. Try to select another");
-            return "jsp/error.jsp";
+            return "jsp/error/error.jsp";
         }
     }
 }

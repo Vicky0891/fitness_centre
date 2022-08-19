@@ -28,7 +28,7 @@ public class AllOrdersByTypeCommand implements Command {
         } catch (RuntimeException e) {
             log.error("Couldn't parse status or got orders. Exception: " + e);
             req.setAttribute("message", "Couldn't get orders.");
-            return "jsp/error.jsp";
+            return "jsp/error/error.jsp";
         }
     }
 

@@ -28,7 +28,7 @@
 </form><td>
 </c:if>
 <c:if test="${gymmembership.id == null}">
-<jsp:include page="../error.jsp"/>
+<jsp:include page="../error/error.jsp"/>
 </c:if>
 </body>
 </html>

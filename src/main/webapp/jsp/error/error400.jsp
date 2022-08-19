@@ -7,14 +7,11 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<h1 class="error">Error 400</h1>
+<h2>Bad request</h2>
 <c:if test="${requestScope.message != null}">
 <h3>${requestScope.message}</h3>
 </c:if>
-<c:if test="${requestScope.errorStatus != null}">
-<h3>Error ${requestScope.errorStatus}</h3>
-</c:if>
-<h1 class="error">Something went wrong</h1>
 
 </body>
 </html>

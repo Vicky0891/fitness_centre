@@ -29,7 +29,7 @@ public class OrdersCommand implements Command {
         } catch (RuntimeException e) {
             log.error("Couldn't get orders. Exception: " + e);
             req.setAttribute("message", "Something went wrong. Try again later");
-            return "jsp/error.jsp";
+            return "jsp/error/error.jsp";
         }
     }
 

@@ -10,7 +10,7 @@ public class ErrorCommand implements Command{
     @Override
     public String execute(HttpServletRequest req) {
         log.error("Request isn't correct");
-        return "jsp/error.jsp";
+        return "jsp/error/error.jsp";
     }
 
 }

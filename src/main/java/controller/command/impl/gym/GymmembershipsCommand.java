@@ -5,10 +5,13 @@ import java.util.List;
 import controller.command.Command;
 import controller.util.PagingUtil;
 import controller.util.PagingUtil.Paging;
+import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.log4j.Log4j2;
 import service.GymMembershipService;
 import service.dto.GymMembershipDto;
 
+@Log4j2
 public class GymmembershipsCommand implements Command {
     private GymMembershipService gymMembershipService;
     private PagingUtil pagingUtil;
@@ -26,15 +29,13 @@ public class GymmembershipsCommand implements Command {
         long totalPage = pagingUtil.getTotalPages(totalEntities, paging.getLimit());
         
         if(paging.getPage() > 0 && paging.getPage() <= totalPage) {
+            req.setAttribute("gymmemberships", gymMemberships);
             req.setAttribute("currentPage", paging.getPage());
+            req.setAttribute("totalPages", totalPage);
+            return "jsp/gymmembership/gymmemberships.jsp";
         } else {
-            req.setAttribute("currentPage", 1);
+            log.error("Trying to get not existing page");
+            throw new BadRequestException("Request is not correct. Page " + paging.getPage() + " is not exist.");
         }
-        req.setAttribute("gymmemberships", gymMemberships);
-        req.setAttribute("totalPages", totalPage);
-        return "jsp/gymmembership/gymmemberships.jsp";
-        
-        
-        
     }
 }

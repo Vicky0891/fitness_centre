@@ -25,7 +25,7 @@ public class AllOrdersCommand implements Command{
         } catch (RuntimeException e) {
             log.error("Couldn't get orders. Exception: " + e);
             req.setAttribute("message", "Couldn't get orders.");
-            return "jsp/error.jsp";
+            return "jsp/error/error.jsp";
         }
     }
 

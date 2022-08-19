@@ -18,7 +18,7 @@ public class AddFeedbackFormCommand implements Command {
         } catch (RuntimeException e) {
             log.error("Couldn't parse order id. Exception: " + e);
             req.setAttribute("message", "Something went wrong. Try again");
-            return "jsp/error.jsp";
+            return "jsp/error/error.jsp";
         }
     }
 

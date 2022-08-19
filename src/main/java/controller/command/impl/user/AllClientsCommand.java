@@ -26,7 +26,7 @@ public class AllClientsCommand implements Command {
         } catch (RuntimeException e) {
             log.error("Couldn't got clients. Exception: " + e);
             req.setAttribute("message", "Something went wrong. Try again later");
-            return "jsp/error.jsp";
+            return "jsp/error/error.jsp";
         }
     }
 

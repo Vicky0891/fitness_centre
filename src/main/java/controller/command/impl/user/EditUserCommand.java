@@ -31,12 +31,7 @@ public class EditUserCommand implements Command {
             trainerDto.setId(updated.getId());
             trainerDto.setRoleDto(updated.getRoleDto());
             trainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
-            try {
                 trainerService.create(trainerDto);
-            } catch (RuntimeException e) {
-                System.out.println(e);
-                return "redirect:controller?command=all_users";
-            }
         }
         req.setAttribute("message", "User updated");
         return "redirect:controller?command=all_users";
