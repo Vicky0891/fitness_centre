@@ -10,6 +10,8 @@ public interface ClientDao {
     Client get(Long id);
 
     List<Client> getAll();
+    
+    List<Client> getAll(int limit, Long offset);
 
     List<Client> getAllClientsByType(String typeOfClient);
 
@@ -18,5 +20,7 @@ public interface ClientDao {
     Client update(Client client) throws InternalErrorException;
 
     boolean delete(Long id);
+    
+    long count() throws InternalErrorException;
 
 }

@@ -2,6 +2,7 @@ package service.impl;
 
 import java.util.List;
 
+import controller.util.PagingUtil.Paging;
 import controller.util.exception.impl.BadRequestException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
@@ -37,6 +38,11 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<ClientDto> getAll() {
         return clientDao.getAll().stream().map(e -> toDto(e)).toList();
+    }
+    
+    @Override
+    public List<ClientDto> getAll(Paging paging) {
+        return clientDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
     @Override
@@ -104,6 +110,11 @@ public class ClientServiceImpl implements ClientService {
         client.setTrainerId(clientDto.getTrainerId());
         client.setAdditionalInfo(clientDto.getAdditionalInfo());
         return client;
+    }
+    
+    @Override
+    public long count() throws InternalErrorException {
+        return clientDao.count();
     }
 
 }

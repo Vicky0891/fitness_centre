@@ -34,6 +34,8 @@
 <br/>
 <input type="submit" value="SELECT"/>
 </form>
+<br/>
+<jsp:include page="../pagination/clientspagination.jsp"/>
 
 <tr><th>Id</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Birth date</th><th>Phone number</th><th>Type</th><th>Trainer id</th><th>Additional info</th></tr>     
 <c:forEach items="${clients}" var="client">

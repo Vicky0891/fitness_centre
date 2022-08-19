@@ -28,6 +28,10 @@ public class ClientDaoImpl implements ClientDao {
             + "r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info "
             + "FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id JOIN roles r "
             + "ON r.id = u.role_id WHERE u.deleted = false ORDER BY c.user_id";
+    private static final String SELECT_ALL_BY_PAGED = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, "
+            + "r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info "
+            + "FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id JOIN roles r "
+            + "ON r.id = u.role_id WHERE u.deleted = false ORDER BY c.user_id LIMIT ? OFFSET ?";
     private static final String SELECT_BY_ID = "SELECT c.user_id, c.first_name, c.last_name, u.email, "
             + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
             + "c.additional_info FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id "
@@ -37,6 +41,8 @@ public class ClientDaoImpl implements ClientDao {
             + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
             + "c.additional_info FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id "
             + "JOIN roles r ON r.id = u.role_id WHERE t.name = ? AND u.deleted = false ORDER BY c.user_id";
+    private static final String COUNT_ALL = "SELECT count(*) AS total FROM clients c JOIN users u ON c.user_id = u.id"
+            + " WHERE u.deleted = false";
 
     private DataSource dataSource;
 
@@ -71,6 +77,27 @@ public class ClientDaoImpl implements ClientDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
+            while (result.next()) {
+                clients.add(processClient(result));
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
+        }
+        return clients;
+    }
+    
+    @Override
+    public List<Client> getAll(int limit, Long offset) {
+        log.debug("Accessing to database using \"getAll\" method");
+        List<Client> clients = new ArrayList<>();
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_PAGED);
+            statement.setInt(1, limit);
+            statement.setLong(2, offset);
+            ResultSet result = statement.executeQuery();
             while (result.next()) {
                 clients.add(processClient(result));
             }
@@ -201,6 +228,25 @@ public class ClientDaoImpl implements ClientDao {
             close(connection);
         }
         log.error("Type of client with name={} didn't find", name);
+        throw new InternalErrorException("Internal Server Error");
+    }
+    
+    @Override
+    public long count() throws InternalErrorException {
+        log.debug("Accessing to database using \"count\" method");
+        Connection connection = dataSource.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(COUNT_ALL);
+            if (result.next()) {
+                return result.getLong("total");
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
+        }
+        log.error("Couldn't count clients");
         throw new InternalErrorException("Internal Server Error");
     }
 

@@ -83,7 +83,7 @@ public class CommandFactory {
         commands.put("trainers", new TrainersCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("trainer", new TrainerCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("clients", new ClientsCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
-        commands.put("all_clients", new AllClientsCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
+        commands.put("all_clients", new AllClientsCommand(ServiceFactory.INSTANCE.getService(ClientService.class), PagingUtil.INSTANCE));
         commands.put("all_clients_by_type", new AllClientsByTypeCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
         commands.put("user", new UserCommand());
         commands.put("delete_user", new DeleteUserCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
