@@ -28,6 +28,9 @@ public class OrderDaoImpl implements OrderDao {
     private static final String SELECT_ALL = "SELECT o.id, o.date_of_order, o.user_id, o.total_cost, o.feedback, "
             + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id WHERE o.deleted = false "
             + "ORDER BY o.id";
+    private static final String SELECT_ALL_BY_PAGED = "SELECT o.id, o.date_of_order, o.user_id, o.total_cost, o.feedback, "
+            + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id WHERE o.deleted = false "
+            + "ORDER BY o.id LIMIT ? OFFSET ?";
     private static final String SELECT_BY_ID = "SELECT o.id, o.date_of_order, o.user_id, o.total_cost, o.feedback, "
             + "s.name AS status FROM orders o JOIN status s ON s.id = o.status_id JOIN users u "
             + "ON u.id = o.user_id WHERE o.id = ? AND o.deleted = false";
@@ -40,6 +43,7 @@ public class OrderDaoImpl implements OrderDao {
             + "o.total_cost, s.name AS status FROM orders o JOIN status s ON s.id = o.status_id "
             + "WHERE s.name = ? AND o.deleted = false ORDER BY o.id";
     private static final String SELECT_DISCOUNT = "SELECT t.discount FROM types t WHERE name = ?";
+    private static final String COUNT_ALL = "SELECT count(*) AS total FROM orders o WHERE o.deleted = false";
 
     private DataSource dataSource;
     private OrderInfoDao orderInfoDao;
@@ -77,6 +81,27 @@ public class OrderDaoImpl implements OrderDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
+            while (result.next()) {
+                orders.add(processOrder(result));
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAll(int limit, Long offset) {
+        log.debug("Accessing to database using \"getAll\" method");
+        List<Order> orders = new ArrayList<>();
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_PAGED);
+            statement.setInt(1, limit);
+            statement.setLong(2, offset);
+            ResultSet result = statement.executeQuery();
             while (result.next()) {
                 orders.add(processOrder(result));
             }
@@ -267,6 +292,25 @@ public class OrderDaoImpl implements OrderDao {
             close(connection);
         }
         log.error("Discount id with name={} didn't find", name);
+        throw new InternalErrorException("Internal Server Error");
+    }
+
+    @Override
+    public long count() throws InternalErrorException {
+        log.debug("Accessing to database using \"count\" method");
+        Connection connection = dataSource.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(COUNT_ALL);
+            if (result.next()) {
+                return result.getLong("total");
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+        } finally {
+            close(connection);
+        }
+        log.error("Couldn't count orders");
         throw new InternalErrorException("Internal Server Error");
     }
 

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import controller.util.PagingUtil.Paging;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
 import dao.entity.Order;
@@ -53,6 +54,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAll() {
         return orderDao.getAll().stream().map(e -> toDto(e)).toList();
+    }
+    
+    @Override
+    public List<OrderDto> getAll(Paging paging) {
+        return orderDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
     
 
@@ -268,6 +274,11 @@ public class OrderServiceImpl implements OrderService {
         gymMembership.setTypeOfTraining(gymMembershipDto.getTypeOfTraining());
         gymMembership.setCost(gymMembershipDto.getCost());
         return gymMembership;
+    }
+    
+    @Override
+    public long count() throws InternalErrorException {
+        return orderDao.count();
     }
 
 }

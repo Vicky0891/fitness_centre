@@ -9,6 +9,8 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1>All orders</h1>
+
+
 <table>
 <c:if test="${orders.size() == 0}">
 <h1>No orders</h1>
@@ -27,7 +29,8 @@
 <br/>
 <input type="submit" value="SELECT"/>
 </form>
-
+<br/>
+<jsp:include page="../pagination/orderspagination.jsp"/>
 
 <tr><th>#</th><th>Date of order</th><th>Order details</th><th>Total cost</th><th>Client id</th><th>Status</th><th>Feedback</th><th></th></tr>
 <c:forEach items="${requestScope.orders}" var="order">

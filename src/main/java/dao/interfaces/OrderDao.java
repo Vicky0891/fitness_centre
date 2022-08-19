@@ -13,6 +13,8 @@ public interface OrderDao {
 
     List<Order> getAll();
     
+    List<Order> getAll(int limit, Long offset);
+    
     Order create(Order order) throws InternalErrorException;
 
     Order update(Order order) throws InternalErrorException;
@@ -24,5 +26,7 @@ public interface OrderDao {
     List<Order> getAllByStatus(String name);
 
     boolean delete(Long id);
+    
+    long count() throws InternalErrorException;
 
 }

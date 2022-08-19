@@ -10,7 +10,7 @@
 <jsp:include page="../navbar.jsp"/>
 <h1>Details of order</h1>
 <table>
-<jsp:include page="../pagination.jsp"/>
+<jsp:include page="../pagination/gympagination.jsp"/>
 
 <c:if test="${gymmemberships.size() == 0}">
 <h1>No available gymmemberships</h1>

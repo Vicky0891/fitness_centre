@@ -17,7 +17,7 @@
 </form>
 </c:if>
 <table>
-<jsp:include page="../pagination.jsp"/>
+<jsp:include page="../pagination/gympagination.jsp"/>
 
 <c:if test="${gymmemberships.size() == 0}">
 <h1>No available gymmemberships</h1>

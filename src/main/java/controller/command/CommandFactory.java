@@ -122,7 +122,7 @@ public class CommandFactory {
                 new CreatePrescriptionCommand(ServiceFactory.INSTANCE.getService(PrescriptionService.class)));
 
         commands.put("orders", new OrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
-        commands.put("all_orders", new AllOrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
+        commands.put("all_orders", new AllOrdersCommand(ServiceFactory.INSTANCE.getService(OrderService.class), PagingUtil.INSTANCE));
         commands.put("all_orders_by_type", new AllOrdersByTypeCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("order", new OrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
         commands.put("edit_order", new EditOrderCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
