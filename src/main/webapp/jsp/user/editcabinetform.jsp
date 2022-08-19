@@ -23,10 +23,13 @@
 <label for="birthDate-input">Date of birth: </label>
 <input id="birthDate-input" name="birthDate" type="date"/>
 <br/>
-<label for="category-input">Category: </label>
-<input id="category-input" name="category" type="text" value="${requestScope.user.category}"/>
+<label for="category-option">Category: </label>
+<select id="category-option">
+<option value="first">First</option>
+<option value="second">Second</option>
+<option value="high">High</option>
+</select>
 <br/>
-
 <input type="submit" value="SAVE"/>
 </form>
 </body>

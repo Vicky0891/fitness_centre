@@ -18,8 +18,8 @@
 <form method="post" action="controller">
 <input name="command" type="hidden" value="add_feedback"/>
 <input type="hidden" name="orderId" value="${sessionScope.orderId}"/>
-<label for="feedback-input">Write something : </label>
-<input id="feedback-input" name="feedback" type="text"/>
+<label for="feedback-textarea">Write something : </label>
+<textarea id="feedback-textarea" name="feedback" rows="5" cols="20"></textarea>
 
 <br/>
 <input type="submit" value="SAVE"/>

@@ -22,6 +22,7 @@ public class PrescriptionCommand implements Command {
         if (userDto.getRoleDto().name().equals("TRAINER")) {
             Long clientId = Long.parseLong(req.getParameter("clientId"));
             prescriptionDto = prescriptionService.getById(clientId);
+            req.setAttribute("clientId", clientId);
         }
         if (userDto.getRoleDto().name().equals("CLIENT")) {
             prescriptionDto = prescriptionService.getById(userDto.getId());

@@ -2,7 +2,6 @@ package service.impl;
 
 import java.util.List;
 
-import controller.util.exception.impl.NotFoundException;
 import dao.entity.Order.Status;
 import dao.entity.Prescription;
 import dao.interfaces.PrescriptionDao;
@@ -23,10 +22,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     public PrescriptionDto getById(Long id) throws Exception {
         Prescription prescription = prescriptionDao.get(id);
-        if (prescription == null) {
-            log.error("Trying to get not existing prescription, prescription for client id={}", id);
-            throw new NotFoundException("Prescription for client with id " + id + " not found");
-        }
         return toDto(prescription);
     }
 

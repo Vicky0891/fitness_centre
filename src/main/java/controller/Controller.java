@@ -40,11 +40,11 @@ public class Controller extends HttpServlet {
             if (page.startsWith(REDIRECT)) {
                 resp.sendRedirect(req.getContextPath() + "/" + page.substring(REDIRECT.length()));
             } 
+            req.getRequestDispatcher(page).forward(req, resp);
         } catch (Exception e) {
             log.error("Request isn't correct " + e);
             page = exceptionHandler.handleException(e, req);
         }
-            req.getRequestDispatcher(page).forward(req, resp);
             
     }
 

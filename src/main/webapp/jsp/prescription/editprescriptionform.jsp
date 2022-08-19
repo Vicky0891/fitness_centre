@@ -9,19 +9,20 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1>Change what you want</h1>
+<h3>Notice, you can change prescription just one time!</h3>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="edit_prescription"/>
 <input name="userId" type="hidden" value="${sessionScope.prescription.userId}"/>
 
 
-<label for="typeOfTraining-input">Type of training: </label>
-<input id="typeOfTraining-input" name="typeOfTraining" type="text" value="${sessionScope.prescription.typeOfTraining}"/>
+<label for="typeOfTraining-textarea">Type of training: </label>
+<textarea id="typeOfTraining-textarea" name="typeOfTraining" placeholder="${sessionScope.prescription.typeOfTraining}" rows="5" cols="20"></textarea>
 <br/>
-<label for="equipment-input">Equipment: </label>
-<input id="equipment-input" name="equipment" type="text" value="${sessionScope.prescription.equipment}"/>
+<label for="equipment-textarea">Equipment: </label>
+<textarea id="equipment-textarea" name="equipment" placeholder="${sessionScope.prescription.equipment}" rows="5" cols="20"></textarea>
 <br/>
-<label for="diet-input">Diet: </label>
-<input id="diet-input" name="diet" type="text" value="${sessionScope.prescription.diet}"/>
+<label for="diet-textarea">Diet: </label>
+<textarea id="diet-textarea" name="diet" placeholder="${sessionScope.prescription.diet}" rows="5" cols="20"></textarea>
 <br/>
 
 <input type="submit" value="SAVE"/>

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Edit user</title>
+<title>Edit client</title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -15,9 +15,16 @@
 <form method="post" action="controller">
 <input name="command" type="hidden" value="edit_client"/>
 <input name="id" type="hidden" value="${requestScope.client.id}"/>
+<br/>
+<label for="trainerId-select">Trainer id: </label>
+<select id="trainerId-select" name="trainerId">
+<c:forEach items="${trainers}" var="trainer">
+<option value="${trainer.id}">${trainer.id}</option>
+</c:forEach>
+</select>
 
-<label for="trainerId-input">Trainer id: </label>
-<input id="trainerId-input" name="trainerId" type="number" min="1" value="${requestScope.client.trainerId}"/>
+
+
 <br/>
 <h2>Choose type</h2>
 <br/>

@@ -14,14 +14,14 @@
 <input name="command" type="hidden" value="create_prescription"/>
 
 <br/>
-<label for="typeOfTraining-input">Type of training: </label>
-<input id="typeOfTraining-input" name="typeOfTraining" type="text"/>
+<label for="typeOfTraining-textarea">Type of training: </label>
+<textarea id="typeOfTraining-textarea" name="typeOfTraining" rows="5" cols="20"></textarea>
 <br/>
-<label for="equipment-input">Equipment: </label>
-<input id="equipment-input" name="equipment" type="text"/>
+<label for="equipment-textarea">Equipment: </label>
+<textarea id="equipment-textarea" name="equipment" rows="5" cols="20"></textarea>
 <br/>
-<label for="diet-input">Diet: </label>
-<input id="diet-input" name="diet" type="text"/>
+<label for="diet-textarea">Diet: </label>
+<textarea id="diet-textarea" name="diet" rows="5" cols="20"></textarea>
 <br/>
 
 <input type="submit" value="SAVE"/>

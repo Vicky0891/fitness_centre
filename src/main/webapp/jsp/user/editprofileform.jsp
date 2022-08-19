@@ -11,25 +11,24 @@
 <h1>Edit profile</h1>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="edit_profile"/>
-<input name="id" type="hidden" value="${requestScope.user.id}"/>
+<input name="id" type="hidden" value="${sessionScope.user.id}"/>
 
 
 <label for="firstName-input">First name: </label>
-<input id="firstName-input" name="firstName" type="text" value="${requestScope.user.firstName}"/>
+<input id="firstName-input" name="firstName" type="text" value="${sessionScope.user.firstName}"/>
 <br/>
 <label for="lastName-input">Last name: </label>
-<input id="lastName-input" name="lastName" type="text" value="${requestScope.user.lastName}"/>
+<input id="lastName-input" name="lastName" type="text" value="${sessionScope.user.lastName}"/>
 <br/>
 <label for="birthDate-input">Date of birth: </label>
 <input id="birthDate-input" name="birthDate" type="date"/>
 <br/>
-<label for="phoneNumber-input">Phone number: </label>
-<input id="phoneNumber-input" name="phoneNumber" type="tel" value="${requestScope.user.phoneNumber}"/>
+<label for="phoneNumber-input">Phone number (9-13 digits): </label>
+<input id="phoneNumber-input" name="phoneNumber" type="tel" value="${sessionScope.user.phoneNumber}" min="9" max="13"/>
 <br/>
-<label for="additionalInfo-input">Additional information: </label>
-<input id="additionalInfo-input" name="additionalInfo" type="text" value="${requestScope.user.additionalInfo}"/>
+<label for="additionalInfo-textarea">Additional information: </label>
+<textarea id="additionalInfo-textarea" name="additionalInfo" placeholder="${sessionScope.user.additionalInfo}" rows="5" cols="20"></textarea>
 <br/>
-
 <input type="submit" value="SAVE"/>
 </form>
 </body>
