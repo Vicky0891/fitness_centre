@@ -15,6 +15,7 @@ public class AddToCartCommand implements Command {
     public String execute(HttpServletRequest req) {
         try {
             Long gymmembershipId = Long.parseLong(req.getParameter("gymmembershipId"));
+            String page = req.getParameter("currentPage");
             HttpSession session = req.getSession();
             @SuppressWarnings("unchecked")
             Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
@@ -29,7 +30,7 @@ public class AddToCartCommand implements Command {
                 cart.put(gymmembershipId, quantity + 1);
             }
             session.setAttribute("cart", cart);
-            return "redirect:controller?command=gymmemberships";
+            return "redirect:controller?command=gymmemberships&page=" + page;
         } catch (RuntimeException e) {
             log.error("Couldn't parse gymmembership id or got \"cart\". Exception: " + e);
             req.setAttribute("message",

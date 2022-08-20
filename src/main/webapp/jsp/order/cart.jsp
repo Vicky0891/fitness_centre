@@ -22,7 +22,7 @@
 <c:if test="${requestScope.cart != null}">
 
 <table>
-<tr><th>Gymmembership</th><th>Quantity</th><th>Price</th><th></th><th></th></tr>
+<tr><th>Gymmembership</th><th>Quantity</th><th>Price, USD</th><th></th><th></th></tr>
 <c:forEach items="${requestScope.cart.details}" var="item">
 <tr>
 <td><a href="controller?command=gymmembership&id=${item.gymMembershipDto.id}"><c:out value="${item.gymMembershipDto.typeOfTraining}"/></a></td>
@@ -41,7 +41,7 @@
 </tr>
 </c:forEach>
 <tr>
-<td colspan="3">TOTAL COST: <c:out value="${requestScope.cart.totalCost}"/></td>
+<td colspan="3">TOTAL COST: <c:out value="${requestScope.cart.totalCost}"/> USD</td>
 <td>
 <form method="post" action="controller">
 <input type="hidden" name="command" value="create_order"/>

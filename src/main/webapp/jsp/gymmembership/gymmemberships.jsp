@@ -35,6 +35,7 @@
 <form method="post" action="controller">
 <input type="hidden" name="command" value="add_to_cart"/>
 <input type="hidden" name="gymmembershipId" value="${gymmembership.id}"/>
+<input type="hidden" name="currentPage" value="${currentPage}"/>
 <input type="submit" value="Add to cart"/>
 </form>
 </td>
