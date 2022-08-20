@@ -11,6 +11,8 @@ public class RemoveFromCartCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         Long gymmembershipId = Long.parseLong(req.getParameter("gymmembershipId"));
+        String page = req.getParameter("currentPage");
+        String redirect = req.getParameter("redirect");
         HttpSession session = req.getSession();
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
@@ -21,7 +23,10 @@ public class RemoveFromCartCommand implements Command {
                 if (cart.isEmpty()) {
                     session.removeAttribute("cart");
                 }
-                return "redirect:controller?command=gymmemberships";
+                if (redirect.equals("cart")) {
+                    return "redirect:controller?command=cart";
+                } else
+                    return "redirect:controller?command=gymmemberships&page=" + page;
             }
             if (quantity.intValue() == 1) {
                 cart.remove(gymmembershipId, quantity);
@@ -35,6 +40,9 @@ public class RemoveFromCartCommand implements Command {
                 session.removeAttribute("cart");
             }
         }
-        return "redirect:controller?command=gymmemberships";
+        if (redirect.equals("cart")) {
+            return "redirect:controller?command=cart";
+        } else
+            return "redirect:controller?command=gymmemberships&page=" + page;
     }
 }

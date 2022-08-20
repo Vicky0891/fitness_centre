@@ -43,6 +43,8 @@
 <form method="post" action="controller">
 <input type="hidden" name="command" value="remove_from_cart"/>
 <input type="hidden" name="gymmembershipId" value="${gymmembership.id}"/>
+<input type="hidden" name="currentPage" value="${currentPage}"/>
+<input type="hidden" name="redirect" value="gymmemberships"/>
 <input type="submit" value="Remove from cart"/>
 </form>
 </td>
