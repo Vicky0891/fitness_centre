@@ -3,7 +3,9 @@ package controller.command.impl.order;
 import java.util.List;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.OrderService;
 import service.dto.OrderDto;
@@ -27,7 +29,9 @@ public class AllOrdersByTypeCommand implements Command {
             return "jsp/order/allordersbytype.jsp";
         } catch (RuntimeException e) {
             log.error("Couldn't parse status or got orders. Exception: " + e);
-            req.setAttribute("message", "Couldn't get orders.");
+            HttpSession session = req.getSession();
+            MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+            req.setAttribute("message", messageManager.getMessage("msg.notexist.orders"));
             return "jsp/error/error.jsp";
         }
     }

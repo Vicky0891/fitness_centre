@@ -1,28 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:if test="${sessionScope.language != null}">
+<fmt:setLocale value="${sessionScope.language}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <!DOCTYPE html>
-<html>
+<html lang="${sessionScope.language}">
 <head>
-<title>Trainers</title>
+<title><fmt:message key="msg.trainers.title"/></title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 
 <jsp:include page="../navbar.jsp"/>
 
-<h1>Our trainers</h1>
+<h1><fmt:message key="msg.trainers.maintitle"/></h1>
 <table>
 <c:if test="${trainers.size() == 0}">
-<h1>This catalog is empty</h1>
+<h1><fmt:message key="msg.trainers.notrainers"/></h1>
 </c:if>
 <c:if test="${trainers.size() > 0}">
-<th>Id</th><th>First Name</th><th>Last Name</th><th>Email</th>  
+<th>#</th><th><fmt:message key="msg.user.firstname"/></th><th><fmt:message key="msg.user.lastname"/></th><th><fmt:message key="msg.user.category"/></th>  
 <c:forEach items="${trainers}" var="trainer">
 <tr>
 <td><a href="controller?command=trainer&id=${trainer.id}"><c:out value="${trainer.id}"/></a></td>
 <td><a href="controller?command=trainer&id=${trainer.id}"><c:out value="${trainer.firstName}"/></a></td>
 <td><c:out value="${trainer.lastName}"/></td>
-<td><c:out value="${trainer.email}"/></td>
+<td><c:out value="${trainer.category}"/></td>
 </tr>
 </c:forEach>
 </c:if>

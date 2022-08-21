@@ -3,6 +3,7 @@ package controller.command;
 import java.util.HashMap;
 import java.util.Map;
 
+import controller.command.impl.ChangeLocaleCommand;
 import controller.command.impl.ErrorCommand;
 import controller.command.impl.LoginCommand;
 import controller.command.impl.LoginFormCommand;
@@ -143,6 +144,7 @@ public class CommandFactory {
         commands.put("add_feedback", new AddFeedbackCommand(ServiceFactory.INSTANCE.getService(OrderService.class)));
 
         commands.put("error", new ErrorCommand());
+        commands.put("change_locale", new ChangeLocaleCommand());
 
     }
 

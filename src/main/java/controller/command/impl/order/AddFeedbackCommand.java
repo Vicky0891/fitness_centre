@@ -1,6 +1,7 @@
 package controller.command.impl.order;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,8 +30,9 @@ public class AddFeedbackCommand implements Command {
             throw new BadRequestException("The entered data is incorrect. Try again.");
         }
         OrderDto updated = orderService.addFeedback(currentOrderDto);
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("order", updated);
-        req.setAttribute("message", "Information  updated successfully");
+        req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));
         return "redirect:controller?command=orders";
     }
 }

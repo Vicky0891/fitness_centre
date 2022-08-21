@@ -1,6 +1,7 @@
 package controller.command.impl.prescription;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -43,7 +44,8 @@ public class CreatePrescriptionCommand implements Command {
         }
         PrescriptionDto created = prescriptionService.create(prescriptionDto);
         req.setAttribute("prescription", created);
-        req.setAttribute("message", "Prescription was created");
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+        req.setAttribute("message", messageManager.getMessage("msg.create.prescription"));
         return "jsp/prescription/prescription.jsp";
     }
 

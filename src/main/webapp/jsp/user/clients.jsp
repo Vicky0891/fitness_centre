@@ -1,22 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:if test="${sessionScope.language != null}">
+<fmt:setLocale value="${sessionScope.language}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <!DOCTYPE html>
-<html>
+<html lang="${sessionScope.language}">
 <head>
-<title>Trainers</title>
+<title><fmt:message key="msg.clients.title"/></title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 
 <jsp:include page="../navbar.jsp"/>
 
-<h1>My clients</h1>
+<h1><fmt:message key="msg.clients.maintitle"/></h1>
 <table>
 <c:if test="${clients.size() == 0}">
-<h1>You don't have any clients yet</h1>
+<h1><fmt:message key="msg.clients.noclients"/></h1>
 </c:if>
 <c:if test="${clients.size() > 0}">
-<tr><th>Account number</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Birth date</th><th>Type</th><th>Additional info</th></tr>     
+<tr><th>ID</th><th><fmt:message key="msg.user.firstname"/></th><th><fmt:message key="msg.user.lastname"/></th><th><fmt:message key="msg.login.email"/></th><th><fmt:message key="msg.user.birthdate"/></th><th><fmt:message key="msg.clients.type"/></th><th><fmt:message key="msg.user.addinfo"/></th></tr>     
 <c:forEach items="${clients}" var="client">
 <tr>
 <td><c:out value="${client.id}"/></td>
@@ -30,7 +35,7 @@
 <form method="post" action="controller">
 <input type="hidden" name="command" value="prescription"/>
 <input type="hidden" name="clientId" value="${client.id}"/>
-<input type="submit" value="Check prescription"/>
+<input type="submit" value="<fmt:message key="msg.clients.checkprescription"/>"/>
 </form>
 </td>
 </tr>

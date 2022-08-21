@@ -1,7 +1,9 @@
 package controller.command.impl.user;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import service.UserService;
 
 public class DeleteUserCommand implements Command {
@@ -15,7 +17,9 @@ public class DeleteUserCommand implements Command {
     public String execute(HttpServletRequest req) throws Exception {
         Long userId = Long.parseLong(req.getParameter("userId"));
         userService.delete(userId);
-        req.setAttribute("message", "User deleted successfully");
+        HttpSession session = req.getSession();
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+        req.setAttribute("message", messageManager.getMessage("msg.delete.user"));
         return "redirect:controller?command=all_users";
     }
 

@@ -1,14 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:if test="${sessionScope.language != null}">
+<fmt:setLocale value="${sessionScope.language}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <!DOCTYPE html>
+<html lang="${sessionScope.language}">
 
 
-<a href="controller?command=gymmemberships&page=1">First</a>   |   
+<a href="controller?command=gymmemberships&page=1"><fmt:message key="msg.pagination.first"/></a>   |   
 <c:if test="${requestScope.currentPage > 1}">
-<a href="controller?command=gymmemberships&page=${requestScope.currentPage - 1}">Prev</a>   |   
+<a href="controller?command=gymmemberships&page=${requestScope.currentPage - 1}"><fmt:message key="msg.pagination.prev"/></a>   |   
 </c:if>
-Page ${requestScope.currentPage} out of ${requestScope.totalPages}   |   
+<fmt:message key="msg.pagination.page"/> ${requestScope.currentPage} <fmt:message key="msg.pagination.outof"/> ${requestScope.totalPages}   |   
 <c:if test="${requestScope.currentPage < requestScope.totalPages}">
-<a href="controller?command=gymmemberships&page=${requestScope.currentPage + 1}">Next</a>   |   
+<a href="controller?command=gymmemberships&page=${requestScope.currentPage + 1}"><fmt:message key="msg.pagination.next"/></a>   |   
 </c:if>
-<a href="controller?command=gymmemberships&page=${requestScope.totalPages}">Last</a>
+<a href="controller?command=gymmemberships&page=${requestScope.totalPages}"><fmt:message key="msg.pagination.last"/></a>

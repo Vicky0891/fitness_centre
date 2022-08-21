@@ -1,7 +1,9 @@
 package controller.command.impl.user;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import service.ClientService;
 import service.dto.ClientDto;
 import service.dto.ClientDto.TypeDto;
@@ -24,7 +26,9 @@ public class EditClientCommand implements Command {
 
         ClientDto updated = clientService.update(currentClientDto);
         req.setAttribute("client", updated);
-        req.setAttribute("message", "Client updated");
+        HttpSession session = req.getSession();
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+        req.setAttribute("message", messageManager.getMessage("msg.update.client"));
         return "redirect:controller?command=all_clients";
     }
 

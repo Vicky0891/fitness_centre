@@ -51,7 +51,7 @@ public class UserRoleFilter extends HttpFilter {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
                 "cart", "login", "login_form", "logout", "create_order", "user", "edit_profile_form", "edit_profile",
                 "add_feedback_form", "add_feedback", "orders", "order", "remove_order", "prescription",
-                "edit_prescription", "edit_prescription_form", "remove_from_cart" ->
+                "edit_prescription", "edit_prescription_form", "remove_from_cart", "change_locale" ->
             false;
         default -> true;
         };
@@ -61,7 +61,7 @@ public class UserRoleFilter extends HttpFilter {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
                 "cart", "login", "login_form", "logout", "create_order", "user", "edit_profile_form", "edit_profile",
-                "prescription", "edit_cabinet_form", "edit_cabinet", "clients", "create_prescription_form", "create_prescription" ->
+                "prescription", "edit_cabinet_form", "edit_cabinet", "clients", "create_prescription_form", "create_prescription", "change_locale" ->
             false;
         default -> true;
         };

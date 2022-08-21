@@ -7,16 +7,7 @@
 <fmt:setBundle basename="messages"/>
 <!DOCTYPE html>
 <html lang="${sessionScope.language}">
-<head>
-<title><fmt:message key="msg.main.error"/></title>
-<link href="./css/style.css" rel="stylesheet" type="text/css"/>
-</head>
-<body>
-<h1 class="error"><fmt:message key="msg.main.error"/> 400</h1>
-<h2>Bad request</h2>
-<c:if test="${requestScope.message != null}">
-<h5>${requestScope.message}</h5>
-</c:if>
-
-</body>
-</html>
+<footer>
+<h5>Copyright Viktoryia Zhuk</h5>
+<h5>Email: niki_08_91@mail.ru</h5>
+</footer>

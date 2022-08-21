@@ -3,6 +3,7 @@ package controller.command.impl.user;
 import java.time.LocalDate;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import service.TrainerService;
@@ -36,7 +37,8 @@ public class EditCabinetCommand implements Command {
 
         TrainerDto updated = trainerService.update(currentTrainerDto);
         session.setAttribute("user", updated);
-        req.setAttribute("message", "Information  updated successfully");
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+        req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));
         return "jsp/user/user.jsp";
     }
 

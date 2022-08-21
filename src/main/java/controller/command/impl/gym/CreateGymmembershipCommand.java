@@ -3,8 +3,10 @@ package controller.command.impl.gym;
 import java.math.BigDecimal;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.GymMembershipService;
 import service.dto.GymMembershipDto;
@@ -22,6 +24,8 @@ public class CreateGymmembershipCommand implements Command {
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
         String cost = req.getParameter("cost");
+        HttpSession session = req.getSession();
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         try {
             gymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
@@ -33,7 +37,7 @@ public class CreateGymmembershipCommand implements Command {
         }
         GymMembershipDto created = gymMembershipService.create(gymMembershipDto);
         req.setAttribute("gymmembership", created);
-        req.setAttribute("message", "New gymmembership was created");
+        req.setAttribute("message", messageManager.getMessage("msg.create.gym"));
         return "jsp/gymmembership/gymmembership.jsp";
     }
 

@@ -3,7 +3,9 @@ package controller.command.impl.user;
 import java.time.LocalDate;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import service.TrainerService;
 import service.UserService;
 import service.dto.UserDto;
@@ -31,9 +33,11 @@ public class EditUserCommand implements Command {
             trainerDto.setId(updated.getId());
             trainerDto.setRoleDto(updated.getRoleDto());
             trainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
-                trainerService.create(trainerDto);
+            trainerService.create(trainerDto);
         }
-        req.setAttribute("message", "User updated");
+        HttpSession session = req.getSession();
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+        req.setAttribute("message", messageManager.getMessage("msg.update.user"));
         return "redirect:controller?command=all_users";
     }
 

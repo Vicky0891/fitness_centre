@@ -1,8 +1,10 @@
 package controller.command.impl.user;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.UserService;
 import service.dto.UserDto.RoleDto;
@@ -31,7 +33,9 @@ public class CreateUserCommand implements Command {
         }
         UserDto created = userService.create(userDto);
         req.setAttribute("user", created);
-        req.setAttribute("message", "New user was created");
+        HttpSession session = req.getSession();
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+        req.setAttribute("message", messageManager.getMessage("msg.create.user"));
         return "jsp/user/user.jsp";
     }
 }

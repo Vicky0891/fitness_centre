@@ -3,8 +3,10 @@ package controller.command.impl.gym;
 import java.math.BigDecimal;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.GymMembershipService;
 import service.dto.GymMembershipDto;
@@ -33,8 +35,10 @@ public class EditGymmembershipCommand implements Command {
             throw new BadRequestException("The entered data is incorrect. Try again.");
         }
         GymMembershipDto updated = gymMembershipService.update(currentGymMembershipDto);
+        HttpSession session = req.getSession();
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("gymmembership", updated);
-        req.setAttribute("message", "Gymmembership updated");
+        req.setAttribute("message", messageManager.getMessage("msg.update.gym"));
         return "redirect:controller?command=gymmemberships";
     }
 }

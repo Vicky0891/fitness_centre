@@ -1,6 +1,7 @@
 package controller.command.impl.prescription;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -38,7 +39,8 @@ public class EditPrescriptionCommand implements Command {
         PrescriptionDto updated = prescriptionService.update(currentPrescriptionDto);
 
         req.setAttribute("prescription", updated);
-        req.setAttribute("message", "Information  updated successfully");
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+        req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));
         return "jsp/prescription/prescription.jsp";
     }
 }

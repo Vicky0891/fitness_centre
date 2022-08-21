@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -13,10 +14,10 @@ public class AddToCartCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
+        HttpSession session = req.getSession();
         try {
             Long gymmembershipId = Long.parseLong(req.getParameter("gymmembershipId"));
             String page = req.getParameter("currentPage");
-            HttpSession session = req.getSession();
             @SuppressWarnings("unchecked")
             Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
             if (cart == null) {
@@ -33,8 +34,8 @@ public class AddToCartCommand implements Command {
             return "redirect:controller?command=gymmemberships&page=" + page;
         } catch (RuntimeException e) {
             log.error("Couldn't parse gymmembership id or got \"cart\". Exception: " + e);
-            req.setAttribute("message",
-                    "The requested gymmembership doesn't exist or has been deleted. Try to select another");
+            MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+            req.setAttribute("message", messageManager.getMessage("msg.notexist.gym"));
             return "jsp/error/error.jsp";
         }
     }

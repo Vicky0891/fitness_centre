@@ -23,7 +23,6 @@ public class CartCommand implements Command {
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
         if (cart == null) {
-            req.setAttribute("message", "Cart is empty");
             return PAGE;
         }
         UserDto userDto = (UserDto) session.getAttribute("user");

@@ -3,7 +3,9 @@ package controller.command.impl.user;
 import java.util.List;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.ClientService;
 import service.dto.ClientDto;
@@ -18,6 +20,7 @@ public class AllClientsByTypeCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
+        HttpSession session = req.getSession();
         try {
             String type = req.getParameter("type");
             List<ClientDto> clients = clientService.getAllClientsByType(type);
@@ -26,7 +29,8 @@ public class AllClientsByTypeCommand implements Command {
             return "jsp/user/allclientsbytype.jsp";
         } catch (RuntimeException e) {
             log.error("Couldn't got clients. Exception: " + e);
-            req.setAttribute("message", "Something went wrong. Try again later");
+            MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+            req.setAttribute("message", messageManager.getMessage("msg.error.errormessage"));
             return "jsp/error/error.jsp";
         }
     }

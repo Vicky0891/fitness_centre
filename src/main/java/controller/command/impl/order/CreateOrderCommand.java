@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import controller.command.Command;
+import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import service.ClientService;
@@ -26,6 +27,7 @@ public class CreateOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         UserDto userDto = (UserDto) session.getAttribute("user");
         if (userDto == null) {
             req.setAttribute("message", "Please login");
@@ -36,7 +38,7 @@ public class CreateOrderCommand implements Command {
         OrderDto processed = orderService.processCart(cart, userDto);
         OrderDto created = orderService.create(processed);
         req.setAttribute("order", created);
-        req.setAttribute("message", "Order created successfully");
+        req.setAttribute("message", messageManager.getMessage("Order created successfully"));
         session.removeAttribute("cart");
         ClientDto clientDto = new ClientDto();
         clientDto.setId(userDto.getId());
