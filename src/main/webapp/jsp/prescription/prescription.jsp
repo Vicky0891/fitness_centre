@@ -20,7 +20,7 @@
 
 <c:if test="${sessionScope.user['class'].simpleName == 'ClientDto'}">
 <c:if test="${requestScope.prescription.id == null}">
-<h2><fmt:message key="msg.prescription.noprescription"/></h2>
+<h3><fmt:message key="msg.prescription.noprescription"/></h3>
 </c:if>
 
 

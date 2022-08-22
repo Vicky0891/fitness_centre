@@ -49,10 +49,10 @@ public class TrainerServiceImpl implements TrainerService {
             log.error("Trying to create an existing trainer, trainer={}", trainerDto);
             throw new BadRequestException("Such trainer already exists");
         }
-        Trainer trainer = toTrainer(trainerDto);
+        Trainer trainer = toTrainerForCreate(trainerDto);
         Trainer createdTrainer = trainerDao.create(trainer);
         log.info("Trainer was create, trainer={}", trainerDto);
-        return toDto(createdTrainer);
+        return toDtoForCreate(createdTrainer);
     }
 
     @Override
@@ -105,6 +105,7 @@ public class TrainerServiceImpl implements TrainerService {
         try {
             trainerDto.setId(trainer.getId());
             trainerDto.setEmail(trainer.getEmail());
+            trainerDto.setBirthDate(trainer.getBirthDate());
             trainerDto.setRoleDto(RoleDto.valueOf(trainer.getRole().name()));
         } catch (NullPointerException e) {
             log.error("Trainer wasn't create, trainer={} ", trainer);
@@ -116,6 +117,7 @@ public class TrainerServiceImpl implements TrainerService {
         Trainer trainer = new Trainer();
         trainer.setId(trainerDto.getId());
         trainer.setEmail(trainerDto.getEmail());
+        trainer.setBirthDate(trainerDto.getBirthDate());
         trainer.setRole(Role.valueOf(trainerDto.getRoleDto().name()));
         return trainer;
     }

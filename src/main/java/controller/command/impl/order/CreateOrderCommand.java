@@ -40,13 +40,17 @@ public class CreateOrderCommand implements Command {
         req.setAttribute("order", created);
         req.setAttribute("message", messageManager.getMessage("msg.create.order"));
         session.removeAttribute("cart");
+        ClientDto createdClient = createClientDto(userDto);
+        session.setAttribute("user", createdClient);
+        return "jsp/order/order.jsp";
+    }
+
+    private ClientDto createClientDto(UserDto userDto) throws Exception {
         ClientDto clientDto = new ClientDto();
         clientDto.setId(userDto.getId());
         clientDto.setType(TypeDto.NEW);
         clientDto.setRoleDto(RoleDto.CLIENT);
         clientDto.setBirthDate(LocalDate.parse("0001-01-01"));
-        ClientDto createdClient = clientService.create(clientDto);
-        session.setAttribute("user", createdClient);
-        return "jsp/order/order.jsp";
+        return clientService.create(clientDto);
     }
 }

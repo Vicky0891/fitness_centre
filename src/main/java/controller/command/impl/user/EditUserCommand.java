@@ -29,11 +29,7 @@ public class EditUserCommand implements Command {
         currentUserDto.setRoleDto(RoleDto.valueOf(role));
         UserDto updated = userService.update(currentUserDto);
         if (role.equals("TRAINER")) {
-            TrainerDto trainerDto = new TrainerDto();
-            trainerDto.setId(updated.getId());
-            trainerDto.setRoleDto(updated.getRoleDto());
-            trainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
-            trainerService.create(trainerDto);
+            createTrainerDto(updated);
         }
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
@@ -41,4 +37,11 @@ public class EditUserCommand implements Command {
         return "redirect:controller?command=all_users";
     }
 
+    private void createTrainerDto(UserDto userDto) throws Exception {
+        TrainerDto trainerDto = new TrainerDto();
+        trainerDto.setId(userDto.getId());
+        trainerDto.setRoleDto(userDto.getRoleDto());
+        trainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
+        trainerService.create(trainerDto);
+    }
 }

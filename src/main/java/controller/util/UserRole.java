@@ -1,11 +1,14 @@
 package controller.util;
 
+import controller.util.exception.impl.NotFoundException;
+import lombok.extern.log4j.Log4j2;
 import service.ClientService;
 import service.TrainerService;
 import service.dto.ClientDto;
 import service.dto.TrainerDto;
 import service.dto.UserDto;
 
+@Log4j2
 public class UserRole {
     private ClientService clientService;
     private TrainerService trainerService;
@@ -17,17 +20,26 @@ public class UserRole {
 
     public Object getUserRole(UserDto userDto) throws Exception {
         switch (userDto.getRoleDto().toString()) {
-
         case "CLIENT":
-            ClientDto clientDto = clientService.getById(userDto.getId());
-            if (clientDto != null) {
-                return clientDto;
+            try {
+                ClientDto clientDto = clientService.getById(userDto.getId());
+                if (clientDto != null) {
+                    return clientDto;
+                }
+            } catch (NotFoundException e) {
+                log.error("Client not exists or something went wrong. Exception: " + e);
             }
         case "TRAINER":
-            TrainerDto trainerDto = trainerService.getById(userDto.getId());
-            if (trainerDto != null) {
-                return trainerDto;
+            try {
+                TrainerDto trainerDto = trainerService.getById(userDto.getId());
+                if (trainerDto != null) {
+                    return trainerDto;
+                }
+            } catch (NotFoundException e) {
+                log.error("Client not exists or something went wrong. Exception: " + e);
             }
+        case "ADMIN":
+            return userDto;
         }
         return userDto;
     }

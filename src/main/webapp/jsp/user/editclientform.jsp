@@ -31,8 +31,7 @@
 
 
 <br/>
-<h2><fmt:message key="msg.editclient.selecttype"/></h2>
-<br/>
+<h3><fmt:message key="msg.editclient.selecttype"/></h3>
 <input id="type-input-regular" name="type" type="radio"
 value="REGULAR" ${requestScope.user.typeDto=='REGULAR' ? 'checked' : ''}>
 <label for="type-input-regular"><fmt:message key="msg.editclient.regular"/></label>
@@ -48,7 +47,7 @@ value="CORPORATE" ${requestScope.user.typeDto=='CORPORATE' ? 'checked' : ''}>
 </form>
 <br/>
 
-<h2><fmt:message key="msg.trainers.title"/></h2>
+<h3><fmt:message key="msg.trainers.title"/></h3>
 <table>
 <tr><th>ID</th><th><fmt:message key="msg.user.firstname"/></th><th><fmt:message key="msg.user.lastname"/></th></tr>  
 <c:forEach items="${trainers}" var="trainer">

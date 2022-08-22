@@ -22,8 +22,7 @@
 </c:if>
 <c:if test="${orders.size() > 0}">
 
-<h2>Select to view all orders with status</h2>
-<br/>
+<h3><fmt:message key="msg.allorders.selectstatus"/></h3>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="all_orders_by_type"/>
 <input id="status-input-pending" name="status" type="radio" value="PENDING">

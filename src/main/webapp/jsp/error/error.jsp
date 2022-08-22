@@ -19,7 +19,6 @@
 <c:if test="${requestScope.errorStatus != null}">
 <h3><fmt:message key="msg.main.error"/> ${requestScope.errorStatus}</h3>
 </c:if>
-<h1 class="error">Something went wrong</h1>
 <footer>
 <jsp:include page="../footer.jsp"/>
 </footer>

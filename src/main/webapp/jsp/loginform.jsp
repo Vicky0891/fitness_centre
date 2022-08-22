@@ -32,7 +32,7 @@
 <input type="submit" value="<fmt:message key="msg.login.login"/>"/>
 </form>
 <h3><fmt:message key="msg.login.newuser"/></h3>
-<h2><a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a></h2>
+<h3><a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a></h3>
 <footer>
 <jsp:include page="footer.jsp"/>
 </footer>
