@@ -3,7 +3,6 @@ package service.impl;
 import java.util.List;
 
 import controller.util.PagingUtil.Paging;
-import controller.util.exception.impl.BadRequestException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
 import dao.entity.Client;
@@ -49,7 +48,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto create(ClientDto clientDto) throws Exception {
         Client existing = clientDao.get(clientDto.getId());
         if (existing != null) {
-            return clientDto;
+            return toDto(existing);
         }
         Client client = toClient(clientDto);
         Client createdClient = clientDao.create(client);

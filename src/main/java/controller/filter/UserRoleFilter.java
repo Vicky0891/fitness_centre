@@ -2,6 +2,7 @@ package controller.filter;
 
 import java.io.IOException;
 
+import controller.util.MessageManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -9,8 +10,10 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.dto.UserDto;
 
+@Log4j2
 @WebFilter(urlPatterns = "/controller/*")
 public class UserRoleFilter extends HttpFilter {
     private static final String DEFAULT_ROLE = "CLIENT";
@@ -19,7 +22,7 @@ public class UserRoleFilter extends HttpFilter {
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         String command = req.getParameter("command");
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         String role = DEFAULT_ROLE;
 
         if (session.getAttribute("user") != null) {
@@ -27,7 +30,9 @@ public class UserRoleFilter extends HttpFilter {
             role = userDto.getRoleDto().toString();
         }
         if (permissionRequired(role, command)) {
-            req.setAttribute("message", "Don't have sufficient rights to complete the request");
+            log.info("Trying to access a restricted page. Command: " + command + ". Role: " + role);
+            MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+            req.setAttribute("message", messageManager.getMessage("msg.error.userrole"));
             req.getRequestDispatcher("index.jsp").forward(req, res);
             return;
         }
@@ -61,7 +66,8 @@ public class UserRoleFilter extends HttpFilter {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
                 "cart", "login", "login_form", "logout", "create_order", "user", "edit_profile_form", "edit_profile",
-                "prescription", "edit_cabinet_form", "edit_cabinet", "clients", "create_prescription_form", "create_prescription", "change_locale" ->
+                "prescription", "edit_cabinet_form", "edit_cabinet", "clients", "create_prescription_form",
+                "create_prescription", "change_locale" ->
             false;
         default -> true;
         };

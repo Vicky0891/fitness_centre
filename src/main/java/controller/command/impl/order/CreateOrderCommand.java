@@ -27,10 +27,10 @@ public class CreateOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         UserDto userDto = (UserDto) session.getAttribute("user");
+        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         if (userDto == null) {
-            req.setAttribute("message", "Please login");
+            req.setAttribute("message", messageManager.getMessage("msg.login"));
             return "jsp/loginform.jsp";
         }
         @SuppressWarnings("unchecked")

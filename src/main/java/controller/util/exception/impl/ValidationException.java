@@ -1,4 +1,4 @@
-package controller.util.exception;
+package controller.util.exception.impl;
 
 public class ValidationException extends Exception{
 

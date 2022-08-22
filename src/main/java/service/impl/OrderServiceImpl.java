@@ -17,7 +17,6 @@ import dao.entity.Order.Status;
 import dao.interfaces.ClientDao;
 import dao.interfaces.GymMembershipDao;
 import dao.interfaces.OrderDao;
-import dao.interfaces.OrderInfoDao;
 import lombok.extern.log4j.Log4j2;
 import service.OrderService;
 import service.dto.OrderDto;
@@ -31,20 +30,18 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderDao orderDao;
     private GymMembershipDao gymMembershipDao;
-    private OrderInfoDao orderInfoDao;
     private ClientDao clientDao;
 
-    public OrderServiceImpl(OrderDao orderDao, GymMembershipDao gymMembershipDao, OrderInfoDao orderInfoDao, ClientDao clientDao) {
+    public OrderServiceImpl(OrderDao orderDao, GymMembershipDao gymMembershipDao, ClientDao clientDao) {
         this.orderDao = orderDao;
         this.gymMembershipDao = gymMembershipDao;
-        this.orderInfoDao = orderInfoDao;
         this.clientDao = clientDao;
     }
 
     @Override
     public OrderDto getById(Long id) throws NotFoundException {
         Order order = orderDao.get(id);
-        if(order == null) {
+        if (order == null) {
             log.error("Trying to get not existing order, order id={}", id);
             throw new NotFoundException("Order with id " + id + " not found");
         }
@@ -55,19 +52,18 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> getAll() {
         return orderDao.getAll().stream().map(e -> toDto(e)).toList();
     }
-    
+
     @Override
     public List<OrderDto> getAll(Paging paging) {
         return orderDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
-    
 
     @Override
     public List<OrderDto> getAllOrdersDtoByClient(Long id) {
         return orderDao.getAllOrdersByClient(id).stream().map(e -> toDto(e)).toList();
-        
+
     }
-    
+
     @Override
     public List<OrderDto> getAllByStatus(String statusName) {
         return orderDao.getAllByStatus(statusName).stream().map(e -> toDto(e)).toList();
@@ -80,13 +76,13 @@ public class OrderServiceImpl implements OrderService {
         log.info("Order was create, order={}", orderDto);
         return toDto(createdOrder);
     }
-    
+
     @Override
     public OrderDto processCart(Map<Long, Integer> cart, UserDto userDto) throws Exception {
         OrderDto orderDto = createDto(cart, userDto);
         return orderDto;
     }
-   
+
     public OrderDto createDto(Map<Long, Integer> cart, UserDto userDto) throws Exception {
         OrderDto orderDto = new OrderDto();
         orderDto.setStatusDto(StatusDto.PENDING);
@@ -103,40 +99,37 @@ public class OrderServiceImpl implements OrderService {
         });
         orderDto.setDetails(details);
         BigDecimal totalCost = calculatePrice(details);
-        orderDto.setTotalCost(totalCost);
         orderDto.setFeedback("");
-        if(userDto != null) {
+        if (userDto != null) {
             totalCost = calculateDiscount(userDto, totalCost);
             orderDto.setUserId(userDto.getId());
         }
-//        if(userDto == null) {
-//        return orderDto;
-//        }
+        orderDto.setTotalCost(totalCost);
         return orderDto;
     }
 
     private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) throws Exception {
         Client existingClient = clientDao.get(userDto.getId());
-        if(existingClient == null) {
+        if (existingClient == null) {
             return totalCost;
         }
         String typeOfClient = existingClient.getType().toString();
         int discount = orderDao.getDiscount(typeOfClient);
         double totalCostInDouble = totalCost.doubleValue();
-        totalCostInDouble = (totalCost.doubleValue() - ((totalCost.doubleValue() / (double)100) * (double)discount));
+        totalCostInDouble = (totalCost.doubleValue() - ((totalCost.doubleValue() / (double) 100) * (double) discount));
         return BigDecimal.valueOf(totalCostInDouble);
     }
-    
+
     private BigDecimal calculatePrice(List<OrderInfoDto> details) {
         BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderInfoDto detail: details) {
+        for (OrderInfoDto detail : details) {
             BigDecimal gymmembershipPrice = detail.getGymMembershipPrice();
             BigDecimal itemPrice = gymmembershipPrice.multiply(BigDecimal.valueOf(detail.getGymMembershipQuantity()));
             totalCost = totalCost.add(itemPrice);
         }
         return totalCost;
     }
-    
+
     private GymMembershipDto toGymMembershipDto(GymMembership gymMembership) {
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         try {
@@ -168,17 +161,17 @@ public class OrderServiceImpl implements OrderService {
         Order existing = orderDao.get(orderDto.getId());
         if (existing != null && existing.getId() != orderDto.getId()) {
             log.error("Trying to add feedback to not existing or incorrect order, order={}", orderDto);
-            throw new RuntimeException("Trying to add feedback to not existing or incorrect order, order={}\", orderDto");
+            throw new RuntimeException(
+                    "Trying to add feedback to not existing or incorrect order, order={}\", orderDto");
         }
         Order order = toOrderForUpdate(orderDto);
         Order createdOrder = orderDao.addFeedback(order);
         return toDto(createdOrder);
     }
 
-
     @Override
     public void delete(Long id) throws InternalErrorException {
-        if(!orderDao.delete(id)) {
+        if (!orderDao.delete(id)) {
             log.error("Order wasn't delete, order id={}", id);
             throw new InternalErrorException("Internal Server Error. Order wasn't delete.");
         }
@@ -195,14 +188,14 @@ public class OrderServiceImpl implements OrderService {
         order.setFeedback(orderDto.getFeedback());
         List<OrderInfoDto> detailsDto = orderDto.getDetails();
         List<OrderInfo> details = new ArrayList<>();
-        for(OrderInfoDto orderInfoDto: detailsDto) {
+        for (OrderInfoDto orderInfoDto : detailsDto) {
             OrderInfo orderInfo = toOrderInfo(orderInfoDto);
             details.add(orderInfo);
         }
         order.setDetails(details);
         return order;
     }
-    
+
     private Order toOrder(OrderDto orderDto) {
         Order order = new Order();
         order.setDateOfOrder(orderDto.getDateOfOrder());
@@ -213,7 +206,7 @@ public class OrderServiceImpl implements OrderService {
         order.setFeedback(orderDto.getFeedback());
         List<OrderInfoDto> detailsDto = orderDto.getDetails();
         List<OrderInfo> details = new ArrayList<>();
-        for(OrderInfoDto orderInfoDto: detailsDto) {
+        for (OrderInfoDto orderInfoDto : detailsDto) {
             OrderInfo orderInfo = toOrderInfo(orderInfoDto);
             details.add(orderInfo);
         }
@@ -233,7 +226,7 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setFeedback(order.getFeedback());
             List<OrderInfo> details = order.getDetails();
             List<OrderInfoDto> detailsDto = new ArrayList<>();
-            for(OrderInfo orderInfo: details) {
+            for (OrderInfo orderInfo : details) {
                 OrderInfoDto orderInfoDto = toOrderInfoDto(orderInfo);
                 detailsDto.add(orderInfoDto);
             }
@@ -251,7 +244,7 @@ public class OrderServiceImpl implements OrderService {
         orderInfo.setGymMembershipPrice(orderInfoDto.getGymMembershipPrice());
         return orderInfo;
     }
-    
+
     private OrderInfoDto toOrderInfoDto(OrderInfo orderInfo) {
         OrderInfoDto orderInfoDto = new OrderInfoDto();
         try {
@@ -266,7 +259,6 @@ public class OrderServiceImpl implements OrderService {
         return orderInfoDto;
     }
 
-
     private GymMembership toGymMembership(GymMembershipDto gymMembershipDto) {
         GymMembership gymMembership = new GymMembership();
         gymMembership.setId(gymMembershipDto.getId());
@@ -275,7 +267,7 @@ public class OrderServiceImpl implements OrderService {
         gymMembership.setCost(gymMembershipDto.getCost());
         return gymMembership;
     }
-    
+
     @Override
     public long count() throws InternalErrorException {
         return orderDao.count();

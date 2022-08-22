@@ -7,7 +7,6 @@ import dao.factory.DaoFactory;
 import dao.interfaces.ClientDao;
 import dao.interfaces.GymMembershipDao;
 import dao.interfaces.OrderDao;
-import dao.interfaces.OrderInfoDao;
 import dao.interfaces.PrescriptionDao;
 import dao.interfaces.TrainerDao;
 import dao.interfaces.UserDao;
@@ -35,12 +34,10 @@ public class ServiceFactory {
         map.put(ClientService.class, new ClientServiceImpl(DaoFactory.INSTANCE.getDao(ClientDao.class)));
         map.put(GymMembershipService.class,
                 new GymMembershipServiceImpl(DaoFactory.INSTANCE.getDao(GymMembershipDao.class)));
-//        map.put(OrderInfoService.class, new PrescriptionServiceImpl(DaoFactory.INSTANCE.getDao(PrescriptionDao.class)));
-        map.put(OrderService.class,
-                new OrderServiceImpl(DaoFactory.INSTANCE.getDao(OrderDao.class),
-                        (DaoFactory.INSTANCE.getDao(GymMembershipDao.class)),
-                        (DaoFactory.INSTANCE.getDao(OrderInfoDao.class)), (DaoFactory.INSTANCE.getDao(ClientDao.class))));
-        map.put(PrescriptionService.class, new PrescriptionServiceImpl(DaoFactory.INSTANCE.getDao(PrescriptionDao.class)));
+        map.put(OrderService.class, new OrderServiceImpl(DaoFactory.INSTANCE.getDao(OrderDao.class),
+                (DaoFactory.INSTANCE.getDao(GymMembershipDao.class)), (DaoFactory.INSTANCE.getDao(ClientDao.class))));
+        map.put(PrescriptionService.class,
+                new PrescriptionServiceImpl(DaoFactory.INSTANCE.getDao(PrescriptionDao.class)));
     }
 
     @SuppressWarnings("unchecked")

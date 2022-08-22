@@ -18,7 +18,7 @@
 <h3>${requestScope.message}</h3>
 </c:if>
 
-<h2><fmt:message key="msg.login.pleaselogin"/></h2>
+<h3><fmt:message key="msg.login.pleaselogin"/></h3>
 <br/>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="login"/>
@@ -31,8 +31,8 @@
 <br/>
 <input type="submit" value="<fmt:message key="msg.login.login"/>"/>
 </form>
-<h2><fmt:message key="msg.login.newuser"/></h2>
-<a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a>
+<h3><fmt:message key="msg.login.newuser"/></h3>
+<h2><a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a></h2>
 <footer>
 <jsp:include page="footer.jsp"/>
 </footer>

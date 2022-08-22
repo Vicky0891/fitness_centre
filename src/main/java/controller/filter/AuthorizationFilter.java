@@ -2,6 +2,7 @@ package controller.filter;
 
 import java.io.IOException;
 
+import controller.util.MessageManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -9,9 +10,11 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @WebFilter(urlPatterns = "/controller/*")
-public class AutorizationFilter extends HttpFilter {
+public class AuthorizationFilter extends HttpFilter {
 
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
@@ -20,7 +23,9 @@ public class AutorizationFilter extends HttpFilter {
         if (requiresAutorization(command)) {
             HttpSession session = req.getSession(false);
             if (session == null || session.getAttribute("user") == null) {
-                req.setAttribute("message", "Requested page requires autorization");
+                log.info("Trying to access a restricted page. Command: " + command);
+                MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+                req.setAttribute("message", messageManager.getMessage("msg.error.autorization"));
                 req.getRequestDispatcher("jsp/loginform.jsp").forward(req, res);
                 return;
             }
