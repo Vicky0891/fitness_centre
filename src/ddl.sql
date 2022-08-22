@@ -48,7 +48,8 @@ birth_date date,
 phone_number VARCHAR(13),
 type_id BIGINT REFERENCES types,
 trainer_id BIGINT,
-additional_info text);
+additional_info text,
+path_avatar text);
 
 CREATE TABLE IF NOT EXISTS orders (
 id BIGSERIAL PRIMARY KEY,

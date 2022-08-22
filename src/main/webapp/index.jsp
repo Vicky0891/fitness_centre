@@ -22,6 +22,8 @@
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>
+<img src="images/fitness_centre.jpg" width="648" height="432" alt="image" class="rightimg"\>
+<fmt:message key="msg.main.maintext"/>
 <footer>
 <jsp:include page="jsp/footer.jsp"/>
 </footer>

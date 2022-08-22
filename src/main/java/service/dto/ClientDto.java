@@ -14,6 +14,7 @@ import lombok.Data;
         private TypeDto type;
         private Long trainerId;
         private String additionalInfo;
+        private String pathAvatar;
         
         public enum TypeDto {
             NEW, REGULAR, CORPORATE

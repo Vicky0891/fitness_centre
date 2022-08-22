@@ -92,6 +92,7 @@ public class ClientServiceImpl implements ClientService {
             clientDto.setRoleDto(RoleDto.valueOf(client.getRole().toString()));
             clientDto.setTrainerId(client.getTrainerId());
             clientDto.setAdditionalInfo(client.getAdditionalInfo());
+            clientDto.setPathAvatar(client.getPathAvatar());
         } catch (NullPointerException e) {
             log.error("Client wasn't create, client={} ", client);
         }
@@ -109,6 +110,7 @@ public class ClientServiceImpl implements ClientService {
         client.setRole(Role.valueOf(clientDto.getRoleDto().toString()));
         client.setTrainerId(clientDto.getTrainerId());
         client.setAdditionalInfo(clientDto.getAdditionalInfo());
+        client.setPathAvatar(clientDto.getPathAvatar());
         return client;
     }
     

@@ -23,6 +23,9 @@
 
 
 <c:if test="${sessionScope.user['class'].simpleName == 'ClientDto'}">
+<img src="images/usersavatars/${user.pathAvatar}" alt="photo" class="clientphoto">
+
+
 <h3><fmt:message key="msg.user.firstname"/>: <c:out value="${user.firstName}"/></h3>
 <h3><fmt:message key="msg.user.lastname"/>: <c:out value="${user.lastName}"/></h3>
 <c:if test="${user.birthDate != '0001-01-01'}">

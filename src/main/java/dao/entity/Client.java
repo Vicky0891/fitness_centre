@@ -14,6 +14,7 @@ public class Client extends User{
     private Type type;
     private Long trainerId;
     private String additionalInfo;
+    private String pathAvatar;
     
     public enum Type {
         NEW, REGULAR, CORPORATE

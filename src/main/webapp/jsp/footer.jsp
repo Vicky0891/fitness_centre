@@ -7,7 +7,6 @@
 <fmt:setBundle basename="messages"/>
 <!DOCTYPE html>
 <html lang="${sessionScope.language}">
-<footer>
+
 <h5>Copyright Viktoryia Zhuk</h5>
 <h5>Email: niki_08_91@mail.ru</h5>
-</footer>

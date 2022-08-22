@@ -151,6 +151,7 @@ public class TrainerServiceImpl implements TrainerService {
             clientDto.setRoleDto(RoleDto.valueOf(client.getRole().toString()));
             clientDto.setTrainerId(client.getTrainerId());
             clientDto.setAdditionalInfo(client.getAdditionalInfo());
+            clientDto.setPathAvatar(client.getPathAvatar());
         } catch (NullPointerException e) {
             log.error("Client wasn't create, client={} ", client);
         }
@@ -168,6 +169,7 @@ public class TrainerServiceImpl implements TrainerService {
         client.setRole(Role.valueOf(clientDto.getRoleDto().toString()));
         client.setTrainerId(clientDto.getTrainerId());
         client.setAdditionalInfo(clientDto.getAdditionalInfo());
+        client.setPathAvatar(clientDto.getPathAvatar());
         return client;
     }
 
