@@ -31,5 +31,8 @@ value="TRAINER" ${requestScope.user.roleDto=='TRAINER' ? 'checked' : ''}>
 <input type="submit" value="<fmt:message key="msg.order.save"/>"/>
 <br/>
 </form>
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

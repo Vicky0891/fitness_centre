@@ -33,5 +33,8 @@
 </form>
 <h2><fmt:message key="msg.login.newuser"/></h2>
 <a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a>
+<footer>
+<jsp:include page="footer.jsp"/>
+</footer>
 </body>
 </html>

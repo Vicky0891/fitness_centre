@@ -31,5 +31,8 @@
 
 <input type="submit" value="<fmt:message key="msg.gymmembership.edit"/>"/>
 </form>
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

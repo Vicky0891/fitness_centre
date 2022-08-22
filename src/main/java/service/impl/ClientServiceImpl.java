@@ -49,8 +49,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto create(ClientDto clientDto) throws Exception {
         Client existing = clientDao.get(clientDto.getId());
         if (existing != null) {
-            log.error("Trying to create an existing client, client={}", clientDto);
-            throw new BadRequestException("Such client already exists");
+            return clientDto;
         }
         Client client = toClient(clientDto);
         Client createdClient = clientDao.create(client);

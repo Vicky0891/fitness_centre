@@ -24,5 +24,8 @@
 <c:if test="${trainer.id == null}">
 <h1 class="error"><fmt:message key="msg.user.noexist"/></h1>
 </c:if>
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

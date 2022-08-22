@@ -35,5 +35,8 @@
 <c:if test="${gymmembership.id == null}">
 <jsp:include page="../error/error.jsp"/>
 </c:if>
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

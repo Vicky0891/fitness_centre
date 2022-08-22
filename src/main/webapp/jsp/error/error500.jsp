@@ -17,6 +17,8 @@
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>
-
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

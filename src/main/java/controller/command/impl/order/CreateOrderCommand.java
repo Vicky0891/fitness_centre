@@ -38,7 +38,7 @@ public class CreateOrderCommand implements Command {
         OrderDto processed = orderService.processCart(cart, userDto);
         OrderDto created = orderService.create(processed);
         req.setAttribute("order", created);
-        req.setAttribute("message", messageManager.getMessage("Order created successfully"));
+        req.setAttribute("message", messageManager.getMessage("msg.create.order"));
         session.removeAttribute("cart");
         ClientDto clientDto = new ClientDto();
         clientDto.setId(userDto.getId());

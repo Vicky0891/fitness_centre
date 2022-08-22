@@ -38,6 +38,9 @@
 </tr>
 </c:forEach>
 </c:if>
-</table>           
+</table> 
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>          
 </body>
 </html>

@@ -59,6 +59,8 @@ value="CORPORATE" ${requestScope.user.typeDto=='CORPORATE' ? 'checked' : ''}>
 </tr>
 </c:forEach>
 </table>  
-
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

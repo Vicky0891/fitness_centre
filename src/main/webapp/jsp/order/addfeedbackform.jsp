@@ -28,5 +28,8 @@
 <br/>
 <input type="submit" value="<fmt:message key="msg.order.save"/>"/>
 </form>
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto create(OrderDto orderDto) throws Exception {
         Order order = toOrder(orderDto);
         Order createdOrder = orderDao.create(order);
-        log.info("Order was update, order={}", orderDto);
+        log.info("Order was create, order={}", orderDto);
         return toDto(createdOrder);
     }
     

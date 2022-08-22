@@ -16,6 +16,7 @@
 <jsp:include page="../navbar.jsp"/>
 
 <h1><fmt:message key="msg.trainers.maintitle"/></h1>
+<h3><fmt:message key="msg.trainers.maintext"/></h3>
 <table>
 <c:if test="${trainers.size() == 0}">
 <h1><fmt:message key="msg.trainers.notrainers"/></h1>
@@ -31,6 +32,9 @@
 </tr>
 </c:forEach>
 </c:if>
-</table>           
+</table> 
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>          
 </body>
 </html>

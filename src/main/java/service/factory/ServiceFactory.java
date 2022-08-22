@@ -13,7 +13,6 @@ import dao.interfaces.TrainerDao;
 import dao.interfaces.UserDao;
 import service.ClientService;
 import service.GymMembershipService;
-import service.OrderInfoService;
 import service.OrderService;
 import service.PrescriptionService;
 import service.TrainerService;
@@ -36,7 +35,7 @@ public class ServiceFactory {
         map.put(ClientService.class, new ClientServiceImpl(DaoFactory.INSTANCE.getDao(ClientDao.class)));
         map.put(GymMembershipService.class,
                 new GymMembershipServiceImpl(DaoFactory.INSTANCE.getDao(GymMembershipDao.class)));
-        map.put(OrderInfoService.class, new PrescriptionServiceImpl(DaoFactory.INSTANCE.getDao(PrescriptionDao.class)));
+//        map.put(OrderInfoService.class, new PrescriptionServiceImpl(DaoFactory.INSTANCE.getDao(PrescriptionDao.class)));
         map.put(OrderService.class,
                 new OrderServiceImpl(DaoFactory.INSTANCE.getDao(OrderDao.class),
                         (DaoFactory.INSTANCE.getDao(GymMembershipDao.class)),

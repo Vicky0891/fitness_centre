@@ -62,6 +62,8 @@
 <br/>
 <h3><a href="controller?command=clients"><fmt:message key="msg.user.myclients"/></a></h3>
 </c:if>
-
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>

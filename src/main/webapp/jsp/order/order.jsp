@@ -19,9 +19,9 @@
 </c:if>
 <h3>#: <c:out value="${requestScope.order.id}"/></h3>
 <h3><fmt:message key="msg.allorders.dateoforder"/>: <c:out value="${requestScope.order.dateOfOrder}"/></h3>
-<h3><fmt:message key="msg.allorders.totalcost"/>, USD: <c:out value="${requestScope.order.totalCost}"/> USD</h3>
+<h3><fmt:message key="msg.allorders.totalcost"/>: <c:out value="${requestScope.order.totalCost}"/> USD</h3>
 <table>
-<tr><th><fmt:message key="msg.gymmembership.typeoftraining"/></th><th><fmt:message key="msg.msg.gymmembership.numberofvisits"/></th><th><fmt:message key="msg.gymmembership.cost"/>, USD</th></tr>
+<tr><th><fmt:message key="msg.gymmembership.typeoftraining"/></th><th><fmt:message key="msg.gymmembership.numberofvisits"/></th><th><fmt:message key="msg.gymmembership.cost"/></th></tr>
 <c:forEach items="${order.details}" var="detail">
 <tr>
 <td><c:out value="${detail.gymMembershipDto.typeOfTraining}"/></td>
@@ -30,5 +30,8 @@
 </tr>          
 </c:forEach>
 </table>
+<footer>
+<jsp:include page="../footer.jsp"/>
+</footer>
 </body>
 </html>
