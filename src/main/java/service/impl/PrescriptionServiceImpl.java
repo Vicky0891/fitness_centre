@@ -52,7 +52,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     public void delete(Long id) throws DaoException {
-        prescriptionDao.delete(prescriptionDao.get(id));
+        prescriptionDao.delete(id);
         log.info("Prescription was delete, prescription id={}", id);
     }
 

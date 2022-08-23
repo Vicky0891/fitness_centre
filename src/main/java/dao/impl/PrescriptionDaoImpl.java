@@ -109,16 +109,17 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public void delete(Prescription prescription) throws DaoException {
-        log.debug("Accessing to database using \"delete\" method, prescription={}", prescription);
+    public boolean delete(Long id) throws DaoException {
+        log.debug("Accessing to database using \"delete\" method, prescription id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE);
-            statement.setLong(1, prescription.getUserId());
-            statement.executeUpdate();
+            statement.setLong(1, id);
+            int rowsDeleted = statement.executeUpdate();
+            return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
-            throw new DaoException("Something went wrong. Prescription with client id=" + prescription.getUserId()
+            throw new DaoException("Something went wrong. Prescription with client id=" + id
                     + "wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);

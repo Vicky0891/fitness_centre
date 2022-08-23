@@ -186,4 +186,28 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
         }
     }
 
+    @Override
+    public OrderInfo create(OrderInfo orderInfo) throws DaoException {
+        log.debug("Accessing to database using \"create\" method, orderInfo={}", orderInfo);
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            statement.setLong(1, orderInfo.getOrderId());
+            statement.setLong(2, orderInfo.getGymMembership().getId());
+            statement.setInt(3, orderInfo.getGymMembershipQuantity());
+            statement.setBigDecimal(4, orderInfo.getGymMembershipPrice());
+            statement.executeUpdate();
+
+            ResultSet result = statement.getGeneratedKeys();
+            if (result.next()) {
+                Long id = result.getLong("id");
+                return get(id);
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Order wasn't create. Contact your system administrator.");
+        }
+        return null;
+    }
+
 }

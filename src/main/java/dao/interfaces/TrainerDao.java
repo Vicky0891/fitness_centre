@@ -6,18 +6,8 @@ import controller.util.exception.impl.DaoException;
 import dao.entity.Client;
 import dao.entity.Trainer;
 
-public interface TrainerDao {
-    
-    Trainer get(Long id) throws DaoException;
-
-    List<Trainer> getAll() throws DaoException;
+public interface TrainerDao extends AbstractDao<Long, Trainer> {
 
     List<Client> getAllClientsByTrainer(Long trainerId) throws DaoException;
-
-    Trainer create(Trainer trainer) throws DaoException;
-
-    Trainer update(Trainer trainer) throws DaoException;
-
-    boolean delete(Long id) throws DaoException;
 
 }
