@@ -13,6 +13,7 @@ public class Trainer extends User{
     private LocalDate birthDate;
     private String category;
     private List<Client> clients;
+    private String pathAvatar;
     
     public Trainer () {
         super();

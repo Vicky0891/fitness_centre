@@ -58,9 +58,9 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public TrainerDto update(TrainerDto trainerDto) {
         Trainer trainer = toTrainer(trainerDto);
-        Trainer createdTrainer = trainerDao.update(trainer);
+        Trainer updatedTrainer = trainerDao.update(trainer);
         log.info("Trainer was update, trainer={}", trainerDto);
-        return toDto(createdTrainer);
+        return toDto(updatedTrainer);
     }
 
     @Override
@@ -94,6 +94,7 @@ public class TrainerServiceImpl implements TrainerService {
             }
             trainerDto.setClients(clientsDto);
             trainerDto.setCategory(trainer.getCategory());
+            trainerDto.setPathAvatar(trainer.getPathAvatar());
         } catch (NullPointerException e) {
             log.error("Trainer wasn't create, trainer={} ", trainer);
         }
@@ -137,6 +138,7 @@ public class TrainerServiceImpl implements TrainerService {
         }
         trainer.setClients(clients);
         trainer.setCategory(trainerDto.getCategory());
+        trainer.setPathAvatar(trainerDto.getPathAvatar());
         return trainer;
     }
 

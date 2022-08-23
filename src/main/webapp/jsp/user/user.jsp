@@ -46,6 +46,7 @@
 
 
 <c:if test="${sessionScope.user['class'].simpleName == 'TrainerDto'}">
+<img src="images/trainersavatars/${user.pathAvatar}" alt="photo" class="trainerphoto">
 <br/>
 <h3><fmt:message key="msg.user.firstname"/>: <c:out value="${user.firstName}"/></h3>
 <h3><fmt:message key="msg.user.lastname"/>: <c:out value="${user.lastName}"/></h3>

@@ -22,9 +22,12 @@
 <h1><fmt:message key="msg.trainers.notrainers"/></h1>
 </c:if>
 <c:if test="${trainers.size() > 0}">
-<th>#</th><th><fmt:message key="msg.user.firstname"/></th><th><fmt:message key="msg.user.lastname"/></th><th><fmt:message key="msg.user.category"/></th>  
+<th></th><th>#</th><th><fmt:message key="msg.user.firstname"/></th><th><fmt:message key="msg.user.lastname"/></th><th><fmt:message key="msg.user.category"/></th>  
 <c:forEach items="${trainers}" var="trainer">
 <tr>
+<td>
+<img src="images/trainersavatars/${trainer.pathAvatar}" alt="photo" class="trainerphoto">
+</td>
 <td><a href="controller?command=trainer&id=${trainer.id}"><c:out value="${trainer.id}"/></a></td>
 <td><a href="controller?command=trainer&id=${trainer.id}"><c:out value="${trainer.firstName}"/></a></td>
 <td><c:out value="${trainer.lastName}"/></td>

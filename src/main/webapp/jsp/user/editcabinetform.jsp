@@ -14,11 +14,12 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1><fmt:message key="msg.editcabinet.title"/></h1>
-<form method="post" action="controller">
+<form method="post" action="controller" enctype="multipart/form-data">
 <input name="command" type="hidden" value="edit_cabinet"/>
 <input name="id" type="hidden" value="${sessionScope.user.id}"/>
 
-
+<input type="file" name="avatar" accept="image/*"/>
+<br/>
 <label for="firstName-input"><fmt:message key="msg.user.firstname"/>: </label>
 <input id="firstName-input" name="firstName" type="text" value="${requestScope.user.firstName}"/>
 <br/>

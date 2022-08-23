@@ -38,7 +38,8 @@ user_id BIGINT NOT NULL REFERENCES users,
 first_name text,
 last_name text,
 birth_date date,
-category text);
+category text,
+path_avatar text);
 
 CREATE TABLE IF NOT EXISTS clients (
 user_id BIGINT NOT NULL REFERENCES users,

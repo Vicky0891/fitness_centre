@@ -21,13 +21,13 @@ import lombok.extern.log4j.Log4j2;
 public class TrainerDaoImpl implements TrainerDao {
     private static final String DELETE = "UPDATE users SET deleted = true WHERE id = ?";
     private static final String UPDATE = "UPDATE trainers SET first_name = ?, last_name = ?, birth_date = ?, "
-            + "category = ? WHERE user_id = ?";
+            + "category = ?, path_avatar = ? WHERE user_id = ?";
     private static final String INSERT = "INSERT INTO trainers (user_id, birth_date) VALUES (?, ?)";
     private static final String SELECT_ALL = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
-            + " r.name AS role, tr.birth_date, tr.category FROM trainers tr JOIN users u ON u.id = tr.user_id "
+            + " r.name AS role, tr.birth_date, tr.category, tr.path_avatar FROM trainers tr JOIN users u ON u.id = tr.user_id "
             + "JOIN roles r ON r.id = u.role_id WHERE u.deleted = false ORDER BY tr.user_id";
     private static final String SELECT_BY_ID = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
-            + " r.name AS role, tr.birth_date, tr.category FROM trainers tr JOIN users u ON tr.user_id = u.id "
+            + " r.name AS role, tr.birth_date, tr.category, tr.path_avatar FROM trainers tr JOIN users u ON tr.user_id = u.id "
             + "JOIN roles r ON r.id = u.role_id WHERE tr.user_id = ? AND u.deleted = false";
     private static final String SELECT_CLIENTS_FOR_TRAINER = "SELECT c.user_id, c.first_name, c.last_name, u.email, "
             + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
@@ -114,7 +114,8 @@ public class TrainerDaoImpl implements TrainerDao {
             statement.setString(2, trainer.getLastName());
             statement.setDate(3, Date.valueOf(trainer.getBirthDate()));
             statement.setString(4, trainer.getCategory());
-            statement.setLong(5, trainer.getId());
+            statement.setString(5, trainer.getPathAvatar());
+            statement.setLong(6, trainer.getId());
 
             statement.executeUpdate();
             return get(trainer.getId());
@@ -175,6 +176,7 @@ public class TrainerDaoImpl implements TrainerDao {
         trainer.setLastName(result.getString("last_name"));
         trainer.setBirthDate(result.getDate("birth_date").toLocalDate());
         trainer.setCategory(result.getString("category"));
+        trainer.setPathAvatar(result.getString("path_avatar"));
         List<Client> clients = getAllClientsByTrainer(result.getLong("user_id"));
         trainer.setClients(clients);
         return trainer;

@@ -12,6 +12,7 @@ public class TrainerDto extends UserDto{
     private LocalDate birthDate;
     private String category;
     private List<ClientDto> clients;
+    private String pathAvatar;
     
     public TrainerDto () {
         super();
