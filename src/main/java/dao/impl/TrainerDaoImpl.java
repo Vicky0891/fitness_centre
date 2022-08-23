@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.DaoException;
 import dao.connection.DataSource;
 import dao.entity.Client;
 import dao.entity.Trainer;
@@ -44,7 +45,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public Trainer get(Long id) {
+    public Trainer get(Long id) throws DaoException {
         log.debug("Accessing to database using \"get\" method, trainer id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -56,6 +57,8 @@ public class TrainerDaoImpl implements TrainerDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get trainer id=" + id + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -63,7 +66,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public List<Trainer> getAll() {
+    public List<Trainer> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<Trainer> trainers = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -75,6 +78,7 @@ public class TrainerDaoImpl implements TrainerDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -82,7 +86,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public Trainer create(Trainer trainer) {
+    public Trainer create(Trainer trainer) throws DaoException {
         log.debug("Accessing to database using \"create\" method, trainer={}", trainer);
         Connection connection = dataSource.getConnection();
         try {
@@ -98,6 +102,7 @@ public class TrainerDaoImpl implements TrainerDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Trainer wasn't create. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -105,7 +110,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public Trainer update(Trainer trainer) {
+    public Trainer update(Trainer trainer) throws DaoException {
         log.debug("Accessing to database using \"update\" method, trainer={}", trainer);
         Connection connection = dataSource.getConnection();
         try {
@@ -121,14 +126,15 @@ public class TrainerDaoImpl implements TrainerDao {
             return get(trainer.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Trainer witn id=" + trainer.getId()
+                    + " wasn't create. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) throws DaoException {
         log.debug("Accessing to database using \"delete\" method, trainer id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -138,14 +144,15 @@ public class TrainerDaoImpl implements TrainerDao {
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Trainer witn id=" + id
+                    + " wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return false;
     }
 
     @Override
-    public List<Client> getAllClientsByTrainer(Long id) {
+    public List<Client> getAllClientsByTrainer(Long id) throws DaoException {
         log.debug("Accessing to database using \"getAllClientsByTrainer\" method, trainer id={}", id);
         List<Client> clients = new ArrayList<>();
 
@@ -160,26 +167,32 @@ public class TrainerDaoImpl implements TrainerDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
         return clients;
     }
 
-    private Trainer processTrainer(ResultSet result) throws SQLException {
-        Trainer trainer = new Trainer();
-        trainer.setId(result.getLong("user_id"));
-        trainer.setEmail(result.getString("email"));
-        trainer.setPassword(result.getString("password"));
-        trainer.setRole(Role.valueOf(result.getString("role")));
-        trainer.setFirstName(result.getString("first_name"));
-        trainer.setLastName(result.getString("last_name"));
-        trainer.setBirthDate(result.getDate("birth_date").toLocalDate());
-        trainer.setCategory(result.getString("category"));
-        trainer.setPathAvatar(result.getString("path_avatar"));
-        List<Client> clients = getAllClientsByTrainer(result.getLong("user_id"));
-        trainer.setClients(clients);
-        return trainer;
+    private Trainer processTrainer(ResultSet result) throws DaoException {
+        try {
+            Trainer trainer = new Trainer();
+            trainer.setId(result.getLong("user_id"));
+            trainer.setEmail(result.getString("email"));
+            trainer.setPassword(result.getString("password"));
+            trainer.setRole(Role.valueOf(result.getString("role")));
+            trainer.setFirstName(result.getString("first_name"));
+            trainer.setLastName(result.getString("last_name"));
+            trainer.setBirthDate(result.getDate("birth_date").toLocalDate());
+            trainer.setCategory(result.getString("category"));
+            trainer.setPathAvatar(result.getString("path_avatar"));
+            List<Client> clients = getAllClientsByTrainer(result.getLong("user_id"));
+            trainer.setClients(clients);
+            return trainer;
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
+        }
     }
 
     private void close(Connection connection) {

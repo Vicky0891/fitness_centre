@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.DaoException;
 import dao.connection.DataSource;
 import dao.entity.User;
 import dao.entity.User.Role;
@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User get(Long id) {
+    public User get(Long id) throws DaoException {
         log.debug("Accessing to database using \"get\" method, user id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -51,6 +51,8 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get user id=" + id + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -58,7 +60,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getByEmail(String email) {
+    public User getByEmail(String email) throws DaoException {
         log.debug("Accessing to database using \"getByEmail\" method, user email={}", email);
         Connection connection = dataSource.getConnection();
         try {
@@ -70,6 +72,8 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get user email=" + email + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -77,7 +81,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<User> users = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -89,14 +93,15 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
         return users;
     }
-    
+
     @Override
-    public List<User> getAll(int limit, Long offset) {
+    public List<User> getAll(int limit, Long offset) throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<User> users = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -110,6 +115,7 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -117,7 +123,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User create(User user) throws InternalErrorException  {
+    public User create(User user) throws DaoException {
         log.debug("Accessing to database using \"create\" method, user={}", user);
         Connection connection = dataSource.getConnection();
         try {
@@ -134,6 +140,7 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. User wasn't create. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -141,7 +148,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User update(User user) throws InternalErrorException {
+    public User update(User user) throws DaoException {
         log.debug("Accessing to database using \"update\" method, user={}", user);
         Connection connection = dataSource.getConnection();
         try {
@@ -153,14 +160,15 @@ public class UserDaoImpl implements UserDao {
             return get(user.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. User id=" + user.getId()
+                    + " wasn't update. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) throws DaoException {
         log.debug("Accessing to database using \"delete\" method, user id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -170,22 +178,28 @@ public class UserDaoImpl implements UserDao {
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. User id=" + id + " wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return false;
     }
 
-    private User processUser(ResultSet result) throws SQLException {
-        User user = new User();
-        user.setId(result.getLong("id"));
-        user.setEmail(result.getString("email"));
-        user.setPassword(result.getString("password"));
-        user.setRole(Role.valueOf(result.getString("role")));
-        return user;
+    private User processUser(ResultSet result) throws DaoException {
+        try {
+            User user = new User();
+            user.setId(result.getLong("id"));
+            user.setEmail(result.getString("email"));
+            user.setPassword(result.getString("password"));
+            user.setRole(Role.valueOf(result.getString("role")));
+            return user;
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
+        }
     }
 
-    private int getRoleId(String name) throws InternalErrorException {
+    private int getRoleId(String name) throws DaoException {
         log.debug("Accessing to database using \"getRoleId\" method, role name={}", name);
         Connection connection = dataSource.getConnection();
         try {
@@ -201,11 +215,11 @@ public class UserDaoImpl implements UserDao {
             close(connection);
         }
         log.error("Role of user with name={} didn't find", name);
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
-    
+
     @Override
-    public long count() throws InternalErrorException {
+    public long count() throws DaoException {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {
@@ -220,7 +234,7 @@ public class UserDaoImpl implements UserDao {
             close(connection);
         }
         log.error("Couldn't count users");
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
     private void close(Connection connection) {

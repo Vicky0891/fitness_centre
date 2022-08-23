@@ -20,7 +20,7 @@ public class OrdersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         try {
             UserDto userDto = (UserDto) session.getAttribute("user");
@@ -28,7 +28,7 @@ public class OrdersCommand implements Command {
             req.setAttribute("orders", orders);
             return "jsp/order/orders.jsp";
         } catch (RuntimeException e) {
-            log.error("Couldn't get orders. Exception: " + e);
+            log.error(e.getMessage());
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
             req.setAttribute("message", messageManager.getMessage("msg.error.errormessage"));
             return "jsp/error/error.jsp";

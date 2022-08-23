@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1 class="error"><fmt:message key="msg.main.error"/> 500</h1>
-<h2>Internal server error</h2>
+<h2><fmt:message key="msg.error.internal"/></h2>
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>

@@ -3,6 +3,7 @@ package service.impl;
 import java.util.List;
 
 import controller.util.PagingUtil.Paging;
+import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
 import dao.entity.Client;
@@ -35,12 +36,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDto> getAll() {
+    public List<ClientDto> getAll() throws DaoException {
         return clientDao.getAll().stream().map(e -> toDto(e)).toList();
     }
-    
+
     @Override
-    public List<ClientDto> getAll(Paging paging) {
+    public List<ClientDto> getAll(Paging paging) throws DaoException {
         return clientDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
@@ -52,7 +53,6 @@ public class ClientServiceImpl implements ClientService {
         }
         Client client = toClient(clientDto);
         Client createdClient = clientDao.create(client);
-        log.info("Client was create, client={}", clientDto);
         return toDto(createdClient);
     }
 
@@ -60,12 +60,11 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto update(ClientDto clientDto) throws Exception {
         Client client = toClient(clientDto);
         Client updatedClient = clientDao.update(client);
-        log.info("Client was update, client={}", clientDto);
         return toDto(updatedClient);
     }
 
     @Override
-    public void delete(Long id) throws InternalErrorException {
+    public void delete(Long id) throws Exception {
         if (!clientDao.delete(id)) {
             log.error("Client wasn't delete, client id={}", id);
             throw new InternalErrorException("Internal Server Error. Client wasn't delete.");
@@ -73,7 +72,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDto> getAllClientsByType(String typeOfClient) {
+    public List<ClientDto> getAllClientsByType(String typeOfClient) throws DaoException {
         return clientDao.getAllClientsByType(typeOfClient).stream().map(e -> toDto(e)).toList();
     }
 
@@ -111,9 +110,9 @@ public class ClientServiceImpl implements ClientService {
         client.setPathAvatar(clientDto.getPathAvatar());
         return client;
     }
-    
+
     @Override
-    public long count() throws InternalErrorException {
+    public long count() throws DaoException {
         return clientDao.count();
     }
 

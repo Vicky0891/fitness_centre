@@ -2,7 +2,6 @@ package controller.command.impl.prescription;
 
 import controller.command.Command;
 import controller.util.MessageManager;
-import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -27,17 +26,12 @@ public class EditPrescriptionCommand implements Command {
         String equipment = req.getParameter("equipment");
         String diet = req.getParameter("diet");
 
-        try {
-            currentPrescriptionDto.setTypeOfTraining(typeOfTraining);
-            currentPrescriptionDto.setEquipment(equipment);
-            currentPrescriptionDto.setDiet(diet);
-            currentPrescriptionDto.setStatusDto(StatusDto.CONFIRM);
-        } catch (Exception e) {
-            log.error("prescription wasn't update. Exception: " + e);
-            throw new BadRequestException("The entered data is incorrect. Try again.");
-        }
+        currentPrescriptionDto.setTypeOfTraining(typeOfTraining);
+        currentPrescriptionDto.setEquipment(equipment);
+        currentPrescriptionDto.setDiet(diet);
+        currentPrescriptionDto.setStatusDto(StatusDto.CONFIRM);
         PrescriptionDto updated = prescriptionService.update(currentPrescriptionDto);
-
+        log.info("Prescription was update, prescription={}", updated);
         req.setAttribute("prescription", updated);
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));

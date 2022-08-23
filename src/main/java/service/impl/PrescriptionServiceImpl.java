@@ -2,6 +2,7 @@ package service.impl;
 
 import java.util.List;
 
+import controller.util.exception.impl.DaoException;
 import dao.entity.Order.Status;
 import dao.entity.Prescription;
 import dao.interfaces.PrescriptionDao;
@@ -26,7 +27,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    public List<PrescriptionDto> getAll() {
+    public List<PrescriptionDto> getAll() throws DaoException {
         return prescriptionDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
@@ -34,7 +35,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public PrescriptionDto create(PrescriptionDto prescriptionDto) throws Exception {
         Prescription prescription = toPrescription(prescriptionDto);
         Prescription createdPrescription = prescriptionDao.create(prescription);
-        log.info("Prescription was create, prescription={}", prescriptionDto);
         return toDto(createdPrescription);
     }
 
@@ -47,12 +47,11 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         }
         Prescription prescription = toPrescription(prescriptionDto);
         Prescription createdPrescription = prescriptionDao.update(prescription);
-        log.info("Prescription was update, prescription={}", prescriptionDto);
         return toDto(createdPrescription);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws DaoException {
         prescriptionDao.delete(prescriptionDao.get(id));
         log.info("Prescription was delete, prescription id={}", id);
     }

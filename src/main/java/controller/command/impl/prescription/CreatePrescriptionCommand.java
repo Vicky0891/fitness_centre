@@ -2,7 +2,6 @@ package controller.command.impl.prescription;
 
 import controller.command.Command;
 import controller.util.MessageManager;
-import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -31,18 +30,14 @@ public class CreatePrescriptionCommand implements Command {
         String diet = req.getParameter("diet");
 
         PrescriptionDto prescriptionDto = new PrescriptionDto();
-        try {
-            prescriptionDto.setTrainerId(trainerId);
-            prescriptionDto.setUserId(Long.valueOf(userId));
-            prescriptionDto.setTypeOfTraining(typeOfTraining);
-            prescriptionDto.setEquipment(equipment);
-            prescriptionDto.setDiet(diet);
-            prescriptionDto.setStatusDto(StatusDto.PENDING);
-        } catch (Exception e) {
-            log.error("prescription wasn't create. Exception: " + e);
-            throw new BadRequestException("The entered data is incorrect. Try again.");
-        }
+        prescriptionDto.setTrainerId(trainerId);
+        prescriptionDto.setUserId(Long.valueOf(userId));
+        prescriptionDto.setTypeOfTraining(typeOfTraining);
+        prescriptionDto.setEquipment(equipment);
+        prescriptionDto.setDiet(diet);
+        prescriptionDto.setStatusDto(StatusDto.PENDING);
         PrescriptionDto created = prescriptionService.create(prescriptionDto);
+        log.info("Prescription was create, prescription={}", created);
         req.setAttribute("prescription", created);
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("message", messageManager.getMessage("msg.create.prescription"));

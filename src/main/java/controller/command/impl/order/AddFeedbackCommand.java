@@ -2,7 +2,6 @@ package controller.command.impl.order;
 
 import controller.command.Command;
 import controller.util.MessageManager;
-import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -23,13 +22,9 @@ public class AddFeedbackCommand implements Command {
         Long orderId = (Long) session.getAttribute("orderId");
         OrderDto currentOrderDto = orderService.getById(orderId);
         String feedback = req.getParameter("feedback");
-        try {
-            currentOrderDto.setFeedback(feedback);
-        } catch (Exception e) {
-            log.error("Feedback wasn't added. Exception: " + e);
-            throw new BadRequestException("The entered data is incorrect. Try again.");
-        }
+        currentOrderDto.setFeedback(feedback);
         OrderDto updated = orderService.addFeedback(currentOrderDto);
+        log.info("Feedback was added, order={}", updated);
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("order", updated);
         req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));

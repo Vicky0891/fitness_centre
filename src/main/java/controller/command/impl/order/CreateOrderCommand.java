@@ -7,6 +7,7 @@ import controller.command.Command;
 import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.ClientService;
 import service.OrderService;
 import service.dto.ClientDto;
@@ -15,6 +16,7 @@ import service.dto.OrderDto;
 import service.dto.UserDto;
 import service.dto.UserDto.RoleDto;
 
+@Log4j2
 public class CreateOrderCommand implements Command {
     private final OrderService orderService;
     private final ClientService clientService;
@@ -37,6 +39,7 @@ public class CreateOrderCommand implements Command {
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
         OrderDto processed = orderService.processCart(cart, userDto);
         OrderDto created = orderService.create(processed);
+        log.info("Order was create, order={}", created);
         req.setAttribute("order", created);
         req.setAttribute("message", messageManager.getMessage("msg.create.order"));
         session.removeAttribute("cart");

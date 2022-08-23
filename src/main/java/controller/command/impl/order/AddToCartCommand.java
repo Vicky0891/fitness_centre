@@ -33,9 +33,9 @@ public class AddToCartCommand implements Command {
             session.setAttribute("cart", cart);
             return "redirect:controller?command=gymmemberships&page=" + page;
         } catch (RuntimeException e) {
-            log.error("Couldn't parse gymmembership id or got \"cart\". Exception: " + e);
+            log.error(e.getMessage());
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-            req.setAttribute("message", messageManager.getMessage("msg.notexist.gym"));
+            req.setAttribute("message", messageManager.getMessage("msg.error.errormessage"));
             return "jsp/error/error.jsp";
         }
     }

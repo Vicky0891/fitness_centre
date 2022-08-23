@@ -4,10 +4,12 @@ import controller.command.Command;
 import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.ClientService;
 import service.dto.ClientDto;
 import service.dto.ClientDto.TypeDto;
 
+@Log4j2
 public class EditClientCommand implements Command {
     private final ClientService clientService;
 
@@ -25,6 +27,7 @@ public class EditClientCommand implements Command {
         currentClientDto.setTrainerId(Long.valueOf(trainerId));
 
         ClientDto updated = clientService.update(currentClientDto);
+        log.info("Client was update, client={}", updated);
         req.setAttribute("client", updated);
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");

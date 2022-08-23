@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import dao.connection.DataSource;
 import dao.entity.GymMembership;
@@ -37,7 +38,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public GymMembership get(Long id) {
+    public GymMembership get(Long id) throws DaoException {
         log.debug("Accessing to database using \"get\" method, gymMembership id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -49,6 +50,8 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Failed to get gymmembership id=" + id
+                    + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -56,7 +59,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public List<GymMembership> getAll() {
+    public List<GymMembership> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -68,6 +71,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -75,7 +79,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public List<GymMembership> getAll(int limit, Long offset) {
+    public List<GymMembership> getAll(int limit, Long offset) throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -89,6 +93,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -96,7 +101,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public GymMembership create(GymMembership gymMembership) {
+    public GymMembership create(GymMembership gymMembership) throws DaoException {
         log.debug("Accessing to database using \"create\" method, gymMembership={}", gymMembership);
         Connection connection = dataSource.getConnection();
         try {
@@ -113,6 +118,8 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Gymmembership wasn't create. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -120,7 +127,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public GymMembership update(GymMembership gymMembership) {
+    public GymMembership update(GymMembership gymMembership) throws DaoException {
         log.debug("Accessing to database using \"update\" method, gymMembership={}", gymMembership);
         Connection connection = dataSource.getConnection();
         try {
@@ -134,14 +141,15 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             return get(gymMembership.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Gymmembership id=" + gymMembership.getId()
+                    + "wasn't update. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) throws DaoException {
         log.debug("Accessing to database using \"delete\" method, gymMembership id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -151,23 +159,29 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Gymmembership id=" + id
+                    + "wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return false;
     }
 
-    private GymMembership processGymMembership(ResultSet result) throws SQLException {
-        GymMembership gymMembership = new GymMembership();
-        gymMembership.setId(result.getLong("id"));
-        gymMembership.setNumberOfVisits(result.getInt("number_of_visits"));
-        gymMembership.setTypeOfTraining(result.getString("type_of_training"));
-        gymMembership.setCost(result.getBigDecimal("cost"));
-        return gymMembership;
+    private GymMembership processGymMembership(ResultSet result) throws DaoException {
+        try {
+            GymMembership gymMembership = new GymMembership();
+            gymMembership.setId(result.getLong("id"));
+            gymMembership.setNumberOfVisits(result.getInt("number_of_visits"));
+            gymMembership.setTypeOfTraining(result.getString("type_of_training"));
+            gymMembership.setCost(result.getBigDecimal("cost"));
+            return gymMembership;
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
+        }
     }
 
     @Override
-    public long count() throws InternalErrorException {
+    public long count() throws DaoException {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {
@@ -182,7 +196,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             close(connection);
         }
         log.error("Couldn't count gymmemberships");
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
     private void close(Connection connection) {

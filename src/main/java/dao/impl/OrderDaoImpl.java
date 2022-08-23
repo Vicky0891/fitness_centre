@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import dao.connection.DataSource;
 import dao.entity.Order;
@@ -54,7 +55,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order get(Long id) {
+    public Order get(Long id) throws DaoException {
         log.debug("Accessing to database using \"get\" method, order id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -67,6 +68,8 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get order id=" + id + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -74,7 +77,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAll() {
+    public List<Order> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -86,6 +89,7 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -93,7 +97,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAll(int limit, Long offset) {
+    public List<Order> getAll(int limit, Long offset) throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -107,6 +111,7 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -114,7 +119,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order create(Order order) throws InternalErrorException {
+    public Order create(Order order) throws DaoException {
         log.debug("Accessing to database using \"create\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
@@ -140,6 +145,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             rollback(connection);
             log.error("SQL Exception: " + e + ". Rollback made");
+            throw new DaoException("Something went wrong. Failed to create order. Contact your system administrator.");
         } finally {
             restore(connection);
         }
@@ -147,7 +153,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order update(Order order) throws InternalErrorException {
+    public Order update(Order order) throws DaoException {
         log.debug("Accessing to database using \"update\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
@@ -159,14 +165,15 @@ public class OrderDaoImpl implements OrderDao {
             return get(order.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Failed to update order id=" + order.getId()
+                    + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public Order addFeedback(Order order) {
+    public Order addFeedback(Order order) throws DaoException {
         log.debug("Accessing to database using \"addFeedback\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
@@ -178,14 +185,15 @@ public class OrderDaoImpl implements OrderDao {
             return get(order.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Failed to update feedback order id=" + order.getId()
+                    + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public List<Order> getAllOrdersByClient(Long id) {
+    public List<Order> getAllOrdersByClient(Long id) throws DaoException {
         log.debug("Accessing to database using \"getAllOrdersByClient\" method, id={}", id);
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -199,6 +207,7 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -207,7 +216,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAllByStatus(String statusName) {
+    public List<Order> getAllByStatus(String statusName) throws DaoException {
         log.debug("Accessing to database using \"getAllByStatus\" method, Status name={}", statusName);
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -220,6 +229,7 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -227,7 +237,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) throws DaoException {
         log.debug("Accessing to database using \"delete\" method, id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -237,26 +247,31 @@ public class OrderDaoImpl implements OrderDao {
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
-            return false;
+            throw new DaoException("Something went wrong. Order wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);
         }
     }
 
-    private Order processOrder(ResultSet result) throws SQLException {
-        Order order = new Order();
-        order.setId(result.getLong("id"));
-        order.setDateOfOrder(result.getDate("date_of_order").toLocalDate());
-        order.setUserId(result.getLong("user_id"));
-        order.setTotalCost(result.getBigDecimal("total_cost"));
-        order.setStatus(Status.valueOf(result.getString("status")));
-        order.setFeedback(result.getString("feedback"));
-        List<OrderInfo> details = orderInfoDao.getAllByOrderId(result.getLong("id"));
-        order.setDetails(details);
-        return order;
+    private Order processOrder(ResultSet result) throws DaoException {
+        try {
+            Order order = new Order();
+            order.setId(result.getLong("id"));
+            order.setDateOfOrder(result.getDate("date_of_order").toLocalDate());
+            order.setUserId(result.getLong("user_id"));
+            order.setTotalCost(result.getBigDecimal("total_cost"));
+            order.setStatus(Status.valueOf(result.getString("status")));
+            order.setFeedback(result.getString("feedback"));
+            List<OrderInfo> details = orderInfoDao.getAllByOrderId(result.getLong("id"));
+            order.setDetails(details);
+            return order;
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
+        }
     }
 
-    public int getStatusId(String name) throws InternalErrorException {
+    public int getStatusId(String name) throws DaoException {
         log.debug("Accessing to database using \"getStatusId\" method, name={}", name);
         Connection connection = dataSource.getConnection();
         try {
@@ -272,11 +287,11 @@ public class OrderDaoImpl implements OrderDao {
             close(connection);
         }
         log.error("Status id for order with name={} didn't find", name);
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
     @Override
-    public int getDiscount(String name) throws InternalErrorException {
+    public int getDiscount(String name) throws DaoException {
         log.debug("Accessing to database using \"getDiscount\" method, name={}", name);
         Connection connection = dataSource.getConnection();
         try {
@@ -292,11 +307,11 @@ public class OrderDaoImpl implements OrderDao {
             close(connection);
         }
         log.error("Discount id with name={} didn't find", name);
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
     @Override
-    public long count() throws InternalErrorException {
+    public long count() throws DaoException {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {
@@ -311,7 +326,7 @@ public class OrderDaoImpl implements OrderDao {
             close(connection);
         }
         log.error("Couldn't count orders");
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
     private void restore(Connection connection) {

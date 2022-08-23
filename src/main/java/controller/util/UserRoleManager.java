@@ -9,11 +9,11 @@ import service.dto.TrainerDto;
 import service.dto.UserDto;
 
 @Log4j2
-public class UserRole {
+public class UserRoleManager {
     private ClientService clientService;
     private TrainerService trainerService;
 
-    public UserRole(ClientService clientService, TrainerService trainerService) {
+    public UserRoleManager(ClientService clientService, TrainerService trainerService) {
         this.clientService = clientService;
         this.trainerService = trainerService;
     }

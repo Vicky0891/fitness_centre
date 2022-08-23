@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.util.exception.impl.DaoException;
 import dao.connection.DataSource;
 import dao.entity.OrderInfo;
 import dao.interfaces.GymMembershipDao;
@@ -39,8 +40,8 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public OrderInfo get(Long id) {
-        log.debug("Accessing to database using \"get\" method, orderInfo id={}", id);
+    public OrderInfo get(Long id) throws DaoException {
+        log.debug("Accessing to database using \"get\" method, order id={}", id);
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -51,6 +52,8 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Failed to get orderdetail order id=" + id
+                    + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -58,7 +61,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public List<OrderInfo> getAllByOrderId(Long id) {
+    public List<OrderInfo> getAllByOrderId(Long id) throws DaoException {
         log.debug("Accessing to database using \"getAllByOrderId\" method, order id={}", id);
         List<OrderInfo> orderInfo = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -71,6 +74,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -78,7 +82,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public List<OrderInfo> getAll() {
+    public List<OrderInfo> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<OrderInfo> orderInfos = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -90,6 +94,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -97,7 +102,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public OrderInfo create(OrderInfo orderInfo, Connection connection) {
+    public OrderInfo create(OrderInfo orderInfo, Connection connection) throws DaoException {
         log.debug("Accessing to database using \"create\" method, orderInfo={}", orderInfo);
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -114,12 +119,13 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Order wasn't create. Contact your system administrator.");
         }
         return null;
     }
 
     @Override
-    public OrderInfo update(OrderInfo orderInfo) {
+    public OrderInfo update(OrderInfo orderInfo) throws DaoException {
         log.debug("Accessing to database using \"update\" method, orderInfo={}", orderInfo);
         Connection connection = dataSource.getConnection();
         try {
@@ -132,14 +138,14 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             return get(orderInfo.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Order wasn't update. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) throws DaoException {
         log.debug("Accessing to database using \"delete\" method, id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -149,21 +155,26 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Order wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return false;
     }
 
-    private OrderInfo processOrderInfo(ResultSet result) throws SQLException {
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setId(result.getLong("id"));
-        orderInfo.setOrderId(result.getLong("order_id"));
-        Long gymMembershipId = result.getLong("gymmembership_id");
-        orderInfo.setGymMembership(gymMembershipDao.get(gymMembershipId));
-        orderInfo.setGymMembershipQuantity(result.getInt("gymmembership_quantity"));
-        orderInfo.setGymMembershipPrice(result.getBigDecimal("gymmembership_price"));
-        return orderInfo;
+    private OrderInfo processOrderInfo(ResultSet result) throws DaoException {
+        try {
+            OrderInfo orderInfo = new OrderInfo();
+            orderInfo.setId(result.getLong("id"));
+            orderInfo.setOrderId(result.getLong("order_id"));
+            Long gymMembershipId = result.getLong("gymmembership_id");
+            orderInfo.setGymMembership(gymMembershipDao.get(gymMembershipId));
+            orderInfo.setGymMembershipQuantity(result.getInt("gymmembership_quantity"));
+            orderInfo.setGymMembershipPrice(result.getBigDecimal("gymmembership_price"));
+            return orderInfo;
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
+        }
     }
 
     private void close(Connection connection) {

@@ -2,31 +2,31 @@ package dao.interfaces;
 
 import java.util.List;
 
-import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.DaoException;
 import dao.entity.Order;
 
 public interface OrderDao {
-    
-    Order get(Long id);
-    
-    int getDiscount(String name) throws InternalErrorException;
 
-    List<Order> getAll();
-    
-    List<Order> getAll(int limit, Long offset);
-    
-    Order create(Order order) throws InternalErrorException;
+    Order get(Long id) throws DaoException;
 
-    Order update(Order order) throws InternalErrorException;
-    
-    Order addFeedback(Order order);
-    
-    List<Order> getAllOrdersByClient(Long id);
-    
-    List<Order> getAllByStatus(String name);
+    int getDiscount(String name) throws DaoException;
 
-    boolean delete(Long id);
-    
-    long count() throws InternalErrorException;
+    List<Order> getAll() throws DaoException;
+
+    List<Order> getAll(int limit, Long offset) throws DaoException;
+
+    Order create(Order order) throws DaoException;
+
+    Order update(Order order) throws DaoException;
+
+    Order addFeedback(Order order) throws DaoException;
+
+    List<Order> getAllOrdersByClient(Long id) throws DaoException;
+
+    List<Order> getAllByStatus(String name) throws DaoException;
+
+    boolean delete(Long id) throws DaoException;
+
+    long count() throws DaoException;
 
 }

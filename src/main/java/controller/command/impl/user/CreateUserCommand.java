@@ -2,7 +2,6 @@ package controller.command.impl.user;
 
 import controller.command.Command;
 import controller.util.MessageManager;
-import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -23,15 +22,11 @@ public class CreateUserCommand implements Command {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         UserDto userDto = new UserDto();
-        try {
-            userDto.setEmail(email);
-            userDto.setPassword(password);
-            userDto.setRoleDto(RoleDto.CLIENT);
-        } catch (Exception e) {
-            log.error("User wasn't create. Exception: " + e);
-            throw new BadRequestException("The entered data is incorrect. Try again.");
-        }
+        userDto.setEmail(email);
+        userDto.setPassword(password);
+        userDto.setRoleDto(RoleDto.CLIENT);
         UserDto created = userService.create(userDto);
+        log.info("User was create, user={}", created);
         req.setAttribute("user", created);
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");

@@ -2,25 +2,25 @@ package dao.interfaces;
 
 import java.util.List;
 
-import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.DaoException;
 import dao.entity.Client;
 
 public interface ClientDao {
-    
-    Client get(Long id);
 
-    List<Client> getAll();
-    
-    List<Client> getAll(int limit, Long offset);
+    Client get(Long id) throws DaoException;
 
-    List<Client> getAllClientsByType(String typeOfClient);
+    List<Client> getAll() throws DaoException;
 
-    Client create(Client client) throws InternalErrorException;
+    List<Client> getAll(int limit, Long offset) throws DaoException;
 
-    Client update(Client client) throws InternalErrorException;
+    List<Client> getAllClientsByType(String typeOfClient) throws DaoException;
 
-    boolean delete(Long id);
-    
-    long count() throws InternalErrorException;
+    Client create(Client client) throws DaoException;
+
+    Client update(Client client) throws DaoException;
+
+    boolean delete(Long id) throws DaoException;
+
+    long count() throws DaoException;
 
 }

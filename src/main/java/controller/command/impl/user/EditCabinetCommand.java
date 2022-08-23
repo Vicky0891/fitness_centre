@@ -6,13 +6,16 @@ import java.util.Properties;
 import java.util.UUID;
 
 import controller.command.Command;
+import controller.command.impl.order.AddFeedbackCommand;
 import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import lombok.extern.log4j.Log4j2;
 import service.TrainerService;
 import service.dto.TrainerDto;
 
+@Log4j2
 public class EditCabinetCommand implements Command {
 
     private final TrainerService trainerService;
@@ -52,6 +55,7 @@ public class EditCabinetCommand implements Command {
         currentTrainerDto.setCategory(category);
 
         TrainerDto updated = trainerService.update(currentTrainerDto);
+        log.info("Trainer was update, trainer={}", updated);
         session.setAttribute("user", updated);
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));

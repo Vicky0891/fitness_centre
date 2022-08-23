@@ -10,9 +10,11 @@ import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import lombok.extern.log4j.Log4j2;
 import service.ClientService;
 import service.dto.ClientDto;
 
+@Log4j2
 public class EditProfileCommand implements Command {
     private final ClientService clientService;
     public static final String CONFIG_FILE = "/application.properties";
@@ -51,6 +53,7 @@ public class EditProfileCommand implements Command {
         currentClientDto.setPhoneNumber(phoneNumber);
         currentClientDto.setAdditionalInfo(additionalInfo);
         ClientDto updated = clientService.update(currentClientDto);
+        log.info("Client was update, client={}", updated);
         session.setAttribute("user", updated);
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));

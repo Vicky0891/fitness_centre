@@ -17,7 +17,7 @@ public class CreatePrescriptionFormCommand implements Command {
             req.setAttribute("clientId", clientId);
             return "jsp/prescription/createprescriptionform.jsp";
         } catch (NumberFormatException e) {
-            log.error("Couldn't parse client id. Exception: " + e);
+            log.error(e.getMessage());
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
             req.setAttribute("message", messageManager.getMessage("msg.error.errormessage"));
             return "jsp/error/error.jsp";

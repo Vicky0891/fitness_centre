@@ -20,14 +20,14 @@ public class TrainersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         try {
             List<TrainerDto> trainers = trainerService.getAll();
             req.setAttribute("trainers", trainers);
             return "jsp/user/trainers.jsp";
         } catch (RuntimeException e) {
-            log.error("Couldn't got trainers. Exception: " + e);
+            log.error(e.getMessage());
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
             req.setAttribute("message", messageManager.getMessage("msg.error.errormessage"));
             return "jsp/error/error.jsp";

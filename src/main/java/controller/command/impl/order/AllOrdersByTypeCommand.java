@@ -20,7 +20,7 @@ public class AllOrdersByTypeCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         try {
             String status = req.getParameter("status");
             List<OrderDto> orders = orderService.getAllByStatus(status);
@@ -28,10 +28,10 @@ public class AllOrdersByTypeCommand implements Command {
             req.setAttribute("status", status);
             return "jsp/order/allordersbytype.jsp";
         } catch (RuntimeException e) {
-            log.error("Couldn't parse status or got orders. Exception: " + e);
+            log.error(e.getMessage());
             HttpSession session = req.getSession();
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-            req.setAttribute("message", messageManager.getMessage("msg.notexist.orders"));
+            req.setAttribute("message", messageManager.getMessage("msg.error.errormessage"));
             return "jsp/error/error.jsp";
         }
     }

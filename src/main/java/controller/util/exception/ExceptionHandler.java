@@ -1,6 +1,7 @@
 package controller.util.exception;
 
 import controller.util.exception.impl.BadRequestException;
+import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.LoginException;
 import controller.util.exception.impl.NotFoundException;
@@ -15,12 +16,12 @@ public class ExceptionHandler {
     private int errorStatus;
     private String page;
     private final static String DEFAULTPAGE = "jsp/error/error.jsp";
-    
-    public String handleException (Exception e, HttpServletRequest req) {
+
+    public String handleException(Exception e, HttpServletRequest req) {
         if (e instanceof NotFoundException) {
             message = ((NotFoundException) e).errorMessage;
             errorStatus = 404;
-            page = "index.jsp";
+            page = "jsp/error/error404.jsp";
         } else if (e instanceof BadRequestException) {
             message = ((BadRequestException) e).errorMessage;
             errorStatus = 400;
@@ -37,12 +38,16 @@ public class ExceptionHandler {
             message = ((InternalErrorException) e).errorMessage;
             errorStatus = 500;
             page = "jsp/error/error500.jsp";
+        } else if (e instanceof DaoException) {
+            message = ((DaoException) e).errorMessage;
+            errorStatus = 500;
+            page = "jsp/error/error500.jsp";
         } else {
             message = "Internal server error";
             errorStatus = 500;
             page = DEFAULTPAGE;
         }
-        
+
         req.setAttribute("message", message);
         req.setAttribute("errorStatus", errorStatus);
         return page;

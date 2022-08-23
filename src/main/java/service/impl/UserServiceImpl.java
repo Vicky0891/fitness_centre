@@ -3,6 +3,7 @@ package service.impl;
 import java.util.List;
 
 import controller.util.PagingUtil.Paging;
+import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.LoginException;
 import controller.util.exception.impl.NotFoundException;
@@ -63,12 +64,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAll() {
+    public List<UserDto> getAll() throws DaoException {
         return userDao.getAll().stream().map(e -> toDto(e)).toList();
     }
-    
+
     @Override
-    public List<UserDto> getAll(Paging paging) {
+    public List<UserDto> getAll(Paging paging) throws DaoException {
         return userDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
@@ -81,7 +82,6 @@ public class UserServiceImpl implements UserService {
         }
         User user = toUsercreated(userDto);
         User createdUser = userDao.create(user);
-        log.info("User was create, user={}", userDto);
         return toDto(createdUser);
     }
 
@@ -89,15 +89,14 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) throws Exception {
         User user = toUserupdated(userDto);
         User changedUser = userDao.update(user);
-        log.info("User was update, user={}", userDto);
         return toDto(changedUser);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         if (!userDao.delete(id)) {
             log.error("User wasn't delete, user id={}", id);
-            throw new RuntimeException("Couldn't delete user with id " + id);
+            throw new InternalErrorException("Couldn't delete user with id " + id);
         }
     }
 
@@ -132,14 +131,14 @@ public class UserServiceImpl implements UserService {
         }
         return userDto;
     }
-    
+
     @Override
-    public long count() throws InternalErrorException {
+    public long count() throws DaoException {
         return userDao.count();
     }
 
     @Override
-    public String getTypeOfUser(Long id) {
+    public String getTypeOfUser(Long id) throws DaoException {
         User u = userDao.get(id);
         String role = u.getRole().toString();
         return switch (role) {

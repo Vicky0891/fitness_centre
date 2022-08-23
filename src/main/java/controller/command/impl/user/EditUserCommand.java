@@ -6,12 +6,14 @@ import controller.command.Command;
 import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.TrainerService;
 import service.UserService;
 import service.dto.UserDto;
 import service.dto.TrainerDto;
 import service.dto.UserDto.RoleDto;
 
+@Log4j2
 public class EditUserCommand implements Command {
     private final UserService userService;
     private final TrainerService trainerService;
@@ -28,8 +30,10 @@ public class EditUserCommand implements Command {
         String role = req.getParameter("role");
         currentUserDto.setRoleDto(RoleDto.valueOf(role));
         UserDto updated = userService.update(currentUserDto);
+        log.info("User was update, user={}", updated);
         if (role.equals("TRAINER")) {
             createTrainerDto(updated);
+            log.info("Trainer was create, trainer id={}", updated.getId());
         }
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");

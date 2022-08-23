@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.util.exception.impl.InternalErrorException;
+import controller.util.exception.impl.DaoException;
 import dao.connection.DataSource;
 import dao.entity.Client;
 import dao.entity.Client.Type;
@@ -52,7 +52,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client get(Long id) {
+    public Client get(Long id) throws DaoException {
         log.debug("Accessing to database using \"get\" method, client id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -64,6 +64,8 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get client id=" + id + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -71,7 +73,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<Client> getAll() {
+    public List<Client> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -83,14 +85,15 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
         return clients;
     }
-    
+
     @Override
-    public List<Client> getAll(int limit, Long offset) {
+    public List<Client> getAll(int limit, Long offset) throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -104,6 +107,7 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -111,7 +115,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<Client> getAllClientsByType(String typeOfClient) {
+    public List<Client> getAllClientsByType(String typeOfClient) throws DaoException {
         log.debug("Accessing to database using \"getAllClientsByType\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -124,6 +128,7 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -131,7 +136,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client create(Client client) throws InternalErrorException {
+    public Client create(Client client) throws DaoException {
         log.debug("Accessing to database using \"create\" method, client={}", client);
         Connection connection = dataSource.getConnection();
         try {
@@ -148,6 +153,7 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Client wasn't create. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -155,7 +161,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client update(Client client) throws InternalErrorException {
+    public Client update(Client client) throws DaoException {
         log.debug("Accessing to database using \"update\" method, client=", client);
         Connection connection = dataSource.getConnection();
         try {
@@ -174,14 +180,15 @@ public class ClientDaoImpl implements ClientDao {
             return get(client.getId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Client with id=" + client.getId()
+                    + "wasn't update. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) throws DaoException {
         log.debug("Accessing to database using \"delete\" method, client id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -191,30 +198,36 @@ public class ClientDaoImpl implements ClientDao {
             return rowsDeleted == 1;
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Client with id=" + id + "wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return false;
     }
 
-    private Client processClient(ResultSet result) throws SQLException {
-        Client client = new Client();
-        client.setId(result.getLong("user_id"));
-        client.setEmail(result.getString("email"));
-        client.setPassword(result.getString("password"));
-        client.setRole(Role.valueOf(result.getString("role")));
-        client.setFirstName(result.getString("first_name"));
-        client.setLastName(result.getString("last_name"));
-        client.setBirthDate(result.getDate("birth_date").toLocalDate());
-        client.setPhoneNumber(result.getString("phone_number"));
-        client.setType(Type.valueOf(result.getString("type")));
-        client.setTrainerId(result.getLong("trainer_id"));
-        client.setAdditionalInfo(result.getString("additional_info"));
-        client.setPathAvatar(result.getString("path_avatar"));
-        return client;
+    private Client processClient(ResultSet result) throws DaoException {
+        try {
+            Client client = new Client();
+            client.setId(result.getLong("user_id"));
+            client.setEmail(result.getString("email"));
+            client.setPassword(result.getString("password"));
+            client.setRole(Role.valueOf(result.getString("role")));
+            client.setFirstName(result.getString("first_name"));
+            client.setLastName(result.getString("last_name"));
+            client.setBirthDate(result.getDate("birth_date").toLocalDate());
+            client.setPhoneNumber(result.getString("phone_number"));
+            client.setType(Type.valueOf(result.getString("type")));
+            client.setTrainerId(result.getLong("trainer_id"));
+            client.setAdditionalInfo(result.getString("additional_info"));
+            client.setPathAvatar(result.getString("path_avatar"));
+            return client;
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
+        }
     }
 
-    private int getTypeId(String name) throws InternalErrorException {
+    private int getTypeId(String name) throws DaoException {
         log.debug("Accessing to database using \"getTypeId\" method, name={}", name);
         Connection connection = dataSource.getConnection();
         try {
@@ -231,11 +244,11 @@ public class ClientDaoImpl implements ClientDao {
             close(connection);
         }
         log.error("Type of client with name={} didn't find", name);
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
-    
+
     @Override
-    public long count() throws InternalErrorException {
+    public long count() throws DaoException {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {
@@ -250,7 +263,7 @@ public class ClientDaoImpl implements ClientDao {
             close(connection);
         }
         log.error("Couldn't count clients");
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
     private void close(Connection connection) {

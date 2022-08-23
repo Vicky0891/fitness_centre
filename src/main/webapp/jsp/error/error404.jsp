@@ -12,8 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<h1 class="error"><fmt:message key="msg.main.error"/> 400</h1>
-<h2><fmt:message key="msg.error.bad"/></h2>
+<h1 class="error"><fmt:message key="msg.main.error"/> 404</h1>
+<h2><fmt:message key="msg.error.notfound"/></h2>
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import controller.command.Command;
 import controller.util.MessageManager;
-import controller.util.exception.impl.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -26,15 +25,11 @@ public class EditGymmembershipCommand implements Command {
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
         String cost = req.getParameter("cost");
-        try {
-            currentGymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
-            currentGymMembershipDto.setTypeOfTraining(typeOfTraining);
-            currentGymMembershipDto.setCost(new BigDecimal(cost));
-        } catch (Exception e) {
-            log.error("Gymmembership wasn't update. Exception: " + e);
-            throw new BadRequestException("The entered data is incorrect. Try again.");
-        }
+        currentGymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
+        currentGymMembershipDto.setTypeOfTraining(typeOfTraining);
+        currentGymMembershipDto.setCost(new BigDecimal(cost));
         GymMembershipDto updated = gymMembershipService.update(currentGymMembershipDto);
+        log.info("Gymmembership was update, gymmembership={}", updated);
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("gymmembership", updated);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controller.util.exception.impl.BadRequestException;
+import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
 import dao.entity.Client;
@@ -38,7 +39,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public List<TrainerDto> getAll() {
+    public List<TrainerDto> getAll() throws DaoException {
         return trainerDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
@@ -51,20 +52,18 @@ public class TrainerServiceImpl implements TrainerService {
         }
         Trainer trainer = toTrainerForCreate(trainerDto);
         Trainer createdTrainer = trainerDao.create(trainer);
-        log.info("Trainer was create, trainer={}", trainerDto);
         return toDtoForCreate(createdTrainer);
     }
 
     @Override
-    public TrainerDto update(TrainerDto trainerDto) {
+    public TrainerDto update(TrainerDto trainerDto) throws DaoException {
         Trainer trainer = toTrainer(trainerDto);
         Trainer updatedTrainer = trainerDao.update(trainer);
-        log.info("Trainer was update, trainer={}", trainerDto);
         return toDto(updatedTrainer);
     }
 
     @Override
-    public void delete(Long id) throws InternalErrorException {
+    public void delete(Long id) throws Exception {
         if (!trainerDao.delete(id)) {
             log.error("Trainer wasn't delete, trainer id={}", id);
             throw new InternalErrorException("Internal Server Error. Trainer wasn't delete.");
@@ -73,7 +72,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public List<ClientDto> getAllClientsByTrainer(Long trainerId) {
+    public List<ClientDto> getAllClientsByTrainer(Long trainerId) throws DaoException {
         return trainerDao.getAllClientsByTrainer(trainerId).stream().map(e -> clientToDto(e)).toList();
     }
 

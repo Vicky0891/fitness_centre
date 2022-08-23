@@ -4,10 +4,12 @@ import controller.command.Command;
 import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 import service.OrderService;
 import service.dto.OrderDto;
 import service.dto.OrderDto.StatusDto;
 
+@Log4j2
 public class EditOrderCommand implements Command {
     private OrderService orderService;
 
@@ -24,6 +26,7 @@ public class EditOrderCommand implements Command {
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         currentOrderDto.setStatusDto(StatusDto.valueOf(status));
         OrderDto updated = orderService.update(currentOrderDto);
+        log.info("Order was update, order={}", updated);
         req.setAttribute("order", updated);
         req.setAttribute("message", messageManager.getMessage("msg.update.order"));
         return "redirect:controller?command=all_orders";

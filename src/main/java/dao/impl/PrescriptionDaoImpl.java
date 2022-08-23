@@ -8,8 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.util.exception.impl.InternalErrorException;
-import controller.util.exception.impl.NotFoundException;
+import controller.util.exception.impl.DaoException;
 import dao.connection.DataSource;
 import dao.entity.Prescription;
 import dao.entity.Order.Status;
@@ -38,7 +37,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription get(Long clientId) {
+    public Prescription get(Long clientId) throws DaoException {
         log.debug("Accessing to database using \"get\" method, client id={}", clientId);
         Connection connection = dataSource.getConnection();
         try {
@@ -50,6 +49,8 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Failed to get prescription with client id=" + clientId
+                    + ". Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -57,7 +58,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription create(Prescription prescription) throws InternalErrorException {
+    public Prescription create(Prescription prescription) throws DaoException {
         log.debug("Accessing to database using \"create\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
@@ -77,6 +78,8 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Prescription wasn't create. Contact your system administrator.");
         } finally {
             close(connection);
         }
@@ -84,7 +87,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription update(Prescription prescription) throws InternalErrorException {
+    public Prescription update(Prescription prescription) throws DaoException {
         log.debug("Accessing to database using \"update\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
@@ -98,14 +101,15 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             return get(prescription.getUserId());
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Prescription with client id=" + prescription.getUserId()
+                    + "wasn't update. Contact your system administrator.");
         } finally {
             close(connection);
         }
-        return null;
     }
 
     @Override
-    public void delete(Prescription prescription) {
+    public void delete(Prescription prescription) throws DaoException {
         log.debug("Accessing to database using \"delete\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
@@ -114,24 +118,31 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             statement.executeUpdate();
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Prescription with client id=" + prescription.getUserId()
+                    + "wasn't delete. Contact your system administrator.");
         } finally {
             close(connection);
         }
     }
 
-    private Prescription processPrescription(ResultSet result) throws SQLException {
-        Prescription prescription = new Prescription();
-        prescription.setId(result.getLong("id"));
-        prescription.setUserId(result.getLong("client_id"));
-        prescription.setTrainerId(result.getLong("trainer_id"));
-        prescription.setTypeOfTraining(result.getString("type_of_training"));
-        prescription.setEquipment(result.getString("equipment"));
-        prescription.setDiet(result.getString("diet"));
-        prescription.setStatus(Status.valueOf(result.getString("status")));
-        return prescription;
+    private Prescription processPrescription(ResultSet result) throws DaoException {
+        try {
+            Prescription prescription = new Prescription();
+            prescription.setId(result.getLong("id"));
+            prescription.setUserId(result.getLong("client_id"));
+            prescription.setTrainerId(result.getLong("trainer_id"));
+            prescription.setTypeOfTraining(result.getString("type_of_training"));
+            prescription.setEquipment(result.getString("equipment"));
+            prescription.setDiet(result.getString("diet"));
+            prescription.setStatus(Status.valueOf(result.getString("status")));
+            return prescription;
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
+        }
     }
 
-    private int getStatusPending() throws InternalErrorException {
+    private int getStatusPending() throws DaoException {
         log.debug("Accessing to database using \"getStatusPending\"");
         Connection connection = dataSource.getConnection();
         try {
@@ -146,10 +157,10 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             close(connection);
         }
         log.error("Id status \"pending\" didn't find");
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
-    private int getStatusConfirm() throws InternalErrorException {
+    private int getStatusConfirm() throws DaoException {
         log.debug("Accessing to database using \"getStatusConfirm\"");
         Connection connection = dataSource.getConnection();
         try {
@@ -164,11 +175,11 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             close(connection);
         }
         log.error("Id status \"confirm\" didn't find");
-        throw new InternalErrorException("Internal Server Error");
+        throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
     @Override
-    public List<Prescription> getAll() {
+    public List<Prescription> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<Prescription> prescriptions = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -180,6 +191,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
         }

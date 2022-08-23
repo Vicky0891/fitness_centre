@@ -19,7 +19,7 @@ public class AllClientsByTypeCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         try {
             String type = req.getParameter("type");
@@ -28,7 +28,7 @@ public class AllClientsByTypeCommand implements Command {
             req.setAttribute("type", type);
             return "jsp/user/allclientsbytype.jsp";
         } catch (RuntimeException e) {
-            log.error("Couldn't got clients. Exception: " + e);
+            log.error(e.getMessage());
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
             req.setAttribute("message", messageManager.getMessage("msg.error.errormessage"));
             return "jsp/error/error.jsp";

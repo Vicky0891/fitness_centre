@@ -3,6 +3,7 @@ package service.impl;
 import java.util.List;
 
 import controller.util.PagingUtil.Paging;
+import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
 import dao.entity.GymMembership;
@@ -31,36 +32,34 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public List<GymMembershipDto> getAll() {
+    public List<GymMembershipDto> getAll() throws Exception {
         return gymMembershipDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public GymMembershipDto create(GymMembershipDto gymMembershipDto) {
+    public GymMembershipDto create(GymMembershipDto gymMembershipDto)  throws Exception {
         GymMembership gymMembership = toGymMembership(gymMembershipDto);
         GymMembership createdGymMembership = gymMembershipDao.create(gymMembership);
-        log.info("Gymmembership was create, gymmembership={}", gymMembershipDto);
         return toDto(createdGymMembership);
     }
 
     @Override
-    public GymMembershipDto update(GymMembershipDto gymMembershipDto) {
+    public GymMembershipDto update(GymMembershipDto gymMembershipDto) throws Exception {
         GymMembership existing = gymMembershipDao.get(gymMembershipDto.getId());
         if (existing != null && existing.getId() != gymMembershipDto.getId()) {
             log.error("Trying to update not existing or incorrect gymmembership, gymmembership={}", gymMembershipDto);
-            throw new RuntimeException("Trying to update not existing or incorrect gymmembership");
+            throw new InternalErrorException("Internal Server Error. Gymmembership wasn't update.");
         }
         GymMembership gymMembership = toGymMembership(gymMembershipDto);
         GymMembership createdGymMembership = gymMembershipDao.update(gymMembership);
-        log.info("Gymmembership was update, gymmembership={}", gymMembershipDto);
         return toDto(createdGymMembership);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         if (!gymMembershipDao.delete(id)) {
             log.error("Gymmembership wasn't delete, gymmembership id={}", id);
-            throw new RuntimeException("Couldn't delete user with id " + id);
+            throw new InternalErrorException("Gymmembership wasn't delete. Id=" + id);
         }
     }
 
@@ -87,12 +86,12 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public List<GymMembershipDto> getAll(Paging paging) {
+    public List<GymMembershipDto> getAll(Paging paging) throws Exception{
         return gymMembershipDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public long count() throws InternalErrorException {
+    public long count() throws DaoException {
         return gymMembershipDao.count();
     }
 }
