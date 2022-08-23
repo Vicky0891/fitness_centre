@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.language}">
 <head>
-<title>Login</title>
+<title><fmt:message key="msg.login.title"/></title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -18,8 +18,7 @@
 <h3>${requestScope.message}</h3>
 </c:if>
 
-<h3><fmt:message key="msg.login.pleaselogin"/></h3>
-<br/>
+<h4><fmt:message key="msg.login.pleaselogin"/></h4>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="login"/>
 <label for="email-input"><fmt:message key="msg.login.email"/>: </label>
@@ -31,7 +30,7 @@
 <br/>
 <input type="submit" value="<fmt:message key="msg.login.login"/>"/>
 </form>
-<h3><fmt:message key="msg.login.newuser"/></h3>
+<h4><fmt:message key="msg.login.newuser"/></h4>
 <h3><a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a></h3>
 <footer>
 <jsp:include page="footer.jsp"/>

@@ -16,7 +16,6 @@ th {
 
 td {
 	text-align: center;
-	
 	}
 
 body {
@@ -42,7 +41,14 @@ footer {
     background: #59966c;
     color: #fff;
     width: 100%;
+    height: 50px;
+	margin-top: 80px;
 }
+
+
+.pagination{
+	text-align: center;
+	}
 
 .maintext {
 	word-wrap: break-word;
@@ -53,6 +59,13 @@ footer {
 .rightimg{
 	float: right;
     margin: 15px 0 15px 15px;
+}
+
+.mapimg{
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 15px 15px 15px 15px;
 }
 
 .clientphoto{

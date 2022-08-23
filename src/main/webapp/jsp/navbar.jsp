@@ -34,6 +34,7 @@
 </c:if>
 <a href="controller?command=logout"><fmt:message key="msg.navbar.logout"/></a>   |   
 </c:if>
+<a href="controller?command=contacts"><fmt:message key="msg.navbar.contacts"/></a>   |   
 
 <form method="post" action="controller">
 <input name="command" type="hidden" value="change_locale"/>

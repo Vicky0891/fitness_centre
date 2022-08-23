@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.language}">
 
-
+<p class="pagination">
 <a href="controller?command=all_clients&page=1"><fmt:message key="msg.pagination.first"/></a>   |   
 <c:if test="${requestScope.currentPage > 1}">
 <a href="controller?command=all_clients&page=${requestScope.currentPage - 1}"><fmt:message key="msg.pagination.prev"/></a>   |   
@@ -18,3 +18,4 @@
 <a href="controller?command=all_clients&page=${requestScope.currentPage + 1}"><fmt:message key="msg.pagination.next"/></a>   |   
 </c:if>
 <a href="controller?command=all_clients&page=${requestScope.totalPages}"><fmt:message key="msg.pagination.last"/></a>
+</p>

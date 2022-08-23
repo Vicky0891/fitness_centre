@@ -9,4 +9,3 @@
 <html lang="${sessionScope.language}">
 
 <h5>Copyright Viktoryia Zhuk</h5>
-<h5>Email: niki_08_91@mail.ru</h5>

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import controller.command.impl.ChangeLocaleCommand;
+import controller.command.impl.ContactsCommand;
 import controller.command.impl.ErrorCommand;
 import controller.command.impl.LoginCommand;
 import controller.command.impl.LoginFormCommand;
@@ -145,6 +146,7 @@ public class CommandFactory {
 
         commands.put("error", new ErrorCommand());
         commands.put("change_locale", new ChangeLocaleCommand());
+        commands.put("contacts", new ContactsCommand());
 
     }
 
