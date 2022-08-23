@@ -25,11 +25,11 @@
 <label for="typeOfTraining-input"><fmt:message key="msg.gymmembership.typeoftraining"/>: </label>
 <input id="typeOfTraining-input" name="typeOfTraining" type="text" value="${requestScope.gymmembership.typeOfTraining}"/>
 <br/>
-<label for="cost-input"><fmt:message key="msg.gymmembership.cost"/> USD: </label>
-<input id="cost-input" name="cost" type="text" value="${requestScope.gymmembership.cost}"/>
+<label for="cost-input"><fmt:message key="msg.gymmembership.costformat"/> USD: </label>
+<input id="cost-input" name="cost" type="text" pattern="\d+(\.\d{0,})?" value="${requestScope.gymmembership.cost}"/>
 <br/>
 
-<input type="submit" value="<fmt:message key="msg.gymmembership.edit"/>"/>
+<input type="submit" value="<fmt:message key="msg.order.save"/>"/>
 </form>
 <footer>
 <jsp:include page="../footer.jsp"/>

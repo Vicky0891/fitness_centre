@@ -24,8 +24,8 @@
 <label for="typeOfTraining-input"><fmt:message key="msg.gymmembership.typeoftraining"/>: </label>
 <input id="typeOfTraining-input" name="typeOfTraining" type="text"/>
 <br/>
-<label for="cost-input"><fmt:message key="msg.gymmembership.cost"/> USD: </label>
-<input id="cost-input" name="cost" type="text"/>
+<label for="cost-input"><fmt:message key="msg.gymmembership.costformat"/> USD: </label>
+<input id="cost-input" name="cost" type="text" pattern="\d+(\.\d{0,})?"/>
 <br/>
 
 <input type="submit" value="<fmt:message key="msg.gymmembership.create"/>"/>

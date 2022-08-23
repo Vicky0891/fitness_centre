@@ -18,6 +18,7 @@
 <input name="command" type="hidden" value="edit_cabinet"/>
 <input name="id" type="hidden" value="${sessionScope.user.id}"/>
 
+<label for="avatar"><fmt:message key="msg.editprofile.photo"/>: </label>
 <input type="file" name="avatar" accept="image/*"/>
 <br/>
 <label for="firstName-input"><fmt:message key="msg.user.firstname"/>: </label>
