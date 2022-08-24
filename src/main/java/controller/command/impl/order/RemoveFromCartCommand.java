@@ -19,23 +19,12 @@ public class RemoveFromCartCommand implements Command {
         if (cart != null) {
             Integer quantity = cart.get(gymmembershipId);
 
-            if (quantity == null) {
-                if (cart.isEmpty()) {
-                    session.removeAttribute("cart");
-                }
-                if (redirect.equals("cart")) {
-                    return "redirect:controller?command=cart";
-                } else
-                    return "redirect:controller?command=gymmemberships&page=" + page;
-            }
             if (quantity.intValue() == 1) {
                 cart.remove(gymmembershipId, quantity);
-                session.setAttribute("cart", cart);
-            }
-            if (quantity.intValue() > 1) {
+            } else {
                 cart.put(gymmembershipId, quantity - 1);
-                session.setAttribute("cart", cart);
             }
+            session.setAttribute("cart", cart);
             if (cart.isEmpty()) {
                 session.removeAttribute("cart");
             }
