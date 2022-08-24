@@ -29,7 +29,7 @@ public class EditProfileCommand implements Command {
         HttpSession session = req.getSession();
         ClientDto currentClientDto = (ClientDto) session.getAttribute("user");
         Part part = req.getPart("avatar");
-        if (part != null) {
+        if (part.getSize() != 0) {
             String fileName = UUID.randomUUID() + "_" + part.getSubmittedFileName();
             try (InputStream is = getClass().getResourceAsStream(CONFIG_FILE)) {
                 Properties props = new Properties();

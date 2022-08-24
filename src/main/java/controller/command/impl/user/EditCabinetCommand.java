@@ -6,7 +6,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 import controller.command.Command;
-import controller.command.impl.order.AddFeedbackCommand;
 import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,7 +29,7 @@ public class EditCabinetCommand implements Command {
         HttpSession session = req.getSession();
         TrainerDto currentTrainerDto = (TrainerDto) session.getAttribute("user");
         Part part = req.getPart("avatar");
-        if (part != null) {
+        if (part.getSize() != 0) {
             String fileName = UUID.randomUUID() + "_" + part.getSubmittedFileName();
             try (InputStream is = getClass().getResourceAsStream(CONFIG_FILE)) {
                 Properties props = new Properties();
