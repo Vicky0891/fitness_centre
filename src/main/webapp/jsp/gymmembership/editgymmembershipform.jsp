@@ -14,9 +14,13 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1><fmt:message key="msg.gymmembership.edittitle"/></h1>
+<c:if test="${requestScope.message != null}">
+<h5>${requestScope.message}</h5>
+</c:if>
 <form method="post" action="controller">
 <input name="id" type="hidden" value="${requestScope.gymmembership.id}"/>
 <input name="command" type="hidden" value="edit_gymmembership"/>
+<input type="hidden" name="page" value="jsp/gymmembership/editgymmembershipform.jsp"/>
 
 <br/>
 <label for="numberOfVisits-input"><fmt:message key="msg.gymmembership.numberofvisits"/>: </label>

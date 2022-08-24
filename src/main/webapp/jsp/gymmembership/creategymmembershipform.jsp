@@ -14,8 +14,12 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <h1><fmt:message key="msg.gymmembership.createtitle"/></h1>
+<c:if test="${requestScope.message != null}">
+<h5>${requestScope.message}</h5>
+</c:if>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="create_gymmembership"/>
+<input type="hidden" name="page" value="jsp/gymmembership/creategymmembershipform.jsp"/>
 
 <br/>
 <label for="numberOfVisits-input"><fmt:message key="msg.gymmembership.numberofvisits"/>: </label>

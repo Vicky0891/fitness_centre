@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import controller.command.Command;
 import controller.util.MessageManager;
+import controller.util.ValidatorManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -22,13 +23,14 @@ public class CreateGymmembershipCommand implements Command {
     public String execute(HttpServletRequest req) throws Exception {
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
-        String cost = req.getParameter("cost");
+        ValidatorManager validator = new ValidatorManager();
+        BigDecimal cost = validator.getCost(req);
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         gymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
         gymMembershipDto.setTypeOfTraining(typeOfTraining);
-        gymMembershipDto.setCost(new BigDecimal(cost));
+        gymMembershipDto.setCost(cost);
         GymMembershipDto created = gymMembershipService.create(gymMembershipDto);
         log.info("Gymmembership was create, gymmembership={}", created);
         req.setAttribute("gymmembership", created);

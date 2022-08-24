@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import controller.command.Command;
 import controller.util.MessageManager;
+import controller.util.ValidatorManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
@@ -41,7 +42,8 @@ public class EditProfileCommand implements Command {
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String birthDate = req.getParameter("birthDate");
-        String phoneNumber = req.getParameter("phoneNumber");
+        ValidatorManager validator = new ValidatorManager();
+        String phoneNumber = validator.getPhoneNumber(req);
         String additionalInfo = req.getParameter("additionalInfo");
         currentClientDto.setFirstName(firstName);
         currentClientDto.setLastName(lastName);

@@ -6,6 +6,7 @@ import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.LoginException;
 import controller.util.exception.impl.NotFoundException;
 import controller.util.exception.impl.RegistrationException;
+import controller.util.exception.impl.ValidateException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 
@@ -34,6 +35,10 @@ public class ExceptionHandler {
             message = ((LoginException) e).errorMessage;
             errorStatus = 400;
             page = "jsp/loginform.jsp";
+        } else if (e instanceof ValidateException) {
+            message = ((ValidateException) e).errorMessage;
+            errorStatus = 406;
+            page = ((ValidateException) e).page;
         } else if (e instanceof InternalErrorException) {
             message = ((InternalErrorException) e).errorMessage;
             errorStatus = 500;

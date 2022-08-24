@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import controller.command.Command;
 import controller.util.MessageManager;
+import controller.util.ValidatorManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -24,10 +25,11 @@ public class EditGymmembershipCommand implements Command {
         GymMembershipDto currentGymMembershipDto = gymMembershipService.getById(gymMembershipId);
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
-        String cost = req.getParameter("cost");
+        ValidatorManager validator = new ValidatorManager();
+        BigDecimal cost = validator.getCost(req);
         currentGymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
         currentGymMembershipDto.setTypeOfTraining(typeOfTraining);
-        currentGymMembershipDto.setCost(new BigDecimal(cost));
+        currentGymMembershipDto.setCost(cost);
         GymMembershipDto updated = gymMembershipService.update(currentGymMembershipDto);
         log.info("Gymmembership was update, gymmembership={}", updated);
         HttpSession session = req.getSession();

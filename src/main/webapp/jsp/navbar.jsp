@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.language}">
 <h3 class="alltrainers"><a href="/fitness_centre/"><fmt:message key="msg.navbar.main"/></a>   |   
+<a href="controller?command=contacts"><fmt:message key="msg.navbar.contacts"/></a>   |   
 <a href="controller?command=trainers"><fmt:message key="msg.navbar.ourtrainers"/></a>   | 
 <a href="controller?command=gymmemberships"><fmt:message key="msg.navbar.gymmemberships"/></a>   |  
 
@@ -34,7 +35,6 @@
 </c:if>
 <a href="controller?command=logout"><fmt:message key="msg.navbar.logout"/></a>   |   
 </c:if>
-<a href="controller?command=contacts"><fmt:message key="msg.navbar.contacts"/></a>   |   
 
 <form method="post" action="controller">
 <input name="command" type="hidden" value="change_locale"/>

@@ -19,6 +19,7 @@
 </c:if>
 <form method="post" action="controller" enctype="multipart/form-data">
 <input name="command" type="hidden" value="edit_profile"/>
+<input type="hidden" name="page" value="jsp/user/editprofileform.jsp"/>
 <input name="id" type="hidden" value="${sessionScope.user.id}"/>
 
 <label for="avatar"><fmt:message key="msg.editprofile.photo"/>: </label>
@@ -34,7 +35,7 @@
 <input id="birthDate-input" name="birthDate" type="date"/>
 <br/>
 <label for="phoneNumber-input"><fmt:message key="msg.editprofile.phonenumber"/>: </label>
-<input id="phoneNumber-input" name="phoneNumber" type="tel" value="${sessionScope.user.phoneNumber}" pattern="\d{9,13}"/>
+<input id="phoneNumber-input" name="phoneNumber" type="tel" value="${sessionScope.user.phoneNumber}" pattern="\d{12}"/>
 <br/>
 <label for="additionalInfo-textarea"><fmt:message key="msg.user.addinfo"/>: </label>
 <textarea id="additionalInfo-textarea" name="additionalInfo" placeholder="${sessionScope.user.additionalInfo}" rows="5" cols="20"></textarea>
