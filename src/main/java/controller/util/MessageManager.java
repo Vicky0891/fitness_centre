@@ -17,6 +17,12 @@ public class MessageManager {
         this.resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
     }
 
+    /**
+     * Method to get value from resource bundle by key
+     * 
+     * @param key Key for search
+     * @return Value of inputed key
+     */
     public String getMessage(String key) {
         return resourceBundle.getString(key);
     }

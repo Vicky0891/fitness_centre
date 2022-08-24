@@ -37,7 +37,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public GymMembershipDto create(GymMembershipDto gymMembershipDto)  throws Exception {
+    public GymMembershipDto create(GymMembershipDto gymMembershipDto) throws Exception {
         GymMembership gymMembership = toGymMembership(gymMembershipDto);
         GymMembership createdGymMembership = gymMembershipDao.create(gymMembership);
         return toDto(createdGymMembership);
@@ -63,6 +63,12 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         }
     }
 
+    /**
+     * Method transforming gymMembershipDto to GymMembership
+     * 
+     * @param gymMembershipDto Object for transforming
+     * @return transformed Object
+     */
     private GymMembership toGymMembership(GymMembershipDto gymMembershipDto) {
         GymMembership gymMembership = new GymMembership();
         gymMembership.setId(gymMembershipDto.getId());
@@ -72,6 +78,12 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         return gymMembership;
     }
 
+    /**
+     * Method transforming gymMembership to GymMembershipDto
+     * 
+     * @param gymMembership Object for transforming
+     * @return transformed Object
+     */
     private GymMembershipDto toDto(GymMembership gymMembership) {
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         try {
@@ -86,7 +98,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public List<GymMembershipDto> getAll(Paging paging) throws Exception{
+    public List<GymMembershipDto> getAll(Paging paging) throws Exception {
         return gymMembershipDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 

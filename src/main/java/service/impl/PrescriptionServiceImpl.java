@@ -56,6 +56,12 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         log.info("Prescription was delete, prescription id={}", id);
     }
 
+    /**
+     * Method transforming PrescriptionDto to Prescription
+     * 
+     * @param prescriptionDto Object for transforming
+     * @return transformed Object
+     */
     private Prescription toPrescription(PrescriptionDto prescriptionDto) {
         Prescription prescription = new Prescription();
         prescription.setId(prescriptionDto.getId());
@@ -69,6 +75,12 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return prescription;
     }
 
+    /**
+     * Method transforming Prescription to PrescriptionDto
+     * 
+     * @param prescription Object for transforming
+     * @return transformed Object
+     */
     private PrescriptionDto toDto(Prescription prescription) {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
         try {

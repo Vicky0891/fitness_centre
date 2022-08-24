@@ -33,6 +33,12 @@ public class AuthorizationFilter extends HttpFilter {
         chain.doFilter(req, res);
     }
 
+    /**
+     * Method to check command for authorization. If "false" - authorization no need
+     * 
+     * @param command Command for check
+     * @return Boolean about the need of authorization
+     */
     private boolean requiresAutorization(String command) {
 
         return switch (command) {

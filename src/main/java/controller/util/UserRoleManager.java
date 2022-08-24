@@ -18,6 +18,13 @@ public class UserRoleManager {
         this.trainerService = trainerService;
     }
 
+    /**
+     * Method to get object particular class depending on it role
+     * 
+     * @param userDto Any user in system
+     * @return Class Object according to the role
+     * @throws Exception
+     */
     public Object getUserRole(UserDto userDto) throws Exception {
         switch (userDto.getRoleDto().toString()) {
         case "CLIENT":

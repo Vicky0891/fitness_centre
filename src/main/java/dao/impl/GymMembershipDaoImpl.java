@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controller.util.exception.impl.DaoException;
-import controller.util.exception.impl.InternalErrorException;
 import dao.connection.DataSource;
 import dao.entity.GymMembership;
 import dao.interfaces.GymMembershipDao;
@@ -166,6 +165,13 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
         }
     }
 
+    /**
+     * Method to process gymmembership by resultSet from data source
+     * 
+     * @param result ResultSet from data source
+     * @return Gymmembership
+     * @throws DaoException
+     */
     private GymMembership processGymMembership(ResultSet result) throws DaoException {
         try {
             GymMembership gymMembership = new GymMembership();
@@ -199,6 +205,11 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
         throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
+    /**
+     * Method to close connection
+     * 
+     * @param connection Connection to close
+     */
     private void close(Connection connection) {
         try {
             connection.close();

@@ -76,6 +76,12 @@ public class TrainerServiceImpl implements TrainerService {
         return trainerDao.getAllClientsByTrainer(trainerId).stream().map(e -> clientToDto(e)).toList();
     }
 
+    /**
+     * Method transforming Trainer to TrainerDto
+     * 
+     * @param trainer Object for transforming
+     * @return transformed Object
+     */
     private TrainerDto toDto(Trainer trainer) {
         TrainerDto trainerDto = new TrainerDto();
         try {
@@ -100,6 +106,12 @@ public class TrainerServiceImpl implements TrainerService {
         return trainerDto;
     }
 
+    /**
+     * Method transforming Trainer to TrainerDto for use it to create
+     * 
+     * @param trainer Object for transforming
+     * @return transformed Object
+     */
     private TrainerDto toDtoForCreate(Trainer trainer) {
         TrainerDto trainerDto = new TrainerDto();
         try {
@@ -113,6 +125,12 @@ public class TrainerServiceImpl implements TrainerService {
         return trainerDto;
     }
 
+    /**
+     * Method transforming TrainerDto to Trainer for use it to create
+     * 
+     * @param trainerDto Object for transforming
+     * @return transformed Object
+     */
     private Trainer toTrainerForCreate(TrainerDto trainerDto) {
         Trainer trainer = new Trainer();
         trainer.setId(trainerDto.getId());
@@ -122,6 +140,12 @@ public class TrainerServiceImpl implements TrainerService {
         return trainer;
     }
 
+    /**
+     * Method transforming TrainerDto to Trainer
+     * 
+     * @param trainerDto Object for transforming
+     * @return transformed Object
+     */
     private Trainer toTrainer(TrainerDto trainerDto) {
         Trainer trainer = new Trainer();
         trainer.setId(trainerDto.getId());
@@ -141,6 +165,12 @@ public class TrainerServiceImpl implements TrainerService {
         return trainer;
     }
 
+    /**
+     * Method transforming Client to ClientDto
+     * 
+     * @param client Object for transforming
+     * @return transformed Object
+     */
     private ClientDto clientToDto(Client client) {
         ClientDto clientDto = new ClientDto();
         try {
@@ -161,6 +191,12 @@ public class TrainerServiceImpl implements TrainerService {
         return clientDto;
     }
 
+    /**
+     * Method transforming ClientDto to Client
+     * 
+     * @param clientDto Object for transforming
+     * @return transformed Object
+     */
     private Client toClient(ClientDto clientDto) {
         Client client = new Client();
         client.setId(clientDto.getId());

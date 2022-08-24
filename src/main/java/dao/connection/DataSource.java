@@ -2,8 +2,8 @@ package dao.connection;
 
 import java.sql.Connection;
 
-
 import lombok.extern.log4j.Log4j2;
+
 @Log4j2
 public class DataSource implements AutoCloseable {
     public static final DataSource INSTANCE = new DataSource();
@@ -20,6 +20,11 @@ public class DataSource implements AutoCloseable {
         driver = ConnectionProperties.INSTANCE.getDriver();
     }
 
+    /**
+     * Method to get connection from connection pool
+     * 
+     * @return Connection
+     */
     public Connection getConnection() {
         log.debug("Connection with database");
         if (connectionPool == null) {

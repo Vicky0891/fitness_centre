@@ -19,7 +19,8 @@ import lombok.extern.log4j.Log4j2;
 public class OrderInfoDaoImpl implements OrderInfoDao {
 
     private static final String DELETE = "DELETE FROM orderinfo WHERE id = ?";
-    private static final String UPDATE = "UPDATE orderinfo SET gymmembership_quantity = ?, gymmembership_price = ? WHERE id = ? AND deleted = false";
+    private static final String UPDATE = "UPDATE orderinfo SET gymmembership_quantity = ?, gymmembership_price = ? "
+            + "WHERE id = ? AND deleted = false";
     private static final String INSERT = "INSERT INTO orderinfo (order_id, gymmembership_id, gymmembership_quantity,"
             + " gymmembership_price) VALUES (?, ?, ?, ?)";
     private static final String SELECT_ALL = "SELECT oi.id, oi.order_id, oi.gymmembership_id, "
@@ -161,6 +162,13 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
         }
     }
 
+    /**
+     * Method to process OrderInfo by resultSet from data source
+     * 
+     * @param result ResultSet from data source
+     * @return OrderInfo
+     * @throws DaoException
+     */
     private OrderInfo processOrderInfo(ResultSet result) throws DaoException {
         try {
             OrderInfo orderInfo = new OrderInfo();
@@ -177,6 +185,11 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
         }
     }
 
+    /**
+     * Method to close connection
+     * 
+     * @param connection Connection to close
+     */
     private void close(Connection connection) {
         try {
             connection.close();

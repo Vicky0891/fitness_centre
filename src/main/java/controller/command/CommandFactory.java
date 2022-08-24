@@ -150,6 +150,13 @@ public class CommandFactory {
 
     }
 
+    /**
+     * Method get name of command like a key, check it available in factory and not
+     * null and return command
+     * 
+     * @param command Name of command to get
+     * @return Command object
+     */
     public Command getCommand(String command) {
         Command commandInstance = commands.get(command);
         if (commandInstance == null) {
@@ -158,6 +165,11 @@ public class CommandFactory {
         return commandInstance;
     }
 
+    /**
+     * Method to get CommandFactory
+     * 
+     * @return singleton CommandFactory
+     */
     public static CommandFactory getInstance() {
         return INSTANCE;
     }

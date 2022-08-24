@@ -39,6 +39,14 @@ public class UserRoleFilter extends HttpFilter {
         chain.doFilter(req, res);
     }
 
+    /**
+     * Method to check command for access required for users depending on it role
+     * and command
+     * 
+     * @param role    Role of user
+     * @param command Commend for check
+     * @return Boolean about permission required
+     */
     private boolean permissionRequired(String role, String command) {
         switch (role) {
         case "CLIENT":
@@ -51,6 +59,13 @@ public class UserRoleFilter extends HttpFilter {
         return true;
     }
 
+    /**
+     * Method to check command for access required for clients. If "false" - access
+     * permitted
+     * 
+     * @param command Name of command to check
+     * @return Boolean about the need of authorization
+     */
     private boolean clientAccess(String command) {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
@@ -62,6 +77,12 @@ public class UserRoleFilter extends HttpFilter {
         };
     }
 
+    /**
+     * Method to check command for access required for trainers. If "false" - access
+     * 
+     * @param command Name of command to check
+     * @return Boolean about the need of authorization
+     */
     private boolean trainersAccess(String command) {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",

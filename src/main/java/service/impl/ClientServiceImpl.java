@@ -76,6 +76,12 @@ public class ClientServiceImpl implements ClientService {
         return clientDao.getAllClientsByType(typeOfClient).stream().map(e -> toDto(e)).toList();
     }
 
+    /**
+     * Method transforming Client to ClientDto
+     * 
+     * @param client Object for transforming
+     * @return transformed Object
+     */
     private ClientDto toDto(Client client) {
         ClientDto clientDto = new ClientDto();
         try {
@@ -96,6 +102,12 @@ public class ClientServiceImpl implements ClientService {
         return clientDto;
     }
 
+    /**
+     * Method transforming ClientDto to Client
+     * 
+     * @param clientDto Object for transforming
+     * @return transformed Object
+     */
     private Client toClient(ClientDto clientDto) {
         Client client = new Client();
         client.setId(clientDto.getId());

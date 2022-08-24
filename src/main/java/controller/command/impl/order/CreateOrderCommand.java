@@ -48,6 +48,13 @@ public class CreateOrderCommand implements Command {
         return "jsp/order/order.jsp";
     }
 
+    /**
+     * Method create ClientDto and added it in data source
+     * 
+     * @param userDto User in system
+     * @return ClientDto created in data source table
+     * @throws Exception
+     */
     private ClientDto createClientDto(UserDto userDto) throws Exception {
         ClientDto clientDto = new ClientDto();
         clientDto.setId(userDto.getId());

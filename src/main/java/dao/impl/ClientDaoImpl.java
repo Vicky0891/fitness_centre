@@ -205,6 +205,13 @@ public class ClientDaoImpl implements ClientDao {
         }
     }
 
+    /**
+     * Method to process client by resultSet from data source
+     * 
+     * @param result ResultSet from data source
+     * @return Client
+     * @throws DaoException
+     */
     private Client processClient(ResultSet result) throws DaoException {
         try {
             Client client = new Client();
@@ -227,6 +234,13 @@ public class ClientDaoImpl implements ClientDao {
         }
     }
 
+    /**
+     * Method to get id of type of client in data source table
+     * 
+     * @param name Name of type
+     * @return id of type
+     * @throws DaoException
+     */
     private int getTypeId(String name) throws DaoException {
         log.debug("Accessing to database using \"getTypeId\" method, name={}", name);
         Connection connection = dataSource.getConnection();
@@ -266,6 +280,11 @@ public class ClientDaoImpl implements ClientDao {
         throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
+    /**
+     * Method to close connection
+     * 
+     * @param connection Connection to close
+     */
     private void close(Connection connection) {
         try {
             connection.close();

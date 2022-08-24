@@ -29,6 +29,9 @@ public class ProxyConnection implements Connection {
         this.connection = connection;
     }
 
+    /**
+     * Method to really close connection
+     */
     void reallyClose() {
         try {
             connection.close();

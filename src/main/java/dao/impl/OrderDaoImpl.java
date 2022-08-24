@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controller.util.exception.impl.DaoException;
-import controller.util.exception.impl.InternalErrorException;
 import dao.connection.DataSource;
 import dao.entity.Order;
 import dao.entity.Order.Status;
@@ -253,6 +252,13 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+    /**
+     * Method to process order by resultSet from data source
+     * 
+     * @param result ResultSet from data source
+     * @return Order
+     * @throws DaoException
+     */
     private Order processOrder(ResultSet result) throws DaoException {
         try {
             Order order = new Order();
@@ -271,6 +277,13 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+    /**
+     * Method to get id of order status in data source table
+     * 
+     * @param name Name of status
+     * @return id of status
+     * @throws DaoException
+     */
     public int getStatusId(String name) throws DaoException {
         log.debug("Accessing to database using \"getStatusId\" method, name={}", name);
         Connection connection = dataSource.getConnection();
@@ -329,6 +342,11 @@ public class OrderDaoImpl implements OrderDao {
         throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
+    /**
+     * Method to restore autocommit for connection and than close this connection
+     * 
+     * @param connection Connection for using
+     */
     private void restore(Connection connection) {
         try {
             connection.setAutoCommit(true);
@@ -338,6 +356,11 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+    /**
+     * Method to rollback changing
+     * 
+     * @param connection Connection to need rollback
+     */
     private void rollback(Connection connection) {
         try {
             connection.rollback();
@@ -346,6 +369,11 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+    /**
+     * Method to close connection
+     * 
+     * @param connection Connection to close
+     */
     private void close(Connection connection) {
         try {
             connection.close();

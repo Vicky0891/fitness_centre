@@ -100,6 +100,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Method transforming UserDto to User for use it to create
+     * 
+     * @param UserDto Object for transforming
+     * @return transformed Object
+     */
     private User toUsercreated(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
@@ -110,6 +116,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Method transforming UserDto to User for use it to update
+     * 
+     * @param UserDto Object for transforming
+     * @return transformed Object
+     */
     private User toUserupdated(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
@@ -119,6 +131,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Method transforming User to UserDto
+     * 
+     * @param user Object for transforming
+     * @return transformed Object
+     */
     private UserDto toDto(User user) {
         UserDto userDto = new UserDto();
         try {
@@ -139,8 +157,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getTypeOfUser(Long id) throws DaoException {
-        User u = userDao.get(id);
-        String role = u.getRole().toString();
+        User user = userDao.get(id);
+        String role = user.getRole().toString();
         return switch (role) {
         case "CLIENT" -> "CLIENT";
         case "TRAINER" -> "TRAINER";

@@ -41,6 +41,13 @@ public class EditUserCommand implements Command {
         return "redirect:controller?command=all_users";
     }
 
+    /**
+     * Method create TrainerDto and added it in data source
+     * 
+     * @param userDto User in system
+     * @return TrainerDto created in data source table
+     * @throws Exception
+     */
     private void createTrainerDto(UserDto userDto) throws Exception {
         TrainerDto trainerDto = new TrainerDto();
         trainerDto.setId(userDto.getId());

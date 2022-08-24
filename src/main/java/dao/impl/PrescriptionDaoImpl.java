@@ -21,14 +21,16 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     private static final String DELETE = "UPDATE prescriptions SET deleted = true WHERE client_id = ?";
     private static final String UPDATE = "UPDATE prescriptions SET type_of_training = ?, equipment = ?, diet = ?, "
             + "status_id = ? WHERE client_id = ?";
-    private static final String INSERT = "INSERT INTO prescriptions (trainer_id, client_id, type_of_training, equipment, diet, status_id)"
-            + " VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_BY_ID = "SELECT p.id, p.trainer_id, p.client_id, p.type_of_training, p.equipment, p.diet, s.name AS status FROM prescriptions p "
-            + "JOIN status s ON s.id = p.status_id JOIN users u ON p.client_id = u.id WHERE p.client_id = ? AND u.deleted = false";
+    private static final String INSERT = "INSERT INTO prescriptions (trainer_id, client_id, type_of_training, equipment,"
+            + " diet, status_id) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_BY_ID = "SELECT p.id, p.trainer_id, p.client_id, p.type_of_training, p.equipment, "
+            + "p.diet, s.name AS status FROM prescriptions p JOIN status s ON s.id = p.status_id JOIN users u "
+            + "ON p.client_id = u.id WHERE p.client_id = ? AND u.deleted = false";
     private static final String SELECT_STATUS_PENDING = "SELECT s.id FROM status s WHERE name = 'PENDING'";
     private static final String SELECT_STATUS_CONFIRM = "SELECT s.id FROM status s WHERE name = 'CONFIRM'";
     private static final String SELECT_ALL = "SELECT p.id, p.trainer_id, p.client_id, p.type_of_training, "
-            + "p.equipment, p.diet, s.name AS status FROM prescriptions p JOIN status s ON s.id = p.status_id WHERE p.deleted = false";
+            + "p.equipment, p.diet, s.name AS status FROM prescriptions p JOIN status s ON s.id = p.status_id "
+            + "WHERE p.deleted = false";
 
     private DataSource dataSource;
 
@@ -126,6 +128,13 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         }
     }
 
+    /**
+     * Method to process prescription by resultSet from data source
+     * 
+     * @param result ResultSet from data source
+     * @return Prescription
+     * @throws DaoException
+     */
     private Prescription processPrescription(ResultSet result) throws DaoException {
         try {
             Prescription prescription = new Prescription();
@@ -143,6 +152,12 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         }
     }
 
+    /**
+     * Method to get id of status "pending" in data source table
+     * 
+     * @return id of status "pending"
+     * @throws DaoException
+     */
     private int getStatusPending() throws DaoException {
         log.debug("Accessing to database using \"getStatusPending\"");
         Connection connection = dataSource.getConnection();
@@ -161,6 +176,12 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
+    /**
+     * Method to get id of status "confirm" in data source table
+     * 
+     * @return id of status "confirm"
+     * @throws DaoException
+     */
     private int getStatusConfirm() throws DaoException {
         log.debug("Accessing to database using \"getStatusConfirm\"");
         Connection connection = dataSource.getConnection();
@@ -199,6 +220,11 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
         return prescriptions;
     }
 
+    /**
+     * Method to close connection
+     * 
+     * @param connection Connection to close
+     */
     private void close(Connection connection) {
         try {
             connection.close();

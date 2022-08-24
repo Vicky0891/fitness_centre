@@ -10,6 +10,7 @@ import dao.interfaces.OrderDao;
 import dao.interfaces.PrescriptionDao;
 import dao.interfaces.TrainerDao;
 import dao.interfaces.UserDao;
+import lombok.extern.log4j.Log4j2;
 import service.ClientService;
 import service.GymMembershipService;
 import service.OrderService;
@@ -23,6 +24,7 @@ import service.impl.PrescriptionServiceImpl;
 import service.impl.TrainerServiceImpl;
 import service.impl.UserServiceImpl;
 
+@Log4j2
 public class ServiceFactory {
     private Map<Class<?>, Object> map;
     public static final ServiceFactory INSTANCE = new ServiceFactory();
@@ -40,8 +42,20 @@ public class ServiceFactory {
                 new PrescriptionServiceImpl(DaoFactory.INSTANCE.getDao(PrescriptionDao.class)));
     }
 
+    /**
+     * Method to get service objects by class
+     * 
+     * @param <T>   Object of requested class
+     * @param clazz Name of class to get
+     * @return Object of requested class
+     */
     @SuppressWarnings("unchecked")
     public <T> T getService(Class<T> clazz) {
+        T service = (T) map.get(clazz);
+        if (service == null) {
+            log.error("Class {} is not constructed", clazz);
+            throw new RuntimeException("Class " + clazz + " is not constructed");
+        }
         return (T) map.get(clazz);
     }
 

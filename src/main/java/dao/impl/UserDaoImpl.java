@@ -185,6 +185,13 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Method to process user by resultSet from data source
+     * 
+     * @param result ResultSet from data source
+     * @return User
+     * @throws DaoException
+     */
     private User processUser(ResultSet result) throws DaoException {
         try {
             User user = new User();
@@ -199,6 +206,13 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Method to get id of user role in data source table
+     * 
+     * @param name Name of role
+     * @return id of role
+     * @throws DaoException
+     */
     private int getRoleId(String name) throws DaoException {
         log.debug("Accessing to database using \"getRoleId\" method, role name={}", name);
         Connection connection = dataSource.getConnection();
@@ -237,6 +251,11 @@ public class UserDaoImpl implements UserDao {
         throw new DaoException("Something went wrong. Contact your system administrator.");
     }
 
+    /**
+     * Method to close connection
+     * 
+     * @param connection Connection to close
+     */
     private void close(Connection connection) {
         try {
             connection.close();

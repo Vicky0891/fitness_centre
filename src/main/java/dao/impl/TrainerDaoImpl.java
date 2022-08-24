@@ -25,11 +25,11 @@ public class TrainerDaoImpl implements TrainerDao {
             + "category = ?, path_avatar = ? WHERE user_id = ?";
     private static final String INSERT = "INSERT INTO trainers (user_id, birth_date) VALUES (?, ?)";
     private static final String SELECT_ALL = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
-            + " r.name AS role, tr.birth_date, tr.category, tr.path_avatar FROM trainers tr JOIN users u ON u.id = tr.user_id "
-            + "JOIN roles r ON r.id = u.role_id WHERE u.deleted = false ORDER BY tr.user_id";
+            + " r.name AS role, tr.birth_date, tr.category, tr.path_avatar FROM trainers tr JOIN users u "
+            + "ON u.id = tr.user_id JOIN roles r ON r.id = u.role_id WHERE u.deleted = false ORDER BY tr.user_id";
     private static final String SELECT_BY_ID = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
-            + " r.name AS role, tr.birth_date, tr.category, tr.path_avatar FROM trainers tr JOIN users u ON tr.user_id = u.id "
-            + "JOIN roles r ON r.id = u.role_id WHERE tr.user_id = ? AND u.deleted = false";
+            + " r.name AS role, tr.birth_date, tr.category, tr.path_avatar FROM trainers tr JOIN users u "
+            + "ON tr.user_id = u.id JOIN roles r ON r.id = u.role_id WHERE tr.user_id = ? AND u.deleted = false";
     private static final String SELECT_CLIENTS_FOR_TRAINER = "SELECT c.user_id, c.first_name, c.last_name, u.email, "
             + "u.password, r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, "
             + "c.additional_info FROM clients c JOIN types t ON t.id = c.type_id JOIN trainers tr "
@@ -174,6 +174,13 @@ public class TrainerDaoImpl implements TrainerDao {
         return clients;
     }
 
+    /**
+     * Method to process trainer by resultSet from data source
+     * 
+     * @param result ResultSet from data source
+     * @return Trainer
+     * @throws DaoException
+     */
     private Trainer processTrainer(ResultSet result) throws DaoException {
         try {
             Trainer trainer = new Trainer();
@@ -195,6 +202,11 @@ public class TrainerDaoImpl implements TrainerDao {
         }
     }
 
+    /**
+     * Method to close connection
+     * 
+     * @param connection Connection to close
+     */
     private void close(Connection connection) {
         try {
             connection.close();

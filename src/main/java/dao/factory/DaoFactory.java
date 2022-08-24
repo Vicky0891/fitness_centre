@@ -37,6 +37,13 @@ public class DaoFactory {
 
     }
 
+    /**
+     * Method to get Dao Object by class
+     * 
+     * @param <T>   Object of requested class
+     * @param clazz Name of class to get
+     * @return Object of requested class
+     */
     @SuppressWarnings("unchecked")
     public <T> T getDao(Class<T> clazz) {
         T dao = (T) map.get(clazz);

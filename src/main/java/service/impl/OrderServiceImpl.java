@@ -83,6 +83,14 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    /**
+     * Method for creating an order based on the items in the cart
+     * 
+     * @param cart    Cart with order items
+     * @param userDto Client who make order
+     * @return OrderDto Order ready to pay
+     * @throws Exception
+     */
     public OrderDto createDto(Map<Long, Integer> cart, UserDto userDto) throws Exception {
         OrderDto orderDto = new OrderDto();
         orderDto.setStatusDto(StatusDto.PENDING);
@@ -113,6 +121,14 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    /**
+     * Method calculate discount for Client depending on type
+     * 
+     * @param userDto   Client to get discount
+     * @param totalCost Total cost of order before get discount
+     * @return total cost with discount
+     * @throws Exception
+     */
     private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) throws Exception {
         Client existingClient = clientDao.get(userDto.getId());
         if (existingClient == null) {
@@ -125,6 +141,12 @@ public class OrderServiceImpl implements OrderService {
         return BigDecimal.valueOf(totalCostInDouble);
     }
 
+    /**
+     * Method calculate total price for all items of order
+     * 
+     * @param details List items of order
+     * @return total cost
+     */
     private BigDecimal calculatePrice(List<OrderInfoDto> details) {
         BigDecimal totalCost = BigDecimal.ZERO;
         for (OrderInfoDto detail : details) {
@@ -135,6 +157,12 @@ public class OrderServiceImpl implements OrderService {
         return totalCost;
     }
 
+    /**
+     * Method transforming gymMembership to GymMembershipDto
+     * 
+     * @param gymMembership Object for transforming
+     * @return transformed Object
+     */
     private GymMembershipDto toGymMembershipDto(GymMembership gymMembership) {
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         try {
@@ -177,11 +205,17 @@ public class OrderServiceImpl implements OrderService {
     public void delete(Long id) throws InternalErrorException, DaoException {
         if (!orderDao.delete(id)) {
             log.error("Order wasn't delete, order id={}", id);
-            throw new DaoException("Something went wrong. Order id=" + id
-                    + "wasn't delete. Contact your system administrator.");
+            throw new DaoException(
+                    "Something went wrong. Order id=" + id + "wasn't delete. Contact your system administrator.");
         }
     }
 
+    /**
+     * Method transforming OrderDto to Order for use to update
+     * 
+     * @param orderDto Object for transforming
+     * @return transformed Object
+     */
     private Order toOrderForUpdate(OrderDto orderDto) {
         Order order = new Order();
         order.setId(orderDto.getId());
@@ -201,6 +235,12 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    /**
+     * Method transforming OrderDto to Order
+     * 
+     * @param orderDto Object for transforming
+     * @return transformed Object
+     */
     private Order toOrder(OrderDto orderDto) {
         Order order = new Order();
         order.setDateOfOrder(orderDto.getDateOfOrder());
@@ -219,6 +259,12 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    /**
+     * Method transforming Order to OrderDto
+     * 
+     * @param order Object for transforming
+     * @return transformed Object
+     */
     private OrderDto toDto(Order order) {
         OrderDto orderDto = new OrderDto();
         try {
@@ -242,6 +288,12 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    /**
+     * Method transforming OrderInfoDto to OrderInfo
+     * 
+     * @param orderInfoDto Object for transforming
+     * @return transformed Object
+     */
     private OrderInfo toOrderInfo(OrderInfoDto orderInfoDto) {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setGymMembership(toGymMembership(orderInfoDto.getGymMembershipDto()));
@@ -250,6 +302,12 @@ public class OrderServiceImpl implements OrderService {
         return orderInfo;
     }
 
+    /**
+     * Method transforming OrderInfo to OrderInfoDto
+     * 
+     * @param orderInfo Object for transforming
+     * @return transformed Object
+     */
     private OrderInfoDto toOrderInfoDto(OrderInfo orderInfo) {
         OrderInfoDto orderInfoDto = new OrderInfoDto();
         try {
@@ -264,6 +322,12 @@ public class OrderServiceImpl implements OrderService {
         return orderInfoDto;
     }
 
+    /**
+     * Method transforming gymMembershipDto to GymMembership
+     * 
+     * @param gymMembershipDto Object for transforming
+     * @return transformed Object
+     */
     private GymMembership toGymMembership(GymMembershipDto gymMembershipDto) {
         GymMembership gymMembership = new GymMembership();
         gymMembership.setId(gymMembershipDto.getId());

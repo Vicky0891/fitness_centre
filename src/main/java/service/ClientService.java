@@ -8,10 +8,30 @@ import service.dto.ClientDto;
 
 public interface ClientService extends AbstractService<Long, ClientDto> {
 
+    /**
+     * Method get list of clientsDto particular type
+     * 
+     * @param typeOfClient type of clientDto to get
+     * @return list of ClientsDto
+     * @throws DaoException
+     */
     List<ClientDto> getAllClientsByType(String typeOfClient) throws DaoException;
 
+    /**
+     * Method get list of ClientsDto for pagination
+     * 
+     * @param paging Object pass parameters for pagination
+     * @return list of ClientsDto
+     * @throws DaoException
+     */
     List<ClientDto> getAll(Paging paging) throws DaoException;
 
+    /**
+     * Method get quantity of clients from Dao
+     * 
+     * @return quantity of clients
+     * @throws DaoException
+     */
     long count() throws DaoException;
 
 }
