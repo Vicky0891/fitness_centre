@@ -12,7 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
 <jsp:include page="navbar.jsp"/>
+</header>
 <h1><fmt:message key="msg.navbar.contacts"/></h1>
 <h3><fmt:message key="msg.contacts.tel"/></h3>
 <h3><fmt:message key="msg.contacts.email"/></h3>

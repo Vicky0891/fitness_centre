@@ -12,9 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-
+<header>
 <jsp:include page="../navbar.jsp"/>
-
+</header>
 <h1><fmt:message key="msg.trainers.maintitle"/></h1>
 <h3><fmt:message key="msg.trainers.maintext"/></h3>
 <table>

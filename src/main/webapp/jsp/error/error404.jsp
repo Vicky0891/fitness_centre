@@ -12,6 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
+<jsp:include page="../navbar.jsp"/>
+</header>
 <h1 class="error"><fmt:message key="msg.main.error"/> 404</h1>
 <h2><fmt:message key="msg.error.notfound"/></h2>
 <c:if test="${requestScope.message != null}">

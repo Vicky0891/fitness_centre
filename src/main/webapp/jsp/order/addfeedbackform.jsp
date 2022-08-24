@@ -12,7 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
 <jsp:include page="../navbar.jsp"/>
+</header>
 <c:if test="${requestScope != null}">
 <h5>${requestScope.message}</h5>
 </c:if>

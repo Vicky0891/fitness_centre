@@ -12,9 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-
+<header>
 <jsp:include page="../navbar.jsp"/>
-
+</header>
 <h1><fmt:message key="msg.allclientsbytype.all"/> <c:out value="${requestScope.type.toString().toLowerCase()}"/> <fmt:message key="msg.allclientsbytype.clients"/></h1>
 
 <table>

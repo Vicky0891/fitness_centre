@@ -12,7 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
 <jsp:include page="../navbar.jsp"/>
+</header>
 <h1><fmt:message key="msg.orders.title"/></h1>
 <table>
 <c:if test="${orders.size() == 0}">

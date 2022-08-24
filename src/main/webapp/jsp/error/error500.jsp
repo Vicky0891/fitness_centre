@@ -12,6 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
+<jsp:include page="../navbar.jsp"/>
+</header>
 <h1 class="error"><fmt:message key="msg.main.error"/> 500</h1>
 <h2><fmt:message key="msg.error.internal"/></h2>
 <c:if test="${requestScope.message != null}">

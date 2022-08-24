@@ -12,8 +12,10 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<c:if test="${gymmembership.id != null}">
+<header>
 <jsp:include page="../navbar.jsp"/>
+</header>
+<c:if test="${gymmembership.id != null}">
 <h1><fmt:message key="msg.gymmembership.info"/></h1>
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>

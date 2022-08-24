@@ -12,7 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
 <jsp:include page="../navbar.jsp"/>
+</header>
 <h1><fmt:message key="msg.editcabinet.title"/></h1>
 <form method="post" action="controller" enctype="multipart/form-data">
 <input name="command" type="hidden" value="edit_cabinet"/>

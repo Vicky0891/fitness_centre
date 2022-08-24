@@ -12,7 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
 <jsp:include page="../navbar.jsp"/>
+</header>
 <c:if test="${trainer.id != null}">
 <h1><fmt:message key="msg.trainer.info"/></h1>
 <h3>#: <c:out value="${trainer.id}"/></h3>

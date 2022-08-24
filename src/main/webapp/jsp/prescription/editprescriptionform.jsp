@@ -12,7 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
 <jsp:include page="../navbar.jsp"/>
+</header>
 <h3><fmt:message key="msg.prescription.edittext"/></h3>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="edit_prescription"/>

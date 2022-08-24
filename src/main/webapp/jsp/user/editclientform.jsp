@@ -12,7 +12,9 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<header>
 <jsp:include page="../navbar.jsp"/>
+</header>
 <h1><fmt:message key="msg.editclient.title"/></h1>
 <c:if test="${requestScope.message != null}">
 <h2>${requestScope.message}</h2>

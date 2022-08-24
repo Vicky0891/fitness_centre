@@ -7,14 +7,15 @@
 <fmt:setBundle basename="messages"/>
 <!DOCTYPE html>
 <html lang="${sessionScope.language}">
-<html>
 <head>
 <title><fmt:message key="msg.main.title"/></title>
 <link href="css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<h1><fmt:message key="msg.main.welcome"/> ${sessionScope.user != null ? sessionScope.user.email : ''}!</h1>
+<header>
 <jsp:include page="jsp/navbar.jsp"/>
+</header>
+<h1><fmt:message key="msg.main.welcome"/> ${sessionScope.user != null ? sessionScope.user.email : ''}!</h1>
 
 <c:if test="${requestScope.errorStatus != null}">
 <h3><fmt:message key="msg.main.error"/> ${requestScope.errorStatus}</h3>
@@ -22,7 +23,7 @@
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>
-<img src="images/fitness_centre.jpg" width="648" height="432" alt="image" class="rightimg"\>
+<img src="images/fitness_centre.jpg" width="648" height="432" alt="image" class="rightimg"/>
 <fmt:message key="msg.main.maintext"/>
 <footer>
 <jsp:include page="jsp/footer.jsp"/>
