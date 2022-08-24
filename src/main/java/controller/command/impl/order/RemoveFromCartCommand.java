@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpSession;
 
 public class RemoveFromCartCommand implements Command {
 
+    private final String REDIRECT_CART = "redirect:controller?command=cart";
+    private final String REDIRECT_GYMMEMBERSHIPS = "redirect:controller?command=gymmemberships&page=";
+
     @Override
     public String execute(HttpServletRequest req) {
         Long gymmembershipId = Long.parseLong(req.getParameter("gymmembershipId"));
@@ -18,6 +21,12 @@ public class RemoveFromCartCommand implements Command {
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
         if (cart != null) {
             Integer quantity = cart.get(gymmembershipId);
+            if (quantity == null) {
+                if (redirect.equals("cart")) {
+                    return REDIRECT_CART;
+                } else
+                    return REDIRECT_GYMMEMBERSHIPS + page;
+            }
 
             if (quantity.intValue() == 1) {
                 cart.remove(gymmembershipId, quantity);
@@ -25,13 +34,14 @@ public class RemoveFromCartCommand implements Command {
                 cart.put(gymmembershipId, quantity - 1);
             }
             session.setAttribute("cart", cart);
+
             if (cart.isEmpty()) {
                 session.removeAttribute("cart");
             }
         }
         if (redirect.equals("cart")) {
-            return "redirect:controller?command=cart";
+            return REDIRECT_CART;
         } else
-            return "redirect:controller?command=gymmemberships&page=" + page;
+            return REDIRECT_GYMMEMBERSHIPS + page;
     }
 }

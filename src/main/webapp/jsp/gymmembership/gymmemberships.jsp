@@ -66,8 +66,12 @@
 </td>
 </c:if>
 </tr>
+
 </c:forEach>
 </c:if>
+<tr>
+<td align="right" colspan="6"><a href="controller?command=cart"><fmt:message key="msg.gymmembership.gotocart"/></a></td>
+</tr>
 </table> 
 <footer>
 <jsp:include page="../footer.jsp"/>
