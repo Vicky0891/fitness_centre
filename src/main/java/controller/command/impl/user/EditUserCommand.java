@@ -17,6 +17,7 @@ import service.dto.UserDto.RoleDto;
 public class EditUserCommand implements Command {
     private final UserService userService;
     private final TrainerService trainerService;
+    private final String DEFAULT_PHOTO = "default_photo.jpg";
 
     public EditUserCommand(UserService userService, TrainerService trainerService) {
         this.userService = userService;
@@ -53,6 +54,7 @@ public class EditUserCommand implements Command {
         trainerDto.setId(userDto.getId());
         trainerDto.setRoleDto(userDto.getRoleDto());
         trainerDto.setBirthDate(LocalDate.parse("0001-01-01"));
+        trainerDto.setPathAvatar(DEFAULT_PHOTO);
         trainerService.create(trainerDto);
     }
 }

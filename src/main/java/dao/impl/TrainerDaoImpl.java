@@ -23,7 +23,7 @@ public class TrainerDaoImpl implements TrainerDao {
     private static final String DELETE = "UPDATE users SET deleted = true WHERE id = ?";
     private static final String UPDATE = "UPDATE trainers SET first_name = ?, last_name = ?, birth_date = ?, "
             + "category = ?, path_avatar = ? WHERE user_id = ?";
-    private static final String INSERT = "INSERT INTO trainers (user_id, birth_date) VALUES (?, ?)";
+    private static final String INSERT = "INSERT INTO trainers (user_id, birth_date, path_avatar) VALUES (?, ?, ?)";
     private static final String SELECT_ALL = "SELECT tr.user_id, tr.first_name, tr.last_name, u.email, u.password,"
             + " r.name AS role, tr.birth_date, tr.category, tr.path_avatar FROM trainers tr JOIN users u "
             + "ON u.id = tr.user_id JOIN roles r ON r.id = u.role_id WHERE u.deleted = false ORDER BY tr.user_id";
@@ -93,6 +93,7 @@ public class TrainerDaoImpl implements TrainerDao {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, trainer.getId());
             statement.setDate(2, Date.valueOf(trainer.getBirthDate()));
+            statement.setString(3, trainer.getPathAvatar());
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();

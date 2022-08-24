@@ -119,6 +119,7 @@ public class TrainerServiceImpl implements TrainerService {
             trainerDto.setEmail(trainer.getEmail());
             trainerDto.setBirthDate(trainer.getBirthDate());
             trainerDto.setRoleDto(RoleDto.valueOf(trainer.getRole().name()));
+            trainerDto.setPathAvatar(trainer.getPathAvatar());
         } catch (NullPointerException e) {
             log.error("Trainer wasn't create, trainer={} ", trainer);
         }
@@ -137,6 +138,7 @@ public class TrainerServiceImpl implements TrainerService {
         trainer.setEmail(trainerDto.getEmail());
         trainer.setBirthDate(trainerDto.getBirthDate());
         trainer.setRole(Role.valueOf(trainerDto.getRoleDto().name()));
+        trainer.setPathAvatar(trainerDto.getPathAvatar());
         return trainer;
     }
 

@@ -20,6 +20,7 @@ import service.dto.UserDto.RoleDto;
 public class CreateOrderCommand implements Command {
     private final OrderService orderService;
     private final ClientService clientService;
+    private final String DEFAULT_PHOTO = "default_photo.jpg";
 
     public CreateOrderCommand(OrderService orderService, ClientService clientService) {
         this.orderService = orderService;
@@ -61,6 +62,7 @@ public class CreateOrderCommand implements Command {
         clientDto.setType(TypeDto.NEW);
         clientDto.setRoleDto(RoleDto.CLIENT);
         clientDto.setBirthDate(LocalDate.parse("0001-01-01"));
+        clientDto.setPathAvatar(DEFAULT_PHOTO);
         return clientService.create(clientDto);
     }
 }

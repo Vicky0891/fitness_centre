@@ -23,7 +23,8 @@ public class ClientDaoImpl implements ClientDao {
     private static final String DELETE = "UPDATE users SET deleted = true WHERE id = ?";
     private static final String UPDATE = "UPDATE clients SET first_name = ?, last_name = ?, birth_date = ?, "
             + "phone_number = ?, trainer_id = ?, type_id = ?, additional_info = ?, path_avatar = ? WHERE user_id = ?";
-    private static final String INSERT = "INSERT INTO clients (user_id, birth_date, type_id) VALUES (?, ?, ?)";
+    private static final String INSERT = "INSERT INTO clients (user_id, birth_date, type_id, path_avatar) "
+            + "VALUES (?, ?, ?, ?)";
     private static final String SELECT_ALL = "SELECT c.user_id, c.first_name, c.last_name, u.email, u.password, "
             + "r.name AS role, c.birth_date, c.phone_number, c.trainer_id, t.name AS type, c.additional_info, "
             + "c.path_avatar FROM clients c JOIN types t ON c.type_id = t.id JOIN users u ON c.user_id = u.id "
@@ -144,6 +145,7 @@ public class ClientDaoImpl implements ClientDao {
             statement.setLong(1, client.getId());
             statement.setDate(2, Date.valueOf(client.getBirthDate()));
             statement.setInt(3, getTypeId(client.getType().name()));
+            statement.setString(4, client.getPathAvatar());
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
