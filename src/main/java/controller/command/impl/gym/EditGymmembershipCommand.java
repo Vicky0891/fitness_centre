@@ -21,18 +21,17 @@ public class EditGymmembershipCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) throws Exception {
-        Long gymMembershipId = Long.parseLong(req.getParameter("id"));
-        GymMembershipDto currentGymMembershipDto = gymMembershipService.getById(gymMembershipId);
+        HttpSession session = req.getSession();
+        GymMembershipDto currentGymMembershipDto = (GymMembershipDto) session.getAttribute("gymmembership");
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
         ValidatorManager validator = new ValidatorManager();
-        BigDecimal cost = validator.getCost(req);
+        BigDecimal cost = validator.getCorrectCost(req);
         currentGymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
         currentGymMembershipDto.setTypeOfTraining(typeOfTraining);
         currentGymMembershipDto.setCost(cost);
         GymMembershipDto updated = gymMembershipService.update(currentGymMembershipDto);
         log.info("Gymmembership was update, gymmembership={}", updated);
-        HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("gymmembership", updated);
         req.setAttribute("message", messageManager.getMessage("msg.update.gym"));

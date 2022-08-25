@@ -21,7 +21,7 @@
 </c:if>
 <form method="post" action="controller" enctype="multipart/form-data">
 <input name="command" type="hidden" value="edit_profile"/>
-<input type="hidden" name="page" value="jsp/user/editprofileform.jsp"/>
+<input type="hidden" name="redirect" value="edit_profile_form"/>
 <input name="id" type="hidden" value="${sessionScope.user.id}"/>
 
 <label for="avatar"><fmt:message key="msg.editprofile.photo"/>: </label>

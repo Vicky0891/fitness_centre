@@ -75,8 +75,7 @@ public class CommandFactory {
         commands.put("create_gymmembership_form", new CreateGymmembershipFormCommand());
         commands.put("create_gymmembership",
                 new CreateGymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
-        commands.put("edit_gymmembership_form",
-                new EditGymmembershipFormCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
+        commands.put("edit_gymmembership_form", new EditGymmembershipFormCommand());
         commands.put("edit_gymmembership",
                 new EditGymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
         commands.put("delete_gymmembership",

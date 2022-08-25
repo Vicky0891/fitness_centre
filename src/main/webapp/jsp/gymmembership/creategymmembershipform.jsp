@@ -21,7 +21,7 @@
 </c:if>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="create_gymmembership"/>
-<input type="hidden" name="page" value="jsp/gymmembership/creategymmembershipform.jsp"/>
+<input type="hidden" name="redirect" value="create_gymmembership_form"/>
 
 <br/>
 <label for="numberOfVisits-input"><fmt:message key="msg.gymmembership.numberofvisits"/>: </label>

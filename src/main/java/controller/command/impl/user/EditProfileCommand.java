@@ -43,7 +43,7 @@ public class EditProfileCommand implements Command {
         String lastName = req.getParameter("lastName");
         String birthDate = req.getParameter("birthDate");
         ValidatorManager validator = new ValidatorManager();
-        String phoneNumber = validator.getPhoneNumber(req);
+        String phoneNumber = validator.getCorrectPhoneNumber(req);
         String additionalInfo = req.getParameter("additionalInfo");
         currentClientDto.setFirstName(firstName);
         currentClientDto.setLastName(lastName);

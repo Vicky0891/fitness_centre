@@ -20,19 +20,19 @@
 <h5>${requestScope.message}</h5>
 </c:if>
 <form method="post" action="controller">
-<input name="id" type="hidden" value="${requestScope.gymmembership.id}"/>
+<input name="gymmembershipId" type="hidden" value="${sessionScope.gymmembership.id}"/>
 <input name="command" type="hidden" value="edit_gymmembership"/>
-<input type="hidden" name="page" value="jsp/gymmembership/editgymmembershipform.jsp"/>
+<input type="hidden" name="redirect" value="edit_gymmembership_form"/>
 
 <br/>
 <label for="numberOfVisits-input"><fmt:message key="msg.gymmembership.numberofvisits"/>: </label>
-<input id="numberOfVisits-input" name="numberOfVisits" type="number" min="1" value="${requestScope.gymmembership.numberOfVisits}"/>
+<input id="numberOfVisits-input" name="numberOfVisits" type="number" min="1" value="${sessionScope.gymmembership.numberOfVisits}"/>
 <br/>
 <label for="typeOfTraining-input"><fmt:message key="msg.gymmembership.typeoftraining"/>: </label>
-<input id="typeOfTraining-input" name="typeOfTraining" type="text" value="${requestScope.gymmembership.typeOfTraining}"/>
+<input id="typeOfTraining-input" name="typeOfTraining" type="text" value="${sessionScope.gymmembership.typeOfTraining}"/>
 <br/>
 <label for="cost-input"><fmt:message key="msg.gymmembership.costformat"/> USD: </label>
-<input id="cost-input" name="cost" type="text" pattern="\d+(\.\d{0,})?" value="${requestScope.gymmembership.cost}"/>
+<input id="cost-input" name="cost" type="text" pattern="\d+(\.\d{0,})?" value="${sessionScope.gymmembership.cost}"/>
 <br/>
 
 <input type="submit" value="<fmt:message key="msg.order.save"/>"/>

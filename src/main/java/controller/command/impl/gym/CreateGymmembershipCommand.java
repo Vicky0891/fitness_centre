@@ -24,7 +24,7 @@ public class CreateGymmembershipCommand implements Command {
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
         ValidatorManager validator = new ValidatorManager();
-        BigDecimal cost = validator.getCost(req);
+        BigDecimal cost = validator.getCorrectCost(req);
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         GymMembershipDto gymMembershipDto = new GymMembershipDto();

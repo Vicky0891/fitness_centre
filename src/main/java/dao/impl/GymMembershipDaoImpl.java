@@ -158,6 +158,8 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. Gymmembership id=" + gymMembership.getId()
                     + "wasn't update. Contact your system administrator.");
+        } finally {
+            close(connection);
         }
     }
 

@@ -2,6 +2,7 @@ package controller.command.impl.gym;
 
 import controller.command.Command;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import service.GymMembershipService;
 import service.dto.GymMembershipDto;
 
@@ -17,7 +18,8 @@ public class GymmembershipCommand implements Command {
     public String execute(HttpServletRequest req) throws Exception {
         Long id = Long.parseLong(req.getParameter("id"));
         GymMembershipDto gymMembershipDto = gymMembershipService.getById(id);
-        req.setAttribute("gymmembership", gymMembershipDto);
+        HttpSession session = req.getSession();
+        session.setAttribute("gymmembership", gymMembershipDto);
         return "jsp/gymmembership/gymmembership.jsp";
     }
 

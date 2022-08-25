@@ -18,6 +18,14 @@ public class ExceptionHandler {
     private String page;
     private final static String DEFAULTPAGE = "jsp/error/error.jsp";
 
+    /**
+     * Method get all exceptions and redirect to error page depending on type of
+     * exception
+     * 
+     * @param e   Exception
+     * @param req HttpServletRequest
+     * @return Redirect address
+     */
     public String handleException(Exception e, HttpServletRequest req) {
         if (e instanceof NotFoundException) {
             message = ((NotFoundException) e).errorMessage;
@@ -52,7 +60,6 @@ public class ExceptionHandler {
             errorStatus = 500;
             page = DEFAULTPAGE;
         }
-
         req.setAttribute("message", message);
         req.setAttribute("errorStatus", errorStatus);
         return page;

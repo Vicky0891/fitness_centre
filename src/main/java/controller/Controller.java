@@ -39,16 +39,12 @@ public class Controller extends HttpServlet {
         try {
             Command commandInstance = CommandFactory.getInstance().getCommand(command);
             page = commandInstance.execute(req);
-
-            if (page.startsWith(REDIRECT)) {
-                resp.sendRedirect(req.getContextPath() + "/" + page.substring(REDIRECT.length()));
-                return;
-            }
+            checkRedirect(page, req, resp);
         } catch (Exception e) {
             log.error("Request isn't correct " + e);
             page = exceptionHandler.handleException(e, req);
+            checkRedirect(page, req, resp);
         }
-        req.getRequestDispatcher(page).forward(req, resp);
     }
 
     @Override
@@ -56,4 +52,23 @@ public class Controller extends HttpServlet {
         DataSource.INSTANCE.close();
     }
 
+    /**
+     * Method checks if the page contains a "redirect" and sends according to the
+     * request
+     * 
+     * @param page Address of page for check
+     * @param req  HttpServletRequest
+     * @param resp HttpServletResponse
+     * @throws IOException
+     * @throws ServletException
+     */
+    private void checkRedirect(String page, HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+        if (page.startsWith(REDIRECT)) {
+            resp.sendRedirect(req.getContextPath() + "/" + page.substring(REDIRECT.length()));
+            return;
+        } else {
+            req.getRequestDispatcher(page).forward(req, resp);
+        }
+    }
 }

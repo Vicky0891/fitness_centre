@@ -21,7 +21,7 @@ public class ValidatorManager {
      * @return String with validated phone number
      * @throws ValidationException
      */
-    public String getPhoneNumber(HttpServletRequest req) throws ValidationException {
+    public String getCorrectPhoneNumber(HttpServletRequest req) throws ValidationException {
         String phoneNumber = req.getParameter("phoneNumber");
         Pattern pattern = Pattern.compile("[0-9]{12}");
         Matcher matcher = pattern.matcher(phoneNumber);
@@ -35,10 +35,9 @@ public class ValidatorManager {
             return phoneNumber;
         } else {
             HttpSession session = req.getSession();
-            String page = req.getParameter("page");
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
             log.info("Trying to input incorrect phone number: " + phoneNumber);
-            throw new ValidateException(messageManager.getMessage("msg.incorrect.phone"), page);
+            throw new ValidateException(messageManager.getMessage("msg.incorrect.phone"), getRedirect(req));
         }
     }
 
@@ -50,7 +49,7 @@ public class ValidatorManager {
      * @return Validated cost or exception
      * @throws ValidationException
      */
-    public BigDecimal getCost(HttpServletRequest req) throws ValidationException {
+    public BigDecimal getCorrectCost(HttpServletRequest req) throws ValidationException {
         String cost = req.getParameter("cost");
         Pattern pattern = Pattern.compile("^([0-9]+(\\.[0-9]{0,2})?)$");
         Matcher matcher = pattern.matcher(cost);
@@ -58,11 +57,20 @@ public class ValidatorManager {
             return new BigDecimal(cost);
         } else {
             HttpSession session = req.getSession();
-            String page = req.getParameter("page");
             MessageManager messageManager = (MessageManager) session.getAttribute("manager");
             log.info("Trying to input incorrect cost: " + cost);
-            throw new ValidateException(messageManager.getMessage("msg.incorrect.cost"), page);
+            throw new ValidateException(messageManager.getMessage("msg.incorrect.cost"), getRedirect(req));
         }
     }
 
+    /**
+     * Method to get address of redirect based on request
+     * 
+     * @param req HttpServletRequest
+     * @return Name of redirect
+     */
+    private String getRedirect(HttpServletRequest req) {
+        String redirect = req.getParameter("redirect");
+        return "redirect:controller?command=" + redirect;
+    }
 }
