@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ConnectionPool {
-    private static final int POOL_SIZE = 30;
+    private static final int POOL_SIZE = 2;
     private final BlockingDeque<ProxyConnection> freeConnection;
     private final Queue<ProxyConnection> givenConnection;
 

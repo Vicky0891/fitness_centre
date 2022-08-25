@@ -1,5 +1,6 @@
 package dao.interfaces;
 
+import java.sql.Connection;
 import java.util.List;
 
 import controller.util.exception.impl.DaoException;
@@ -33,5 +34,14 @@ public interface ClientDao extends AbstractDao<Long, Client> {
      * @throws DaoException
      */
     long count() throws DaoException;
+
+    /**
+     * Method find Client in the data source by id
+     * 
+     * @param id Client id to be get
+     * @return Client
+     * @throws DaoException
+     */
+    Client get(Long id, Connection connection) throws DaoException;
 
 }

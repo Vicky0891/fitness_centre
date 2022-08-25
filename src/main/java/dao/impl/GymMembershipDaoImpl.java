@@ -58,6 +58,24 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
+    public GymMembership get(Long id, Connection connection) throws DaoException {
+        log.debug("Accessing to database using \"get\" method, gymMembership id={}", id);
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return processGymMembership(result);
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Failed to get gymmembership id=" + id
+                    + ". Contact your system administrator.");
+        }
+        return null;
+    }
+
+    @Override
     public List<GymMembership> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<GymMembership> gymMemberships = new ArrayList<>();
@@ -109,11 +127,10 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             statement.setString(2, gymMembership.getTypeOfTraining());
             statement.setBigDecimal(3, gymMembership.getCost());
             statement.executeUpdate();
-
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 Long id = result.getLong("id");
-                return get(id);
+                return get(id, connection);
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -135,15 +152,12 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
             statement.setString(2, gymMembership.getTypeOfTraining());
             statement.setBigDecimal(3, gymMembership.getCost());
             statement.setLong(4, gymMembership.getId());
-
             statement.executeUpdate();
-            return get(gymMembership.getId());
+            return get(gymMembership.getId(), connection);
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. Gymmembership id=" + gymMembership.getId()
                     + "wasn't update. Contact your system administrator.");
-        } finally {
-            close(connection);
         }
     }
 

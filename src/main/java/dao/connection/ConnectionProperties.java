@@ -20,15 +20,9 @@ public class ConnectionProperties {
         try (InputStream is = getClass().getResourceAsStream(CONFIG_FILE)) {
             Properties props = new Properties();
             props.load(is);
-//            if (System.getenv("local") != null) {
-                url = props.getProperty("db.local.url");
-                user = props.getProperty("db.local.user");
-                password = props.getProperty("db.local.password");
-//            } else {
-//                url = props.getProperty("db.prod.url");
-//                user = props.getProperty("db.prod.user");
-//                password = props.getProperty("db.prod.password");
-//            }
+            url = props.getProperty("db.local.url");
+            user = props.getProperty("db.local.user");
+            password = props.getProperty("db.local.password");
             driver = props.getProperty("db.driver");
         } catch (Exception e) {
             log.error("Error with connection " + e);

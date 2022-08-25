@@ -16,6 +16,8 @@ public interface OrderInfoDao extends AbstractDao<Long, OrderInfo> {
      * @throws DaoException
      */
     List<OrderInfo> getAllByOrderId(Long id) throws DaoException;
+    
+    List<OrderInfo> getAllByOrderId(Long id, Connection connection) throws DaoException;
 
     /**
      * Method is used to create Object in the data source

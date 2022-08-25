@@ -49,7 +49,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
-                return processOrderInfo(result);
+                return processOrderInfo(result, connection);
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -57,6 +57,23 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
                     + ". Contact your system administrator.");
         } finally {
             close(connection);
+        }
+        return null;
+    }
+
+    public OrderInfo get(Long id, Connection connection) throws DaoException {
+        log.debug("Accessing to database using \"get\" method, order id={}", id);
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return processOrderInfo(result, connection);
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Failed to get orderdetail order id=" + id
+                    + ". Contact your system administrator.");
         }
         return null;
     }
@@ -71,13 +88,31 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                orderInfo.add(processOrderInfo(result));
+                orderInfo.add(processOrderInfo(result, connection));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. Contact your system administrator.");
         } finally {
             close(connection);
+        }
+        return orderInfo;
+    }
+
+    @Override
+    public List<OrderInfo> getAllByOrderId(Long id, Connection connection) throws DaoException {
+        log.debug("Accessing to database using \"getAllByOrderId\" method, order id={}", id);
+        List<OrderInfo> orderInfo = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ORDER_ID);
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                orderInfo.add(processOrderInfo(result, connection));
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. Contact your system administrator.");
         }
         return orderInfo;
     }
@@ -91,7 +126,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
             while (result.next()) {
-                orderInfos.add(processOrderInfo(result));
+                orderInfos.add(processOrderInfo(result, connection));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -112,11 +147,10 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             statement.setInt(3, orderInfo.getGymMembershipQuantity());
             statement.setBigDecimal(4, orderInfo.getGymMembershipPrice());
             statement.executeUpdate();
-
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 Long id = result.getLong("id");
-                return get(id);
+                return get(id, connection);
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -134,7 +168,6 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             statement.setInt(1, orderInfo.getGymMembershipQuantity());
             statement.setBigDecimal(2, orderInfo.getGymMembershipPrice());
             statement.setLong(2, orderInfo.getId());
-
             statement.executeUpdate();
             return get(orderInfo.getId());
         } catch (SQLException e) {
@@ -169,13 +202,13 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
      * @return OrderInfo
      * @throws DaoException
      */
-    private OrderInfo processOrderInfo(ResultSet result) throws DaoException {
+    private OrderInfo processOrderInfo(ResultSet result, Connection connection) throws DaoException {
         try {
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setId(result.getLong("id"));
             orderInfo.setOrderId(result.getLong("order_id"));
             Long gymMembershipId = result.getLong("gymmembership_id");
-            orderInfo.setGymMembership(gymMembershipDao.get(gymMembershipId));
+            orderInfo.setGymMembership(gymMembershipDao.get(gymMembershipId, connection));
             orderInfo.setGymMembershipQuantity(result.getInt("gymmembership_quantity"));
             orderInfo.setGymMembershipPrice(result.getBigDecimal("gymmembership_price"));
             return orderInfo;
@@ -210,7 +243,6 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
             statement.setInt(3, orderInfo.getGymMembershipQuantity());
             statement.setBigDecimal(4, orderInfo.getGymMembershipPrice());
             statement.executeUpdate();
-
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 Long id = result.getLong("id");

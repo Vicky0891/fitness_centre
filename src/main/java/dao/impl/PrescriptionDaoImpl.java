@@ -70,7 +70,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             statement.setString(3, prescription.getTypeOfTraining());
             statement.setString(4, prescription.getEquipment());
             statement.setString(5, prescription.getDiet());
-            statement.setInt(6, getStatusPending());
+            statement.setInt(6, getStatusPending(connection));
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
@@ -97,7 +97,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             statement.setString(1, prescription.getTypeOfTraining());
             statement.setString(2, prescription.getEquipment());
             statement.setString(3, prescription.getDiet());
-            statement.setInt(4, getStatusConfirm());
+            statement.setInt(4, getStatusConfirm(connection));
             statement.setLong(5, prescription.getUserId());
             statement.executeUpdate();
             return get(prescription.getUserId());
@@ -158,9 +158,8 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
      * @return id of status "pending"
      * @throws DaoException
      */
-    private int getStatusPending() throws DaoException {
+    private int getStatusPending(Connection connection) throws DaoException {
         log.debug("Accessing to database using \"getStatusPending\"");
-        Connection connection = dataSource.getConnection();
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_STATUS_PENDING);
@@ -169,8 +168,6 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
-        } finally {
-            close(connection);
         }
         log.error("Id status \"pending\" didn't find");
         throw new DaoException("Something went wrong. Contact your system administrator.");
@@ -182,9 +179,8 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
      * @return id of status "confirm"
      * @throws DaoException
      */
-    private int getStatusConfirm() throws DaoException {
+    private int getStatusConfirm(Connection connection) throws DaoException {
         log.debug("Accessing to database using \"getStatusConfirm\"");
-        Connection connection = dataSource.getConnection();
         try {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_STATUS_CONFIRM);
@@ -193,8 +189,6 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
-        } finally {
-            close(connection);
         }
         log.error("Id status \"confirm\" didn't find");
         throw new DaoException("Something went wrong. Contact your system administrator.");

@@ -60,6 +60,24 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User get(Long id, Connection connection) throws DaoException {
+        log.debug("Accessing to database using \"get\" method, user id={}", id);
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return processUser(result);
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get user id=" + id + ". Contact your system administrator.");
+        }
+        return null;
+    }
+
+    @Override
     public User getByEmail(String email) throws DaoException {
         log.debug("Accessing to database using \"getByEmail\" method, user email={}", email);
         Connection connection = dataSource.getConnection();
@@ -130,13 +148,13 @@ public class UserDaoImpl implements UserDao {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
-            statement.setInt(3, getRoleId(user.getRole().name()));
+            statement.setInt(3, getRoleId(user.getRole().name(), connection));
             statement.executeUpdate();
 
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 Long id = result.getLong("id");
-                return get(id);
+                return get(id, connection);
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -153,11 +171,11 @@ public class UserDaoImpl implements UserDao {
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
-            statement.setInt(1, getRoleId(user.getRole().name()));
+            statement.setInt(1, getRoleId(user.getRole().name(), connection));
             statement.setLong(2, user.getId());
 
             statement.executeUpdate();
-            return get(user.getId());
+            return get(user.getId(), connection);
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. User id=" + user.getId()
@@ -213,9 +231,8 @@ public class UserDaoImpl implements UserDao {
      * @return id of role
      * @throws DaoException
      */
-    private int getRoleId(String name) throws DaoException {
+    private int getRoleId(String name, Connection connection) throws DaoException {
         log.debug("Accessing to database using \"getRoleId\" method, role name={}", name);
-        Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_ROLE_ID);
             statement.setString(1, name);
@@ -225,8 +242,6 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
-        } finally {
-            close(connection);
         }
         log.error("Role of user with name={} didn't find", name);
         throw new DaoException("Something went wrong. Contact your system administrator.");

@@ -1,5 +1,6 @@
 package dao.interfaces;
 
+import java.sql.Connection;
 import java.util.List;
 
 import controller.util.exception.impl.DaoException;
@@ -60,5 +61,14 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * @throws DaoException
      */
     long count() throws DaoException;
+
+    /**
+     * Method find Order in the data source by id
+     * 
+     * @param id Order id to be get
+     * @return Order
+     * @throws DaoException
+     */
+    Order get(Long id, Connection connection) throws DaoException;
 
 }

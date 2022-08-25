@@ -74,6 +74,24 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
+    public Client get(Long id, Connection connection) throws DaoException {
+        log.debug("Accessing to database using \"get\" method, client id={}", id);
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return processClient(result);
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get client id=" + id + ". Contact your system administrator.");
+        }
+        return null;
+    }
+
+    @Override
     public List<Client> getAll() throws DaoException {
         log.debug("Accessing to database using \"getAll\" method");
         List<Client> clients = new ArrayList<>();
@@ -144,14 +162,13 @@ public class ClientDaoImpl implements ClientDao {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, client.getId());
             statement.setDate(2, Date.valueOf(client.getBirthDate()));
-            statement.setInt(3, getTypeId(client.getType().name()));
+            statement.setInt(3, getTypeId(client.getType().name(), connection));
             statement.setString(4, client.getPathAvatar());
             statement.executeUpdate();
-
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 Long id = result.getLong("user_id");
-                return get(id);
+                return get(id, connection);
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -173,13 +190,12 @@ public class ClientDaoImpl implements ClientDao {
             statement.setDate(3, Date.valueOf(client.getBirthDate()));
             statement.setString(4, client.getPhoneNumber());
             statement.setLong(5, client.getTrainerId());
-            statement.setInt(6, getTypeId(client.getType().name()));
+            statement.setInt(6, getTypeId(client.getType().name(), connection));
             statement.setString(7, client.getAdditionalInfo());
             statement.setString(8, client.getPathAvatar());
             statement.setLong(9, client.getId());
             statement.executeUpdate();
-
-            return get(client.getId());
+            return get(client.getId(), connection);
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. Client with id=" + client.getId()
@@ -243,9 +259,8 @@ public class ClientDaoImpl implements ClientDao {
      * @return id of type
      * @throws DaoException
      */
-    private int getTypeId(String name) throws DaoException {
+    private int getTypeId(String name, Connection connection) throws DaoException {
         log.debug("Accessing to database using \"getTypeId\" method, name={}", name);
-        Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_TYPE_ID);
             statement.setString(1, name);
@@ -256,8 +271,6 @@ public class ClientDaoImpl implements ClientDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
-        } finally {
-            close(connection);
         }
         log.error("Type of client with name={} didn't find", name);
         throw new DaoException("Something went wrong. Contact your system administrator.");

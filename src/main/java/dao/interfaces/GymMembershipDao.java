@@ -1,5 +1,6 @@
 package dao.interfaces;
 
+import java.sql.Connection;
 import java.util.List;
 
 import controller.util.exception.impl.DaoException;
@@ -24,5 +25,7 @@ public interface GymMembershipDao extends AbstractDao<Long, GymMembership> {
      * @throws DaoException
      */
     long count() throws DaoException;
+
+    GymMembership get(Long gymMembershipId, Connection connection) throws DaoException;
 
 }

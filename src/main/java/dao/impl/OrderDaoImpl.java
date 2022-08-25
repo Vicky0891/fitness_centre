@@ -63,7 +63,7 @@ public class OrderDaoImpl implements OrderDao {
             ResultSet result = statement.executeQuery();
             if (result.next()) {
 
-                return processOrder(result);
+                return processOrder(result, connection);
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -71,6 +71,24 @@ public class OrderDaoImpl implements OrderDao {
                     "Something went wrong. Failed to get order id=" + id + ". Contact your system administrator.");
         } finally {
             close(connection);
+        }
+        return null;
+    }
+
+    @Override
+    public Order get(Long id, Connection connection) throws DaoException {
+        log.debug("Accessing to database using \"get\" method, order id={}", id);
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return processOrder(result, connection);
+            }
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException(
+                    "Something went wrong. Failed to get order id=" + id + ". Contact your system administrator.");
         }
         return null;
     }
@@ -84,13 +102,11 @@ public class OrderDaoImpl implements OrderDao {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(SELECT_ALL);
             while (result.next()) {
-                orders.add(processOrder(result));
+                orders.add(processOrder(result, connection));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. Contact your system administrator.");
-        } finally {
-            close(connection);
         }
         return orders;
     }
@@ -106,7 +122,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(2, offset);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                orders.add(processOrder(result));
+                orders.add(processOrder(result, connection));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -127,9 +143,8 @@ public class OrderDaoImpl implements OrderDao {
             statement.setDate(1, Date.valueOf(order.getDateOfOrder()));
             statement.setLong(2, order.getUserId());
             statement.setBigDecimal(3, order.getTotalCost());
-            statement.setInt(4, getStatusId(order.getStatus().name()));
+            statement.setInt(4, getStatusId(order.getStatus().name(), connection));
             statement.executeUpdate();
-
             ResultSet result = statement.getGeneratedKeys();
 
             if (result.next()) {
@@ -139,7 +154,7 @@ public class OrderDaoImpl implements OrderDao {
                     orderInfoDao.create(detail, connection);
                 }
                 connection.commit();
-                return get(id);
+                return get(id, connection);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -157,11 +172,10 @@ public class OrderDaoImpl implements OrderDao {
         Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
-            statement.setInt(1, getStatusId(order.getStatus().name()));
+            statement.setInt(1, getStatusId(order.getStatus().name(), connection));
             statement.setLong(2, order.getId());
-
             statement.executeUpdate();
-            return get(order.getId());
+            return get(order.getId(), connection);
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. Failed to update order id=" + order.getId()
@@ -179,9 +193,8 @@ public class OrderDaoImpl implements OrderDao {
             PreparedStatement statement = connection.prepareStatement(UPDATE_FEEDBACK);
             statement.setString(1, order.getFeedback());
             statement.setLong(2, order.getId());
-
             statement.executeUpdate();
-            return get(order.getId());
+            return get(order.getId(), connection);
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
             throw new DaoException("Something went wrong. Failed to update feedback order id=" + order.getId()
@@ -200,9 +213,8 @@ public class OrderDaoImpl implements OrderDao {
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BY_CLIENT);
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-
             while (result.next()) {
-                orders.add(processOrder(result));
+                orders.add(processOrder(result, connection));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -224,7 +236,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setString(1, statusName);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                orders.add(processOrder(result));
+                orders.add(processOrder(result, connection));
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
@@ -259,7 +271,7 @@ public class OrderDaoImpl implements OrderDao {
      * @return Order
      * @throws DaoException
      */
-    private Order processOrder(ResultSet result) throws DaoException {
+    private Order processOrder(ResultSet result, Connection connection) throws DaoException {
         try {
             Order order = new Order();
             order.setId(result.getLong("id"));
@@ -268,7 +280,7 @@ public class OrderDaoImpl implements OrderDao {
             order.setTotalCost(result.getBigDecimal("total_cost"));
             order.setStatus(Status.valueOf(result.getString("status")));
             order.setFeedback(result.getString("feedback"));
-            List<OrderInfo> details = orderInfoDao.getAllByOrderId(result.getLong("id"));
+            List<OrderInfo> details = orderInfoDao.getAllByOrderId(result.getLong("id"), connection);
             order.setDetails(details);
             return order;
         } catch (SQLException e) {
@@ -284,9 +296,8 @@ public class OrderDaoImpl implements OrderDao {
      * @return id of status
      * @throws DaoException
      */
-    public int getStatusId(String name) throws DaoException {
+    private int getStatusId(String name, Connection connection) throws DaoException {
         log.debug("Accessing to database using \"getStatusId\" method, name={}", name);
-        Connection connection = dataSource.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_STATUS_ID);
             statement.setString(1, name);
@@ -296,8 +307,6 @@ public class OrderDaoImpl implements OrderDao {
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e);
-        } finally {
-            close(connection);
         }
         log.error("Status id for order with name={} didn't find", name);
         throw new DaoException("Something went wrong. Contact your system administrator.");
