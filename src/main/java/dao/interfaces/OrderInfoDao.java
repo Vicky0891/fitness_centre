@@ -17,13 +17,21 @@ public interface OrderInfoDao extends AbstractDao<Long, OrderInfo> {
      */
     List<OrderInfo> getAllByOrderId(Long id) throws DaoException;
     
+    /**
+     * Method finds all Entity objects by order in the data source
+     * 
+     * @param id Order id to get OrderInfo objects
+     * @param connection Connection to be used
+     * @return List of Objects
+     * @throws DaoException
+     */
     List<OrderInfo> getAllByOrderId(Long id, Connection connection) throws DaoException;
 
     /**
      * Method is used to create Object in the data source
      * 
      * @param orderInfo  entity to be saved
-     * @param connection connection to be used
+     * @param connection Connection to be used
      * @return created Object
      * @throws DaoException
      */

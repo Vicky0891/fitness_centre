@@ -26,6 +26,14 @@ public interface GymMembershipDao extends AbstractDao<Long, GymMembership> {
      */
     long count() throws DaoException;
 
-    GymMembership get(Long gymMembershipId, Connection connection) throws DaoException;
+    /**
+     * Method find Gymmembership in the data source by id
+     * 
+     * @param id Gymmembership id to be get
+     * @param connection Connection to be used
+     * @return Gymmembership
+     * @throws DaoException
+     */
+    GymMembership get(Long id, Connection connection) throws DaoException;
 
 }

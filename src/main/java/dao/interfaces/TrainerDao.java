@@ -22,6 +22,7 @@ public interface TrainerDao extends AbstractDao<Long, Trainer> {
      * Method get list of clients for particular trainer
      * 
      * @param trainerId id of trainer to get clients
+     * @param connection Connection to be used
      * @return list of Clients
      * @throws DaoException
      */
@@ -31,6 +32,7 @@ public interface TrainerDao extends AbstractDao<Long, Trainer> {
      * Method find Trainer in the data source by id
      * 
      * @param id Trainer id to be get
+     * @param connection Connection to be used
      * @return Trainer
      * @throws DaoException
      */

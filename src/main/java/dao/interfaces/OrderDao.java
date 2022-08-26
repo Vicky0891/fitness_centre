@@ -66,6 +66,7 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * Method find Order in the data source by id
      * 
      * @param id Order id to be get
+     * @param connection Connection to be used
      * @return Order
      * @throws DaoException
      */

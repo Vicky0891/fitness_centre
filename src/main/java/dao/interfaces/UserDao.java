@@ -39,6 +39,7 @@ public interface UserDao extends AbstractDao<Long, User> {
      * Method find Entity object in the data source by id
      * 
      * @param id Object id to be get
+     * @param connection Connection to be used
      * @return Object
      * @throws DaoException
      */

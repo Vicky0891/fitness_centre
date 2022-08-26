@@ -39,6 +39,7 @@ public interface ClientDao extends AbstractDao<Long, Client> {
      * Method find Client in the data source by id
      * 
      * @param id Client id to be get
+     * @param connection Connection to be used
      * @return Client
      * @throws DaoException
      */
