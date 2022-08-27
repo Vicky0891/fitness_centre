@@ -20,6 +20,7 @@ public class UserDaoImpl implements UserDao {
 
     private static final String DELETE = "UPDATE users u SET deleted = true WHERE u.id = ?";
     private static final String UPDATE = "UPDATE users SET role_id = ? WHERE id = ? AND deleted = false";
+    private static final String UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE id = ? AND deleted = false";
     private static final String INSERT = "INSERT INTO users (email, password, role_id) VALUES (?, ?, ?)";
     private static final String SELECT_ALL = "SELECT u.id, u.email, u.password, r.name AS role FROM users u "
             + "JOIN roles r ON u.role_id = r.id WHERE u.deleted = false ORDER BY u.id";
@@ -172,6 +173,26 @@ public class UserDaoImpl implements UserDao {
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
             statement.setInt(1, getRoleId(user.getRole().name(), connection));
+            statement.setLong(2, user.getId());
+
+            statement.executeUpdate();
+            return get(user.getId(), connection);
+        } catch (SQLException e) {
+            log.error("SQL Exception: " + e);
+            throw new DaoException("Something went wrong. User id=" + user.getId()
+                    + " wasn't update. Contact your system administrator.");
+        } finally {
+            close(connection);
+        }
+    }
+    
+    @Override
+    public User updatePassword(User user) throws DaoException {
+        log.debug("Accessing to database using \"update password\" method, user={}", user);
+        Connection connection = dataSource.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(UPDATE_PASSWORD);
+            statement.setString(1, user.getPassword());
             statement.setLong(2, user.getId());
 
             statement.executeUpdate();

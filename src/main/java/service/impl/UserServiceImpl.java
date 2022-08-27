@@ -8,6 +8,7 @@ import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.LoginException;
 import controller.util.exception.impl.NotFoundException;
 import controller.util.exception.impl.RegistrationException;
+import controller.util.exception.impl.SamePasswordException;
 import dao.entity.User;
 import dao.entity.User.Role;
 import dao.interfaces.UserDao;
@@ -59,8 +60,20 @@ public class UserServiceImpl implements UserService {
             log.error("Wrong password for user, user email={}", email);
             throw new LoginException("Authorisation Error. Incorrect email or password.");
         }
-        UserDto userDto = toDto(user);
-        return userDto;
+        return toDto(user);
+    }
+    
+    @Override
+    public UserDto changePassword(UserDto userDto) throws Exception {
+        User user = userDao.get(userDto.getId());
+        String existpassword = user.getPassword();
+        String hashedNewPassword = digestUtil.hash(userDto.getPassword());
+        if(hashedNewPassword.equals(existpassword)) {
+            throw new SamePasswordException("New password must be different from the previous one");
+        }
+        user.setPassword(hashedNewPassword);
+        User updated = userDao.updatePassword(user);
+        return toDto(updated);
     }
 
     @Override

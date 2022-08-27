@@ -21,7 +21,11 @@
 
 <h3><fmt:message key="msg.user.account"/>: <c:out value="${user.id}"/></h3>
 <h3><fmt:message key="msg.login.email"/>: <c:out value="${user.email}"/></h3>
-
+<form method="post" action="controller">
+<input type="hidden" name="command" value="change_password_form"/>
+<input type="hidden" name="id" value="${user.id}"/>
+<input type="submit" value="<fmt:message key="msg.user.changepassword"/>"/>
+</form>
 
 <c:if test="${sessionScope.user['class'].simpleName == 'ClientDto'}">
 <img src="images/usersavatars/${user.pathAvatar}" alt="photo" class="clientphoto">

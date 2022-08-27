@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import controller.command.impl.ChangeLocaleCommand;
+import controller.command.impl.ChangePasswordCommand;
+import controller.command.impl.ChangePasswordFormCommand;
 import controller.command.impl.ContactsCommand;
 import controller.command.impl.ErrorCommand;
 import controller.command.impl.LoginCommand;
@@ -107,6 +109,9 @@ public class CommandFactory {
                 new EditClientFormCommand(ServiceFactory.INSTANCE.getService(ClientService.class),
                         ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("edit_client", new EditClientCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
+        commands.put("change_password_form", new ChangePasswordFormCommand());
+        commands.put("change_password",
+                new ChangePasswordCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
 
         commands.put("login_form", new LoginFormCommand());
         commands.put("login",

@@ -6,6 +6,7 @@ import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.LoginException;
 import controller.util.exception.impl.NotFoundException;
 import controller.util.exception.impl.RegistrationException;
+import controller.util.exception.impl.SamePasswordException;
 import controller.util.exception.impl.ValidateException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
@@ -35,6 +36,10 @@ public class ExceptionHandler {
             message = ((BadRequestException) e).errorMessage;
             errorStatus = 400;
             page = "jsp/error/error400.jsp";
+        } else if (e instanceof SamePasswordException) {
+            message = ((SamePasswordException) e).errorMessage;
+            errorStatus = 400;
+            page = "jsp/changepasswordform.jsp";
         } else if (e instanceof RegistrationException) {
             message = ((RegistrationException) e).errorMessage;
             errorStatus = 400;

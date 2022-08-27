@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.language}">
 <head>
-<title><fmt:message key="msg.login.title"/></title>
+<title><fmt:message key="msg.user.changepassword"/></title>
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -18,20 +18,19 @@
 <h3>${requestScope.message}</h3>
 </c:if>
 
-<h4><fmt:message key="msg.login.pleaselogin"/></h4>
+<h4><fmt:message key="msg.user.mainstring"/></h4>
 <form method="post" action="controller">
-<input name="command" type="hidden" value="login"/>
-<label for="email-input"><fmt:message key="msg.login.email"/>: </label>
-<input id="email-input" name="email" type="email"/>
+<input name="command" type="hidden" value="change_password"/>
+<input type="hidden" name="redirect" value="change_password_form"/>
+<label for="newpassword-input"><fmt:message key="msg.user.newpassword"/>: </label>
+<input id="newpassword-input" name="newpassword" type="password" min="4"/>
 <br/>
-<label for="password-input"><fmt:message key="msg.login.password"/>: </label>
-<input id="password-input" name="password" type="password" min="4"/>
+<label for="repeatpassword-input"><fmt:message key="msg.user.repeatpassword"/>: </label>
+<input id="repeatpassword-input" name="repeatpassword" type="password" min="4"/>
 <br/>
 <br/>
-<input type="submit" value="<fmt:message key="msg.login.login"/>"/>
+<input type="submit" value="<fmt:message key="msg.user.changepassword"/>"/>
 </form>
-<h4><fmt:message key="msg.login.newuser"/></h4>
-<h3><a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a></h3>
 <footer>
 <jsp:include page="footer.jsp"/>
 </footer>

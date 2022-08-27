@@ -64,6 +64,27 @@ public class ValidatorManager {
     }
 
     /**
+     * Method gets two string with new password and a repeated new password, compare
+     * them and return new password or exception
+     * 
+     * @param req Request with input cost
+     * @return Validated cost or exception
+     * @throws ValidationException
+     */
+    public String getNewPassword(HttpServletRequest req) throws ValidationException {
+        String newPassword = req.getParameter("newpassword");
+        String repeatPassword = req.getParameter("repeatpassword");
+        if (newPassword.equals(repeatPassword)) {
+            return newPassword;
+        } else {
+            HttpSession session = req.getSession();
+            MessageManager messageManager = (MessageManager) session.getAttribute("manager");
+            log.debug("Entered passwords do not match: " + newPassword + " and " + repeatPassword);
+            throw new ValidateException(messageManager.getMessage("msg.changepassword.incorrect"), getRedirect(req));
+        }
+    }
+
+    /**
      * Method to get address of redirect based on request
      * 
      * @param req HttpServletRequest

@@ -34,15 +34,24 @@ public interface UserDao extends AbstractDao<Long, User> {
      * @throws DaoException
      */
     long count() throws DaoException;
-    
+
     /**
      * Method find Entity object in the data source by id
      * 
-     * @param id Object id to be get
+     * @param id         Object id to be get
      * @param connection Connection to be used
      * @return Object
      * @throws DaoException
      */
     User get(Long id, Connection connection) throws DaoException;
+
+    /**
+     * Method is used to update user password in the data source
+     * 
+     * @param entity to be updated
+     * @return updated Object
+     * @throws DaoException
+     */
+    User updatePassword(User user) throws DaoException;
 
 }

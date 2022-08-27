@@ -16,16 +16,18 @@ public interface UserService extends AbstractService<Long, UserDto> {
      * @throws DaoException
      */
     UserDto getUserDtoByEmail(String email) throws Exception;
-    
+
     /**
-     * Method check user by email and password and login it if user exists and parameters correct
-     * @param email Email of user
+     * Method check user by email and password and login it if user exists and
+     * parameters correct
+     * 
+     * @param email    Email of user
      * @param password Password of user
      * @return UserDto
      * @throws Exception
      */
     UserDto login(String email, String password) throws Exception;
-    
+
     /**
      * Method get list of UserDto for pagination
      * 
@@ -34,7 +36,7 @@ public interface UserService extends AbstractService<Long, UserDto> {
      * @throws DaoException
      */
     List<UserDto> getAll(Paging paging) throws DaoException;
-    
+
     /**
      * Method to get name of type of user (role) by user id
      * 
@@ -43,7 +45,7 @@ public interface UserService extends AbstractService<Long, UserDto> {
      * @throws DaoException
      */
     String getTypeOfUser(Long id) throws DaoException;
-    
+
     /**
      * Method get quantity of users from Dao
      * 
@@ -51,5 +53,14 @@ public interface UserService extends AbstractService<Long, UserDto> {
      * @throws DaoException
      */
     long count() throws DaoException;
-    
+
+    /**
+     * Method to change password for user
+     * 
+     * @param userDto User who changes password
+     * @return User with updated password
+     * @throws Exception
+     */
+    UserDto changePassword(UserDto userDto) throws Exception;
+
 }
