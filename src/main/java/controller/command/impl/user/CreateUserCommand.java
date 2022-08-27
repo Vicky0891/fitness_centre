@@ -27,8 +27,12 @@ public class CreateUserCommand implements Command {
         userDto.setRoleDto(RoleDto.CLIENT);
         UserDto created = userService.create(userDto);
         log.info("User was create, user={}", created);
-        req.setAttribute("user", created);
+        
+        userService.login(email, password);
         HttpSession session = req.getSession();
+        session.setAttribute("user", created);
+        
+//        req.setAttribute("user", created);
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("message", messageManager.getMessage("msg.create.user"));
         return "jsp/user/user.jsp";

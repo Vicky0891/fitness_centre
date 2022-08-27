@@ -30,7 +30,7 @@
 <input id="email-input" name="email" type="email"/>
 <br/>
 <label for="password-input"><fmt:message key="msg.login.password"/>: </label>
-<input id="password-input" name="password" type="password" minlength="4"/>
+<input id="password-input" name="password" type="password" minlength="6"/>
 <br/>
 
 

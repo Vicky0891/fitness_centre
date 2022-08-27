@@ -23,10 +23,10 @@
 <input name="command" type="hidden" value="change_password"/>
 <input type="hidden" name="redirect" value="change_password_form"/>
 <label for="newpassword-input"><fmt:message key="msg.user.newpassword"/>: </label>
-<input id="newpassword-input" name="newpassword" type="password" min="4"/>
+<input id="newpassword-input" name="newpassword" type="password" minlength="6"/>
 <br/>
 <label for="repeatpassword-input"><fmt:message key="msg.user.repeatpassword"/>: </label>
-<input id="repeatpassword-input" name="repeatpassword" type="password" min="4"/>
+<input id="repeatpassword-input" name="repeatpassword" type="password" minlength="6"/>
 <br/>
 <br/>
 <input type="submit" value="<fmt:message key="msg.user.changepassword"/>"/>
