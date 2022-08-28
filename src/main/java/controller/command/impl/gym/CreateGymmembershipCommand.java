@@ -14,16 +14,17 @@ import service.dto.GymMembershipDto;
 @Log4j2
 public class CreateGymmembershipCommand implements Command {
     private final GymMembershipService gymMembershipService;
+    private final ValidatorManager validator;
 
-    public CreateGymmembershipCommand(GymMembershipService gymMembershipService) {
+    public CreateGymmembershipCommand(GymMembershipService gymMembershipService, ValidatorManager validator) {
         this.gymMembershipService = gymMembershipService;
+        this.validator = validator;
     }
 
     @Override
     public String execute(HttpServletRequest req) throws Exception {
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
-        ValidatorManager validator = new ValidatorManager();
         BigDecimal cost = validator.getCorrectCost(req);
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");

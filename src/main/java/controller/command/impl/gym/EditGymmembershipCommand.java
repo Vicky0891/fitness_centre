@@ -14,9 +14,11 @@ import service.dto.GymMembershipDto;
 @Log4j2
 public class EditGymmembershipCommand implements Command {
     private final GymMembershipService gymMembershipService;
+    private final ValidatorManager validator;
 
-    public EditGymmembershipCommand(GymMembershipService gymMembershipService) {
+    public EditGymmembershipCommand(GymMembershipService gymMembershipService, ValidatorManager validator) {
         this.gymMembershipService = gymMembershipService;
+        this.validator = validator;
     }
 
     @Override
@@ -25,7 +27,6 @@ public class EditGymmembershipCommand implements Command {
         GymMembershipDto currentGymMembershipDto = (GymMembershipDto) session.getAttribute("gymmembership");
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
-        ValidatorManager validator = new ValidatorManager();
         BigDecimal cost = validator.getCorrectCost(req);
         currentGymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
         currentGymMembershipDto.setTypeOfTraining(typeOfTraining);

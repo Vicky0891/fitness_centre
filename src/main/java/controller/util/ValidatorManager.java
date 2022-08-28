@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ValidatorManager {
+    public static final ValidatorManager INSTANCE = new ValidatorManager();
 
     /**
      * Method get input phone number, validate it to pattern and return it or make

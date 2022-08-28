@@ -18,10 +18,12 @@ import service.dto.ClientDto;
 @Log4j2
 public class EditProfileCommand implements Command {
     private final ClientService clientService;
+    private final ValidatorManager validator;
     public static final String CONFIG_FILE = "/application.properties";
 
-    public EditProfileCommand(ClientService clientService) {
+    public EditProfileCommand(ClientService clientService, ValidatorManager validator) {
         this.clientService = clientService;
+        this.validator = validator;
     }
 
     @Override
@@ -42,7 +44,6 @@ public class EditProfileCommand implements Command {
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String birthDate = req.getParameter("birthDate");
-        ValidatorManager validator = new ValidatorManager();
         String phoneNumber = validator.getCorrectPhoneNumber(req);
         String additionalInfo = req.getParameter("additionalInfo");
         currentClientDto.setFirstName(firstName);

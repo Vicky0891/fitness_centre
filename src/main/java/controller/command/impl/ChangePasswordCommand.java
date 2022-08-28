@@ -12,16 +12,17 @@ import service.dto.UserDto;
 @Log4j2
 public class ChangePasswordCommand implements Command {
     private final UserService userService;
+    private final ValidatorManager validator;
 
-    public ChangePasswordCommand(UserService userService) {
+    public ChangePasswordCommand(UserService userService, ValidatorManager validator) {
         this.userService = userService;
+        this.validator = validator;
     }
 
     @Override
     public String execute(HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
         UserDto userDto = (UserDto) session.getAttribute("user");
-        ValidatorManager validator = new ValidatorManager();
         String newpassword = validator.getNewPassword(req);
         userDto.setPassword(newpassword);
         UserDto updated = userService.changePassword(userDto);

@@ -55,6 +55,7 @@ import controller.command.impl.user.AllClientsByTypeCommand;
 import controller.command.impl.user.AllClientsCommand;
 import controller.command.impl.user.AllUsersCommand;
 import controller.util.PagingUtil;
+import controller.util.ValidatorManager;
 import service.UserService;
 import service.ClientService;
 import service.GymMembershipService;
@@ -75,11 +76,11 @@ public class CommandFactory {
         commands.put("gymmembership",
                 new GymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
         commands.put("create_gymmembership_form", new CreateGymmembershipFormCommand());
-        commands.put("create_gymmembership",
-                new CreateGymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
+        commands.put("create_gymmembership", new CreateGymmembershipCommand(
+                ServiceFactory.INSTANCE.getService(GymMembershipService.class), ValidatorManager.INSTANCE));
         commands.put("edit_gymmembership_form", new EditGymmembershipFormCommand());
-        commands.put("edit_gymmembership",
-                new EditGymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
+        commands.put("edit_gymmembership", new EditGymmembershipCommand(
+                ServiceFactory.INSTANCE.getService(GymMembershipService.class), ValidatorManager.INSTANCE));
         commands.put("delete_gymmembership",
                 new DeleteGymmembershipCommand(ServiceFactory.INSTANCE.getService(GymMembershipService.class)));
 
@@ -101,7 +102,8 @@ public class CommandFactory {
         commands.put("edit_user", new EditUserCommand(ServiceFactory.INSTANCE.getService(UserService.class),
                 (ServiceFactory.INSTANCE.getService(TrainerService.class))));
         commands.put("edit_profile_form", new EditProfileFormCommand());
-        commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
+        commands.put("edit_profile", new EditProfileCommand(ServiceFactory.INSTANCE.getService(ClientService.class),
+                ValidatorManager.INSTANCE));
         commands.put("edit_cabinet_form",
                 new EditCabinetFormCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("edit_cabinet", new EditCabinetCommand(ServiceFactory.INSTANCE.getService(TrainerService.class)));
@@ -110,8 +112,8 @@ public class CommandFactory {
                         ServiceFactory.INSTANCE.getService(TrainerService.class)));
         commands.put("edit_client", new EditClientCommand(ServiceFactory.INSTANCE.getService(ClientService.class)));
         commands.put("change_password_form", new ChangePasswordFormCommand());
-        commands.put("change_password",
-                new ChangePasswordCommand(ServiceFactory.INSTANCE.getService(UserService.class)));
+        commands.put("change_password", new ChangePasswordCommand(ServiceFactory.INSTANCE.getService(UserService.class),
+                ValidatorManager.INSTANCE));
 
         commands.put("login_form", new LoginFormCommand());
         commands.put("login",
