@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="navbar.jsp"/>
 </header>
@@ -20,8 +22,10 @@
 <h3><fmt:message key="msg.contacts.email"/></h3>
 <h3><fmt:message key="msg.contacts.address"/></h3>
 <img src="images/map.jpg" alt="map" class="mapimg"\>
+</div>
 <footer>
 <jsp:include page="footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

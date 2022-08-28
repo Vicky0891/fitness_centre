@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="../navbar.jsp"/>
 </header>
@@ -74,9 +76,11 @@
 <tr>
 <td align="right" colspan="6"><a href="controller?command=cart"><fmt:message key="msg.gymmembership.gotocart"/></a></td>
 </tr>
-</table> 
+</table>
+</div> 
 <footer>
 <jsp:include page="../footer.jsp"/>
-</footer>          
+</footer> 
+</div>         
 </body>
 </html>

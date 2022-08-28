@@ -12,6 +12,8 @@
 <link href="css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="jsp/navbar.jsp"/>
 </header>
@@ -25,8 +27,10 @@
 </c:if>
 <img src="images/fitness_centre.jpg" width="648" height="432" alt="image" class="rightimg"/>
 <fmt:message key="msg.main.maintext"/>
+</div>
 <footer>
 <jsp:include page="jsp/footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

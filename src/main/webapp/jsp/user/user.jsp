@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="../navbar.jsp"/>
 </header>
@@ -48,8 +50,6 @@
 <h3><a href="controller?command=prescription&id=${user.id}"><fmt:message key="msg.user.persprescription"/></a></h3>
 </c:if>
 
-
-
 <c:if test="${sessionScope.user['class'].simpleName == 'TrainerDto'}">
 <img src="images/trainersavatars/${user.pathAvatar}" alt="photo" class="trainerphoto">
 <br/>
@@ -68,8 +68,10 @@
 <br/>
 <h3><a href="controller?command=clients"><fmt:message key="msg.user.myclients"/></a></h3>
 </c:if>
+</div>
 <footer>
 <jsp:include page="../footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

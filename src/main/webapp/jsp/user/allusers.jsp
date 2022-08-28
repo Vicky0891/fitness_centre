@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="../navbar.jsp"/>
 </header>
@@ -50,8 +52,10 @@
 </c:forEach>
 </c:if>
 </table> 
+</div>
 <footer>
 <jsp:include page="../footer.jsp"/>
-</footer>          
+</footer> 
+</div>         
 </body>
 </html>

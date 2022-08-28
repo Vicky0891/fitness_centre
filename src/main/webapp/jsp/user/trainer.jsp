@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="../navbar.jsp"/>
 </header>
@@ -26,8 +28,10 @@
 <c:if test="${trainer.id == null}">
 <h1 class="error"><fmt:message key="msg.user.noexist"/></h1>
 </c:if>
+</div>
 <footer>
 <jsp:include page="../footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

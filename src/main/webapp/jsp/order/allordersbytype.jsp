@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="../navbar.jsp"/>
 </header>
@@ -47,8 +49,10 @@
 
 </table>
 </c:if>
+</div>
 <footer>
 <jsp:include page="../footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

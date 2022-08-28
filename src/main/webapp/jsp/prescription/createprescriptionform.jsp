@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="../navbar.jsp"/>
 </header>
@@ -33,8 +35,10 @@
 
 <input type="submit" value="<fmt:message key="msg.order.save"/>"/>
 </form>
+</div>
 <footer>
 <jsp:include page="../footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <header>
 <jsp:include page="../navbar.jsp"/>
 </header>
@@ -32,12 +34,12 @@
 <label for="password-input"><fmt:message key="msg.login.password"/>: </label>
 <input id="password-input" name="password" type="password" minlength="6"/>
 <br/>
-
-
 <input type="submit" value="<fmt:message key="msg.createuser.register"/>"/>
 </form>
+</div>
 <footer>
 <jsp:include page="../footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

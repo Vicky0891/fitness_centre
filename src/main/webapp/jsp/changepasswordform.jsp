@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="msg.login.title"/></h1>
 <c:if test="${requestScope.message != null}">
@@ -31,8 +33,10 @@
 <br/>
 <input type="submit" value="<fmt:message key="msg.user.changepassword"/>"/>
 </form>
+</div>
 <footer>
 <jsp:include page="footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>

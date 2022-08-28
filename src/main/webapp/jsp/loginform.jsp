@@ -12,6 +12,8 @@
 <link href="./css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<div class="wrapper">
+<div class="content">
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="msg.login.title"/></h1>
 <c:if test="${requestScope.message != null}">
@@ -32,8 +34,10 @@
 </form>
 <h4><fmt:message key="msg.login.newuser"/></h4>
 <h3><a href="controller?command=create_user_form"><fmt:message key="msg.login.register"/></a></h3>
+</div>
 <footer>
 <jsp:include page="footer.jsp"/>
 </footer>
+</div>
 </body>
 </html>
