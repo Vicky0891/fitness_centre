@@ -11,6 +11,7 @@ import controller.command.impl.ErrorCommand;
 import controller.command.impl.LoginCommand;
 import controller.command.impl.LoginFormCommand;
 import controller.command.impl.LogoutCommand;
+import controller.command.impl.MailToCommand;
 import controller.command.impl.prescription.PrescriptionCommand;
 import controller.command.impl.gym.CreateGymmembershipCommand;
 import controller.command.impl.gym.CreateGymmembershipFormCommand;
@@ -153,6 +154,7 @@ public class CommandFactory {
         commands.put("error", new ErrorCommand());
         commands.put("change_locale", new ChangeLocaleCommand());
         commands.put("contacts", new ContactsCommand());
+        commands.put("mailto", new MailToCommand());
 
     }
 

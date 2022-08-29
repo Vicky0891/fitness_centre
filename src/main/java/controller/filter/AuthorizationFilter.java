@@ -44,7 +44,7 @@ public class AuthorizationFilter extends HttpFilter {
         return switch (command) {
         case "gymmemberships", "gymmembership", "trainers", "trainer", "create_user_form", "create_user", "add_to_cart",
                 "remove_from_cart", "cart", "login", "login_form", "create_order", "remove_order", "change_locale",
-                "contacts" ->
+                "contacts", "mailto" ->
             false;
         default -> true;
         };
