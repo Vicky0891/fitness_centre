@@ -14,7 +14,9 @@
 <body>
 <div class="wrapper">
 <div class="content">
+<header>
 <jsp:include page="navbar.jsp"/>
+</header>
 <h1><fmt:message key="msg.login.title"/></h1>
 <c:if test="${requestScope.message != null}">
 <h3>${requestScope.message}</h3>

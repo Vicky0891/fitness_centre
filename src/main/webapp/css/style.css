@@ -21,13 +21,14 @@ td {
 html, body {
 	height:100%;
 	background: #e1ede3;
+	margin-top: 30px;
 }
 
 .wrapper {
 	display: flex;
 	flex-direction: column;
 	min-height: 100%;
-}
+	}
 .content {
 	flex: 1 0 auto;
 }
@@ -52,6 +53,20 @@ table{
 	margin: auto;
 	border: 1px solid black;
 }
+
+.navbar {
+	width: 100%;
+	text-align: center;
+	background: #59966c;
+	opacity: 0.9
+}
+
+header {
+	position: fixed; 
+	top: 0;
+	z-index: 100;
+	width: 100%;
+  }
 
 .pagination{
 	text-align: center;
