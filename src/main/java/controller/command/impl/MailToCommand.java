@@ -9,16 +9,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 public class MailToCommand implements Command{
+    private final String REFERER = "http://localhost:8080/fitness_centre/";
 
     @Override
     public String execute(HttpServletRequest req) throws Exception {
+        String url = req.getHeader("referer");
+        String path = url.substring(REFERER.length());
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         Desktop desktop = Desktop.getDesktop();
         String message = "mailto:" + messageManager.getMessage("msg.mailto");
         URI uri = URI.create(message);
         desktop.mail(uri);
-        return "redirect:controller?command=contacts";
+        return "redirect:" + path;
     }
 
 }
