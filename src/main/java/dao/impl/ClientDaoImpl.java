@@ -53,7 +53,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client get(Long id) throws DaoException {
+    public Client get(Long id) {
         log.debug("Accessing to database using \"get\" method, client id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -74,7 +74,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client get(Long id, Connection connection) throws DaoException {
+    public Client get(Long id, Connection connection) {
         log.debug("Accessing to database using \"get\" method, client id={}", id);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -92,7 +92,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<Client> getAll() throws DaoException {
+    public List<Client> getAll() {
         log.debug("Accessing to database using \"getAll\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -112,7 +112,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<Client> getAll(int limit, Long offset) throws DaoException {
+    public List<Client> getAll(int limit, Long offset) {
         log.debug("Accessing to database using \"getAll\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -134,7 +134,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<Client> getAllClientsByType(String typeOfClient) throws DaoException {
+    public List<Client> getAllClientsByType(String typeOfClient) {
         log.debug("Accessing to database using \"getAllClientsByType\" method");
         List<Client> clients = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -155,7 +155,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client create(Client client) throws DaoException {
+    public Client create(Client client) {
         log.debug("Accessing to database using \"create\" method, client={}", client);
         Connection connection = dataSource.getConnection();
         try {
@@ -180,7 +180,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client update(Client client) throws DaoException {
+    public Client update(Client client) {
         log.debug("Accessing to database using \"update\" method, client=", client);
         Connection connection = dataSource.getConnection();
         try {
@@ -206,7 +206,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DaoException {
+    public boolean delete(Long id) {
         log.debug("Accessing to database using \"delete\" method, client id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -230,7 +230,7 @@ public class ClientDaoImpl implements ClientDao {
      * @return Client
      * @throws DaoException
      */
-    private Client processClient(ResultSet result) throws DaoException {
+    private Client processClient(ResultSet result) {
         try {
             Client client = new Client();
             client.setId(result.getLong("user_id"));
@@ -259,7 +259,7 @@ public class ClientDaoImpl implements ClientDao {
      * @return id of type
      * @throws DaoException
      */
-    private int getTypeId(String name, Connection connection) throws DaoException {
+    private int getTypeId(String name, Connection connection) {
         log.debug("Accessing to database using \"getTypeId\" method, name={}", name);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_TYPE_ID);
@@ -277,7 +277,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public long count() throws DaoException {
+    public long count() {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {

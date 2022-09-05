@@ -22,7 +22,7 @@ public class CreateGymmembershipCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
         BigDecimal cost = validator.getCorrectCost(req);
@@ -36,7 +36,7 @@ public class CreateGymmembershipCommand implements Command {
         log.info("Gymmembership was create, gymmembership={}", created);
         req.setAttribute("gymmembership", created);
         req.setAttribute("message", messageManager.getMessage("msg.create.gym"));
-        return "jsp/gymmembership/gymmembership.jsp";
+        return "redirect:controller?command=gymmembership&id=" + created.getId();
     }
 
 }

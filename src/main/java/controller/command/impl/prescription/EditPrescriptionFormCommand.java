@@ -14,7 +14,7 @@ public class EditPrescriptionFormCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long userId = Long.parseLong(req.getParameter("userId"));
         PrescriptionDto prescriptionDto = prescriptionService.getById(userId);
         HttpSession session = req.getSession();

@@ -20,7 +20,7 @@ public class ChangePasswordCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         UserDto userDto = (UserDto) session.getAttribute("user");
         String newpassword = validator.getNewPassword(req);

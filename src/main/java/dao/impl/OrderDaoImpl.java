@@ -54,7 +54,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order get(Long id) throws DaoException {
+    public Order get(Long id) {
         log.debug("Accessing to database using \"get\" method, order id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -76,7 +76,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order get(Long id, Connection connection) throws DaoException {
+    public Order get(Long id, Connection connection) {
         log.debug("Accessing to database using \"get\" method, order id={}", id);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -94,7 +94,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAll() throws DaoException {
+    public List<Order> getAll() {
         log.debug("Accessing to database using \"getAll\" method");
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -112,7 +112,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAll(int limit, Long offset) throws DaoException {
+    public List<Order> getAll(int limit, Long offset) {
         log.debug("Accessing to database using \"getAll\" method");
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -134,7 +134,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order create(Order order) throws DaoException {
+    public Order create(Order order) {
         log.debug("Accessing to database using \"create\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
@@ -167,7 +167,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order update(Order order) throws DaoException {
+    public Order update(Order order) {
         log.debug("Accessing to database using \"update\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
@@ -186,7 +186,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order addFeedback(Order order) throws DaoException {
+    public Order addFeedback(Order order) {
         log.debug("Accessing to database using \"addFeedback\" method, order={}", order);
         Connection connection = dataSource.getConnection();
         try {
@@ -205,7 +205,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAllOrdersByClient(Long id) throws DaoException {
+    public List<Order> getAllOrdersByClient(Long id) {
         log.debug("Accessing to database using \"getAllOrdersByClient\" method, id={}", id);
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -227,7 +227,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAllByStatus(String statusName) throws DaoException {
+    public List<Order> getAllByStatus(String statusName) {
         log.debug("Accessing to database using \"getAllByStatus\" method, Status name={}", statusName);
         List<Order> orders = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -248,7 +248,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DaoException {
+    public boolean delete(Long id) {
         log.debug("Accessing to database using \"delete\" method, id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -271,7 +271,7 @@ public class OrderDaoImpl implements OrderDao {
      * @return Order
      * @throws DaoException
      */
-    private Order processOrder(ResultSet result, Connection connection) throws DaoException {
+    private Order processOrder(ResultSet result, Connection connection) {
         try {
             Order order = new Order();
             order.setId(result.getLong("id"));
@@ -296,7 +296,7 @@ public class OrderDaoImpl implements OrderDao {
      * @return id of status
      * @throws DaoException
      */
-    private int getStatusId(String name, Connection connection) throws DaoException {
+    private int getStatusId(String name, Connection connection) {
         log.debug("Accessing to database using \"getStatusId\" method, name={}", name);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_STATUS_ID);
@@ -313,7 +313,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public int getDiscount(String name) throws DaoException {
+    public int getDiscount(String name) {
         log.debug("Accessing to database using \"getDiscount\" method, name={}", name);
         Connection connection = dataSource.getConnection();
         try {
@@ -333,7 +333,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public long count() throws DaoException {
+    public long count() {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {

@@ -15,7 +15,7 @@ public interface ClientService extends AbstractService<Long, ClientDto> {
      * @return list of ClientsDto
      * @throws DaoException
      */
-    List<ClientDto> getAllClientsByType(String typeOfClient) throws DaoException;
+    List<ClientDto> getAllClientsByType(String typeOfClient);
 
     /**
      * Method get list of ClientsDto for pagination
@@ -24,7 +24,7 @@ public interface ClientService extends AbstractService<Long, ClientDto> {
      * @return list of ClientsDto
      * @throws DaoException
      */
-    List<ClientDto> getAll(Paging paging) throws DaoException;
+    List<ClientDto> getAll(Paging paging);
 
     /**
      * Method get quantity of clients from Dao
@@ -32,6 +32,6 @@ public interface ClientService extends AbstractService<Long, ClientDto> {
      * @return quantity of clients
      * @throws DaoException
      */
-    long count() throws DaoException;
+    long count();
 
 }

@@ -23,7 +23,7 @@ public class AllClientsCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Paging paging = pagingUtil.getPaging(req);
         List<ClientDto> clients = clientService.getAll(paging);
         long totalEntities = clientService.count();

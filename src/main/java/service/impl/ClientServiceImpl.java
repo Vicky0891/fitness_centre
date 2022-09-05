@@ -26,7 +26,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto getById(Long id) throws Exception {
+    public ClientDto getById(Long id) {
         Client client = clientDao.get(id);
         if (client == null) {
             log.error("Trying to get not existing client, client id={}", id);
@@ -36,17 +36,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDto> getAll() throws DaoException {
+    public List<ClientDto> getAll() {
         return clientDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public List<ClientDto> getAll(Paging paging) throws DaoException {
+    public List<ClientDto> getAll(Paging paging) {
         return clientDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public ClientDto create(ClientDto clientDto) throws Exception {
+    public ClientDto create(ClientDto clientDto) {
         Client existing = clientDao.get(clientDto.getId());
         if (existing != null) {
             return toDto(existing);
@@ -57,14 +57,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto update(ClientDto clientDto) throws Exception {
+    public ClientDto update(ClientDto clientDto) {
         Client client = toClient(clientDto);
         Client updatedClient = clientDao.update(client);
         return toDto(updatedClient);
     }
 
     @Override
-    public void delete(Long id) throws Exception {
+    public void delete(Long id) {
         if (!clientDao.delete(id)) {
             log.error("Client wasn't delete, client id={}", id);
             throw new InternalErrorException("Internal Server Error. Client wasn't delete.");
@@ -124,7 +124,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public long count() throws DaoException {
+    public long count() {
         return clientDao.count();
     }
 

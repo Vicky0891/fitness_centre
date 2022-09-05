@@ -15,7 +15,7 @@ public class GymmembershipCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long id = Long.parseLong(req.getParameter("id"));
         GymMembershipDto gymMembershipDto = gymMembershipService.getById(id);
         HttpSession session = req.getSession();

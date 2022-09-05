@@ -39,7 +39,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription get(Long clientId) throws DaoException {
+    public Prescription get(Long clientId) {
         log.debug("Accessing to database using \"get\" method, client id={}", clientId);
         Connection connection = dataSource.getConnection();
         try {
@@ -60,7 +60,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription create(Prescription prescription) throws DaoException {
+    public Prescription create(Prescription prescription) {
         log.debug("Accessing to database using \"create\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
@@ -89,7 +89,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public Prescription update(Prescription prescription) throws DaoException {
+    public Prescription update(Prescription prescription) {
         log.debug("Accessing to database using \"update\" method, prescription={}", prescription);
         Connection connection = dataSource.getConnection();
         try {
@@ -111,7 +111,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DaoException {
+    public boolean delete(Long id) {
         log.debug("Accessing to database using \"delete\" method, prescription id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -135,7 +135,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
      * @return Prescription
      * @throws DaoException
      */
-    private Prescription processPrescription(ResultSet result) throws DaoException {
+    private Prescription processPrescription(ResultSet result) {
         try {
             Prescription prescription = new Prescription();
             prescription.setId(result.getLong("id"));
@@ -158,7 +158,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
      * @return id of status "pending"
      * @throws DaoException
      */
-    private int getStatusPending(Connection connection) throws DaoException {
+    private int getStatusPending(Connection connection) {
         log.debug("Accessing to database using \"getStatusPending\"");
         try {
             Statement statement = connection.createStatement();
@@ -179,7 +179,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
      * @return id of status "confirm"
      * @throws DaoException
      */
-    private int getStatusConfirm(Connection connection) throws DaoException {
+    private int getStatusConfirm(Connection connection) {
         log.debug("Accessing to database using \"getStatusConfirm\"");
         try {
             Statement statement = connection.createStatement();
@@ -195,7 +195,7 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
-    public List<Prescription> getAll() throws DaoException {
+    public List<Prescription> getAll() {
         log.debug("Accessing to database using \"getAll\" method");
         List<Prescription> prescriptions = new ArrayList<>();
         Connection connection = dataSource.getConnection();

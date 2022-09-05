@@ -15,7 +15,7 @@ public interface GymMembershipService extends AbstractService<Long, GymMembershi
      * @return list of GymMembershipDto
      * @throws DaoException
      */
-    List<GymMembershipDto> getAll(Paging paging) throws Exception;
+    List<GymMembershipDto> getAll(Paging paging);
 
     /**
      * Method get quantity of gymmemberships from Dao
@@ -23,6 +23,6 @@ public interface GymMembershipService extends AbstractService<Long, GymMembershi
      * @return quantity of gymmemberships
      * @throws DaoException
      */
-    long count() throws DaoException;
+    long count();
 
 }

@@ -15,6 +15,6 @@ public interface TrainerService extends AbstractService<Long, TrainerDto> {
      * @return list of ClientsDto
      * @throws DaoException
      */
-    List<ClientDto> getAllClientsByTrainer(Long trainerId) throws DaoException;
+    List<ClientDto> getAllClientsByTrainer(Long trainerId);
 
 }

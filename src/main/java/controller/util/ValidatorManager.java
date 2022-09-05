@@ -22,7 +22,7 @@ public class ValidatorManager {
      * @return String with validated phone number
      * @throws ValidationException
      */
-    public String getCorrectPhoneNumber(HttpServletRequest req) throws ValidationException {
+    public String getCorrectPhoneNumber(HttpServletRequest req) {
         String phoneNumber = req.getParameter("phoneNumber");
         Pattern pattern = Pattern.compile("[0-9]{12}");
         Matcher matcher = pattern.matcher(phoneNumber);
@@ -50,7 +50,7 @@ public class ValidatorManager {
      * @return Validated cost or exception
      * @throws ValidationException
      */
-    public BigDecimal getCorrectCost(HttpServletRequest req) throws ValidationException {
+    public BigDecimal getCorrectCost(HttpServletRequest req) {
         String cost = req.getParameter("cost");
         Pattern pattern = Pattern.compile("^([0-9]+(\\.[0-9]{0,2})?)$");
         Matcher matcher = pattern.matcher(cost);
@@ -72,7 +72,7 @@ public class ValidatorManager {
      * @return Validated cost or exception
      * @throws ValidationException
      */
-    public String getNewPassword(HttpServletRequest req) throws ValidationException {
+    public String getNewPassword(HttpServletRequest req) {
         String newPassword = req.getParameter("newpassword");
         String repeatPassword = req.getParameter("repeatpassword");
         if (newPassword.equals(repeatPassword)) {

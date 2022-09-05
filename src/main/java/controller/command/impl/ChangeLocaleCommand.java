@@ -9,7 +9,7 @@ public class ChangeLocaleCommand implements Command {
     String REFERER = "http://localhost:8080/fitness_centre/";
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         String language = req.getParameter("language");
         session.setAttribute("language", language);

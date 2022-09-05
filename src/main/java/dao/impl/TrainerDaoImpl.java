@@ -45,7 +45,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public Trainer get(Long id) throws DaoException {
+    public Trainer get(Long id) {
         log.debug("Accessing to database using \"get\" method, trainer id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -66,7 +66,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public Trainer get(Long id, Connection connection) throws DaoException {
+    public Trainer get(Long id, Connection connection) {
         log.debug("Accessing to database using \"get\" method, trainer id={}", id);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -84,7 +84,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public List<Trainer> getAll() throws DaoException {
+    public List<Trainer> getAll() {
         log.debug("Accessing to database using \"getAll\" method");
         List<Trainer> trainers = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -104,7 +104,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public Trainer create(Trainer trainer) throws DaoException {
+    public Trainer create(Trainer trainer) {
         log.debug("Accessing to database using \"create\" method, trainer={}", trainer);
         Connection connection = dataSource.getConnection();
         try {
@@ -129,7 +129,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public Trainer update(Trainer trainer) throws DaoException {
+    public Trainer update(Trainer trainer) {
         log.debug("Accessing to database using \"update\" method, trainer={}", trainer);
         Connection connection = dataSource.getConnection();
         try {
@@ -153,7 +153,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DaoException {
+    public boolean delete(Long id) {
         log.debug("Accessing to database using \"delete\" method, trainer id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -171,7 +171,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public List<Client> getAllClientsByTrainer(Long id) throws DaoException {
+    public List<Client> getAllClientsByTrainer(Long id) {
         log.debug("Accessing to database using \"getAllClientsByTrainer\" method, trainer id={}", id);
         Connection connection = dataSource.getConnection();
         List<Client> clients = new ArrayList<>();
@@ -194,7 +194,7 @@ public class TrainerDaoImpl implements TrainerDao {
     }
 
     @Override
-    public List<Client> getAllClientsByTrainer(Long id, Connection connection) throws DaoException {
+    public List<Client> getAllClientsByTrainer(Long id, Connection connection) {
         log.debug("Accessing to database using \"getAllClientsByTrainer\" method, trainer id={}", id);
         List<Client> clients = new ArrayList<>();
 
@@ -220,7 +220,7 @@ public class TrainerDaoImpl implements TrainerDao {
      * @return Trainer
      * @throws DaoException
      */
-    private Trainer processTrainer(ResultSet result, Connection connection) throws DaoException {
+    private Trainer processTrainer(ResultSet result, Connection connection) {
         try {
             Trainer trainer = new Trainer();
             trainer.setId(result.getLong("user_id"));

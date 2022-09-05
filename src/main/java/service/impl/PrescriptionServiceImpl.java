@@ -21,7 +21,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    public PrescriptionDto getById(Long id) throws Exception {
+    public PrescriptionDto getById(Long id) {
         Prescription prescription = prescriptionDao.get(id);
         return toDto(prescription);
     }
@@ -32,14 +32,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    public PrescriptionDto create(PrescriptionDto prescriptionDto) throws Exception {
+    public PrescriptionDto create(PrescriptionDto prescriptionDto) {
         Prescription prescription = toPrescription(prescriptionDto);
         Prescription createdPrescription = prescriptionDao.create(prescription);
         return toDto(createdPrescription);
     }
 
     @Override
-    public PrescriptionDto update(PrescriptionDto prescriptionDto) throws Exception {
+    public PrescriptionDto update(PrescriptionDto prescriptionDto) {
         Prescription existing = prescriptionDao.get(prescriptionDto.getUserId());
         if (existing != null && existing.getUserId() != prescriptionDto.getUserId()) {
             log.error("Trying to update not existing or incorrect prescription, prescription={}", prescriptionDto);
@@ -51,7 +51,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    public void delete(Long id) throws DaoException {
+    public void delete(Long id) {
         prescriptionDao.delete(id);
         log.info("Prescription was delete, prescription id={}", id);
     }

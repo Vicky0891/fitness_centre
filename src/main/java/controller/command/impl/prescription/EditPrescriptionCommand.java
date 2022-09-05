@@ -19,7 +19,7 @@ public class EditPrescriptionCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         PrescriptionDto currentPrescriptionDto = (PrescriptionDto) session.getAttribute("prescription");
         String typeOfTraining = req.getParameter("typeOfTraining");

@@ -15,7 +15,7 @@ public interface UserDao extends AbstractDao<Long, User> {
      * @return User
      * @throws DaoException
      */
-    User getByEmail(String email) throws DaoException;
+    User getByEmail(String email);
 
     /**
      * Method get list of objects starting from begin position in the table
@@ -25,7 +25,7 @@ public interface UserDao extends AbstractDao<Long, User> {
      * @return list of Users
      * @throws DaoException
      */
-    List<User> getAll(int limit, Long offset) throws DaoException;
+    List<User> getAll(int limit, Long offset);
 
     /**
      * Method count all users
@@ -33,7 +33,7 @@ public interface UserDao extends AbstractDao<Long, User> {
      * @return quantity of users
      * @throws DaoException
      */
-    long count() throws DaoException;
+    long count();
 
     /**
      * Method find Entity object in the data source by id
@@ -43,7 +43,7 @@ public interface UserDao extends AbstractDao<Long, User> {
      * @return Object
      * @throws DaoException
      */
-    User get(Long id, Connection connection) throws DaoException;
+    User get(Long id, Connection connection);
 
     /**
      * Method is used to update user password in the data source
@@ -52,6 +52,6 @@ public interface UserDao extends AbstractDao<Long, User> {
      * @return updated Object
      * @throws DaoException
      */
-    User updatePassword(User user) throws DaoException;
+    User updatePassword(User user);
 
 }

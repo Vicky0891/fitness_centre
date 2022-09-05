@@ -23,7 +23,7 @@ public class AllUsersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Paging paging = pagingUtil.getPaging(req);
         List<UserDto> users = userService.getAll(paging);
         long totalEntities = userService.count();

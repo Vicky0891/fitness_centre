@@ -25,7 +25,7 @@ public class EditUserCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long userId = Long.parseLong(req.getParameter("id"));
         UserDto currentUserDto = userService.getById(userId);
         String role = req.getParameter("role");
@@ -49,7 +49,7 @@ public class EditUserCommand implements Command {
      * @return TrainerDto created in data source table
      * @throws Exception
      */
-    private void createTrainerDto(UserDto userDto) throws Exception {
+    private void createTrainerDto(UserDto userDto) {
         TrainerDto trainerDto = new TrainerDto();
         trainerDto.setId(userDto.getId());
         trainerDto.setRoleDto(userDto.getRoleDto());

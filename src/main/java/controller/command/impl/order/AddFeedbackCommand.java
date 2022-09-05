@@ -17,7 +17,7 @@ public class AddFeedbackCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         Long orderId = (Long) session.getAttribute("orderId");
         OrderDto currentOrderDto = orderService.getById(orderId);

@@ -22,7 +22,7 @@ public class AllOrdersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Paging paging = pagingUtil.getPaging(req);
         List<OrderDto> orders = orderService.getAll(paging);
         long totalEntities = orderService.count();

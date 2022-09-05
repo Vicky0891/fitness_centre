@@ -11,7 +11,7 @@ import lombok.extern.log4j.Log4j2;
 public class ErrorCommand implements Command{
     
     @Override
-    public String execute(HttpServletRequest req) throws BadRequestException {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         log.error("Request isn't correct");

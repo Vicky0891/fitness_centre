@@ -14,7 +14,7 @@ public class TrainerCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long id = Long.parseLong(req.getParameter("id"));
         TrainerDto trainer = trainerService.getById(id);
         req.setAttribute("trainer", trainer);

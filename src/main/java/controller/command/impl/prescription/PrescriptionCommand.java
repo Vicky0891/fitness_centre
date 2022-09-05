@@ -15,7 +15,7 @@ public class PrescriptionCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         UserDto userDto = (UserDto) session.getAttribute("user");
         PrescriptionDto prescriptionDto = new PrescriptionDto();

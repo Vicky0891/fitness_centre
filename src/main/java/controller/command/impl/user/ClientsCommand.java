@@ -18,7 +18,7 @@ public class ClientsCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         TrainerDto trainerDto = (TrainerDto) session.getAttribute("user");
         List<ClientDto> clients = trainerService.getAllClientsByTrainer(trainerDto.getId());

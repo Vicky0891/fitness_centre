@@ -37,7 +37,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public GymMembership get(Long id) throws DaoException {
+    public GymMembership get(Long id) {
         log.debug("Accessing to database using \"get\" method, gymMembership id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -58,7 +58,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public GymMembership get(Long id, Connection connection) throws DaoException {
+    public GymMembership get(Long id, Connection connection) {
         log.debug("Accessing to database using \"get\" method, gymMembership id={}", id);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -76,7 +76,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public List<GymMembership> getAll() throws DaoException {
+    public List<GymMembership> getAll() {
         log.debug("Accessing to database using \"getAll\" method");
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -96,7 +96,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public List<GymMembership> getAll(int limit, Long offset) throws DaoException {
+    public List<GymMembership> getAll(int limit, Long offset) {
         log.debug("Accessing to database using \"getAll\" method");
         List<GymMembership> gymMemberships = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -118,7 +118,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public GymMembership create(GymMembership gymMembership) throws DaoException {
+    public GymMembership create(GymMembership gymMembership) {
         log.debug("Accessing to database using \"create\" method, gymMembership={}", gymMembership);
         Connection connection = dataSource.getConnection();
         try {
@@ -143,7 +143,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public GymMembership update(GymMembership gymMembership) throws DaoException {
+    public GymMembership update(GymMembership gymMembership) {
         log.debug("Accessing to database using \"update\" method, gymMembership={}", gymMembership);
         Connection connection = dataSource.getConnection();
         try {
@@ -164,7 +164,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DaoException {
+    public boolean delete(Long id) {
         log.debug("Accessing to database using \"delete\" method, gymMembership id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -188,7 +188,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
      * @return Gymmembership
      * @throws DaoException
      */
-    private GymMembership processGymMembership(ResultSet result) throws DaoException {
+    private GymMembership processGymMembership(ResultSet result) {
         try {
             GymMembership gymMembership = new GymMembership();
             gymMembership.setId(result.getLong("id"));
@@ -203,7 +203,7 @@ public class GymMembershipDaoImpl implements GymMembershipDao {
     }
 
     @Override
-    public long count() throws DaoException {
+    public long count() {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {

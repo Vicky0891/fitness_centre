@@ -14,7 +14,7 @@ public class EditUserFormCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long userId = Long.parseLong(req.getParameter("userId"));
         UserDto userDto = userService.getById(userId);
         req.setAttribute("user", userDto);

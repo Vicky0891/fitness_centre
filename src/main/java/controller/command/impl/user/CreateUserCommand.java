@@ -18,7 +18,7 @@ public class CreateUserCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         UserDto userDto = new UserDto();
@@ -27,11 +27,11 @@ public class CreateUserCommand implements Command {
         userDto.setRoleDto(RoleDto.CLIENT);
         UserDto created = userService.create(userDto);
         log.info("User was create, user={}", created);
-        
+
         userService.login(email, password);
         HttpSession session = req.getSession();
         session.setAttribute("user", created);
-        
+
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("message", messageManager.getMessage("msg.create.user"));
         return "jsp/user/user.jsp";

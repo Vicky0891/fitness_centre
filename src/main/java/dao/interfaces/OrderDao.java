@@ -15,7 +15,7 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * @return int amount of discount
      * @throws DaoException
      */
-    int getDiscount(String name) throws DaoException;
+    int getDiscount(String name);
 
     /**
      * Method get list of objects starting from begin position in the table
@@ -25,7 +25,7 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * @return list of Orders
      * @throws DaoException
      */
-    List<Order> getAll(int limit, Long offset) throws DaoException;
+    List<Order> getAll(int limit, Long offset);
 
     /**
      * Method to update feedback in the order
@@ -34,7 +34,7 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * @return updated order
      * @throws DaoException
      */
-    Order addFeedback(Order order) throws DaoException;
+    Order addFeedback(Order order);
 
     /**
      * Method to get orders by client
@@ -43,7 +43,7 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * @return list of orders
      * @throws DaoException
      */
-    List<Order> getAllOrdersByClient(Long id) throws DaoException;
+    List<Order> getAllOrdersByClient(Long id);
 
     /**
      * Method to get all orders particular status
@@ -52,7 +52,7 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * @return list of orders
      * @throws DaoException
      */
-    List<Order> getAllByStatus(String name) throws DaoException;
+    List<Order> getAllByStatus(String name);
 
     /**
      * Method count all orders
@@ -60,16 +60,16 @@ public interface OrderDao extends AbstractDao<Long, Order> {
      * @return quantity of orders
      * @throws DaoException
      */
-    long count() throws DaoException;
+    long count();
 
     /**
      * Method find Order in the data source by id
      * 
-     * @param id Order id to be get
+     * @param id         Order id to be get
      * @param connection Connection to be used
      * @return Order
      * @throws DaoException
      */
-    Order get(Long id, Connection connection) throws DaoException;
+    Order get(Long id, Connection connection);
 
 }

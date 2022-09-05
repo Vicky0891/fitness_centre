@@ -18,7 +18,7 @@ public interface OrderService extends AbstractService<Long, OrderDto> {
      * @return OrderDto object
      * @throws Exception
      */
-    OrderDto processCart(Map<Long, Integer> cart, UserDto userDto) throws Exception;
+    OrderDto processCart(Map<Long, Integer> cart, UserDto userDto);
 
     /**
      * Method to update feedback in the order
@@ -27,7 +27,7 @@ public interface OrderService extends AbstractService<Long, OrderDto> {
      * @return OrderDto with updated feedback
      * @throws DaoException
      */
-    OrderDto addFeedback(OrderDto orderDto) throws DaoException;
+    OrderDto addFeedback(OrderDto orderDto);
 
     /**
      * Method get list of all orders for particular client
@@ -36,7 +36,7 @@ public interface OrderService extends AbstractService<Long, OrderDto> {
      * @return list of OrderDto
      * @throws DaoException
      */
-    List<OrderDto> getAllOrdersDtoByClient(Long id) throws DaoException;
+    List<OrderDto> getAllOrdersDtoByClient(Long id);
 
     /**
      * Method get list of orderDto particular status
@@ -45,7 +45,7 @@ public interface OrderService extends AbstractService<Long, OrderDto> {
      * @return list of OrderDto
      * @throws DaoException
      */
-    List<OrderDto> getAllByStatus(String statusName) throws DaoException;
+    List<OrderDto> getAllByStatus(String statusName);
 
     /**
      * Method get list of OrderDto for pagination
@@ -54,7 +54,7 @@ public interface OrderService extends AbstractService<Long, OrderDto> {
      * @return list of OrderDto
      * @throws DaoException
      */
-    List<OrderDto> getAll(Paging paging) throws DaoException;
+    List<OrderDto> getAll(Paging paging);
 
     /**
      * Method get quantity of orders from Dao
@@ -62,6 +62,6 @@ public interface OrderService extends AbstractService<Long, OrderDto> {
      * @return quantity of orders
      * @throws DaoException
      */
-    long count() throws DaoException;
+    long count();
 
 }

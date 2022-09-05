@@ -16,7 +16,7 @@ public class DeleteUserCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long userId = Long.parseLong(req.getParameter("userId"));
         userService.delete(userId);
         log.info("User was delete, user id={}", userId);

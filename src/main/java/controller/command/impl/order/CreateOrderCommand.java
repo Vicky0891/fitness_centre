@@ -28,7 +28,7 @@ public class CreateOrderCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         UserDto userDto = (UserDto) session.getAttribute("user");
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
@@ -56,7 +56,7 @@ public class CreateOrderCommand implements Command {
      * @return ClientDto created in data source table
      * @throws Exception
      */
-    private ClientDto createClientDto(UserDto userDto) throws Exception {
+    private ClientDto createClientDto(UserDto userDto) {
         ClientDto clientDto = new ClientDto();
         clientDto.setId(userDto.getId());
         clientDto.setType(TypeDto.NEW);

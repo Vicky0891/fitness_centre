@@ -16,7 +16,7 @@ public interface ClientDao extends AbstractDao<Long, Client> {
      * @return list of Clients
      * @throws DaoException
      */
-    List<Client> getAll(int limit, Long offset) throws DaoException;
+    List<Client> getAll(int limit, Long offset);
 
     /**
      * Method get list of objects particular type
@@ -25,7 +25,7 @@ public interface ClientDao extends AbstractDao<Long, Client> {
      * @return list of Clients
      * @throws DaoException
      */
-    List<Client> getAllClientsByType(String typeOfClient) throws DaoException;
+    List<Client> getAllClientsByType(String typeOfClient);
 
     /**
      * Method count all clients
@@ -33,16 +33,16 @@ public interface ClientDao extends AbstractDao<Long, Client> {
      * @return quantity of clients
      * @throws DaoException
      */
-    long count() throws DaoException;
+    long count();
 
     /**
      * Method find Client in the data source by id
      * 
-     * @param id Client id to be get
+     * @param id         Client id to be get
      * @param connection Connection to be used
      * @return Client
      * @throws DaoException
      */
-    Client get(Long id, Connection connection) throws DaoException;
+    Client get(Long id, Connection connection);
 
 }

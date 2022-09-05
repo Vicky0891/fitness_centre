@@ -20,7 +20,7 @@ public class AllOrdersByTypeCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         try {
             String status = req.getParameter("status");
             List<OrderDto> orders = orderService.getAllByStatus(status);

@@ -18,7 +18,7 @@ public class EditOrderCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long orderId = Long.parseLong(req.getParameter("id"));
         OrderDto currentOrderDto = orderService.getById(orderId);
         String status = req.getParameter("status");

@@ -18,7 +18,7 @@ public class EditClientCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long clientId = Long.parseLong(req.getParameter("id"));
         ClientDto currentClientDto = clientService.getById(clientId);
         String type = req.getParameter("type");

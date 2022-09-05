@@ -23,7 +23,7 @@ public class LoginCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         UserDto userDto = userService.login(email, password);

@@ -13,7 +13,7 @@ public class OrderCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long id = Long.parseLong(req.getParameter("id"));
         OrderDto orderDto = orderService.getById(id);
         req.setAttribute("order", orderDto);

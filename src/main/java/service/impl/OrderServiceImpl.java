@@ -8,7 +8,6 @@ import java.util.Map;
 
 import controller.util.PagingUtil.Paging;
 import controller.util.exception.impl.DaoException;
-import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
 import dao.entity.Order;
 import dao.entity.OrderInfo;
@@ -40,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getById(Long id) throws DaoException, NotFoundException {
+    public OrderDto getById(Long id) {
         Order order = orderDao.get(id);
         if (order == null) {
             log.error("Trying to get not existing order, order id={}", id);
@@ -50,35 +49,35 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getAll() throws DaoException {
+    public List<OrderDto> getAll() {
         return orderDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public List<OrderDto> getAll(Paging paging) throws DaoException {
+    public List<OrderDto> getAll(Paging paging) {
         return orderDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public List<OrderDto> getAllOrdersDtoByClient(Long id) throws DaoException {
+    public List<OrderDto> getAllOrdersDtoByClient(Long id) {
         return orderDao.getAllOrdersByClient(id).stream().map(e -> toDto(e)).toList();
 
     }
 
     @Override
-    public List<OrderDto> getAllByStatus(String statusName) throws DaoException {
+    public List<OrderDto> getAllByStatus(String statusName) {
         return orderDao.getAllByStatus(statusName).stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public OrderDto create(OrderDto orderDto) throws Exception {
+    public OrderDto create(OrderDto orderDto) {
         Order order = toOrder(orderDto);
         Order createdOrder = orderDao.create(order);
         return toDto(createdOrder);
     }
 
     @Override
-    public OrderDto processCart(Map<Long, Integer> cart, UserDto userDto) throws Exception {
+    public OrderDto processCart(Map<Long, Integer> cart, UserDto userDto) {
         OrderDto orderDto = createDto(cart, userDto);
         return orderDto;
     }
@@ -91,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
      * @return OrderDto Order ready to pay
      * @throws Exception
      */
-    public OrderDto createDto(Map<Long, Integer> cart, UserDto userDto) throws Exception {
+    public OrderDto createDto(Map<Long, Integer> cart, UserDto userDto) {
         OrderDto orderDto = new OrderDto();
         orderDto.setStatusDto(StatusDto.PENDING);
         orderDto.setDateOfOrder(LocalDate.now());
@@ -129,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
      * @return total cost with discount
      * @throws Exception
      */
-    private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) throws Exception {
+    private BigDecimal calculateDiscount(UserDto userDto, BigDecimal totalCost) {
         Client existingClient = clientDao.get(userDto.getId());
         if (existingClient == null) {
             return totalCost;
@@ -177,7 +176,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto update(OrderDto orderDto) throws Exception {
+    public OrderDto update(OrderDto orderDto) {
         Order existing = orderDao.get(orderDto.getId());
         if (existing != null && existing.getId() != orderDto.getId()) {
             log.error("Trying to update not existing or incorrect order, order={}", orderDto);
@@ -189,7 +188,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto addFeedback(OrderDto orderDto) throws DaoException {
+    public OrderDto addFeedback(OrderDto orderDto) {
         Order existing = orderDao.get(orderDto.getId());
         if (existing != null && existing.getId() != orderDto.getId()) {
             log.error("Trying to add feedback to not existing or incorrect order, order={}", orderDto);
@@ -202,7 +201,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(Long id) throws InternalErrorException, DaoException {
+    public void delete(Long id) {
         if (!orderDao.delete(id)) {
             log.error("Order wasn't delete, order id={}", id);
             throw new DaoException(
@@ -338,7 +337,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public long count() throws DaoException {
+    public long count() {
         return orderDao.count();
     }
 

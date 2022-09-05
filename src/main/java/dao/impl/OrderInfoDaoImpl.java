@@ -41,7 +41,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public OrderInfo get(Long id) throws DaoException {
+    public OrderInfo get(Long id) {
         log.debug("Accessing to database using \"get\" method, order id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -61,7 +61,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
         return null;
     }
 
-    public OrderInfo get(Long id, Connection connection) throws DaoException {
+    public OrderInfo get(Long id, Connection connection) {
         log.debug("Accessing to database using \"get\" method, order id={}", id);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -79,7 +79,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public List<OrderInfo> getAllByOrderId(Long id) throws DaoException {
+    public List<OrderInfo> getAllByOrderId(Long id) {
         log.debug("Accessing to database using \"getAllByOrderId\" method, order id={}", id);
         List<OrderInfo> orderInfo = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -100,7 +100,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public List<OrderInfo> getAllByOrderId(Long id, Connection connection) throws DaoException {
+    public List<OrderInfo> getAllByOrderId(Long id, Connection connection) {
         log.debug("Accessing to database using \"getAllByOrderId\" method, order id={}", id);
         List<OrderInfo> orderInfo = new ArrayList<>();
         try {
@@ -118,7 +118,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public List<OrderInfo> getAll() throws DaoException {
+    public List<OrderInfo> getAll() {
         log.debug("Accessing to database using \"getAll\" method");
         List<OrderInfo> orderInfos = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -138,7 +138,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public OrderInfo create(OrderInfo orderInfo, Connection connection) throws DaoException {
+    public OrderInfo create(OrderInfo orderInfo, Connection connection) {
         log.debug("Accessing to database using \"create\" method, orderInfo={}", orderInfo);
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -160,7 +160,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public OrderInfo update(OrderInfo orderInfo) throws DaoException {
+    public OrderInfo update(OrderInfo orderInfo) {
         log.debug("Accessing to database using \"update\" method, orderInfo={}", orderInfo);
         Connection connection = dataSource.getConnection();
         try {
@@ -179,7 +179,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DaoException {
+    public boolean delete(Long id) {
         log.debug("Accessing to database using \"delete\" method, id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -202,7 +202,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
      * @return OrderInfo
      * @throws DaoException
      */
-    private OrderInfo processOrderInfo(ResultSet result, Connection connection) throws DaoException {
+    private OrderInfo processOrderInfo(ResultSet result, Connection connection) {
         try {
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setId(result.getLong("id"));
@@ -233,7 +233,7 @@ public class OrderInfoDaoImpl implements OrderInfoDao {
     }
 
     @Override
-    public OrderInfo create(OrderInfo orderInfo) throws DaoException {
+    public OrderInfo create(OrderInfo orderInfo) {
         log.debug("Accessing to database using \"create\" method, orderInfo={}", orderInfo);
         Connection connection = dataSource.getConnection();
         try {

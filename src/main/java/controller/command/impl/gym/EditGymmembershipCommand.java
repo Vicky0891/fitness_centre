@@ -22,7 +22,7 @@ public class EditGymmembershipCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         GymMembershipDto currentGymMembershipDto = (GymMembershipDto) session.getAttribute("gymmembership");
         String numberOfVisits = req.getParameter("numberOfVisits");
@@ -36,6 +36,6 @@ public class EditGymmembershipCommand implements Command {
         MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         req.setAttribute("gymmembership", updated);
         req.setAttribute("message", messageManager.getMessage("msg.update.gym"));
-        return "redirect:controller?command=gymmemberships";
+        return "redirect:controller?command=gymmembership&id=" + updated.getId();
     }
 }

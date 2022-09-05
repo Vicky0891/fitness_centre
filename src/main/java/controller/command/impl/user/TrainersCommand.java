@@ -20,7 +20,7 @@ public class TrainersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         try {
             List<TrainerDto> trainers = trainerService.getAll();

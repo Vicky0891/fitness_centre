@@ -17,7 +17,7 @@ public class DeleteGymmembershipCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long gymMembershipId = Long.parseLong(req.getParameter("gymmembershipId"));
         gymMembershipService.delete(gymMembershipId);
         String url = req.getHeader("referer");

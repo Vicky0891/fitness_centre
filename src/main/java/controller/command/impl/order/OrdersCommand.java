@@ -20,7 +20,7 @@ public class OrdersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         try {
             UserDto userDto = (UserDto) session.getAttribute("user");

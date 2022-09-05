@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getById(Long id) throws Exception {
+    public UserDto getById(Long id) {
         User user = userDao.get(id);
         if (user == null) {
             log.error("Trying to get not existing user, user id={}", id);
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDtoByEmail(String email) throws Exception {
+    public UserDto getUserDtoByEmail(String email) {
         User user = userDao.getByEmail(email);
         if (user == null) {
             log.error("Trying to get not existing user, user email={}", email);
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto login(String email, String password) throws Exception {
+    public UserDto login(String email, String password) {
         User user = userDao.getByEmail(email);
         if (user == null) {
             log.error("Trying to get not existing user, user email={}", email);
@@ -62,13 +62,13 @@ public class UserServiceImpl implements UserService {
         }
         return toDto(user);
     }
-    
+
     @Override
-    public UserDto changePassword(UserDto userDto) throws Exception {
+    public UserDto changePassword(UserDto userDto) {
         User user = userDao.get(userDto.getId());
         String existpassword = user.getPassword();
         String hashedNewPassword = digestUtil.hash(userDto.getPassword());
-        if(hashedNewPassword.equals(existpassword)) {
+        if (hashedNewPassword.equals(existpassword)) {
             throw new SamePasswordException("New password must be different from the previous one");
         }
         user.setPassword(hashedNewPassword);
@@ -77,17 +77,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAll() throws DaoException {
+    public List<UserDto> getAll() {
         return userDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public List<UserDto> getAll(Paging paging) throws DaoException {
+    public List<UserDto> getAll(Paging paging) {
         return userDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public UserDto create(UserDto userDto) throws Exception {
+    public UserDto create(UserDto userDto) {
         User existing = userDao.getByEmail(userDto.getEmail());
         if (existing != null) {
             log.error("Trying to create an existing user, user={}", userDto);
@@ -99,14 +99,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(UserDto userDto) throws Exception {
+    public UserDto update(UserDto userDto) {
         User user = toUserupdated(userDto);
         User changedUser = userDao.update(user);
         return toDto(changedUser);
     }
 
     @Override
-    public void delete(Long id) throws Exception {
+    public void delete(Long id) {
         if (!userDao.delete(id)) {
             log.error("User wasn't delete, user id={}", id);
             throw new InternalErrorException("Couldn't delete user with id " + id);

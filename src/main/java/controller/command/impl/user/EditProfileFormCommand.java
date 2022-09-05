@@ -8,7 +8,7 @@ import service.dto.ClientDto;
 public class EditProfileFormCommand implements Command {
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         ClientDto clientDto = (ClientDto) session.getAttribute("user");
         session.setAttribute("user", clientDto);

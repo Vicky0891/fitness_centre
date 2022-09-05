@@ -22,13 +22,13 @@ public class GymmembershipsCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Paging paging = pagingUtil.getPaging(req);
         List<GymMembershipDto> gymMemberships = gymMembershipService.getAll(paging);
         long totalEntities = gymMembershipService.count();
         long totalPage = pagingUtil.getTotalPages(totalEntities, paging.getLimit());
-        
-        if(paging.getPage() > 0 && paging.getPage() <= totalPage) {
+
+        if (paging.getPage() > 0 && paging.getPage() <= totalPage) {
             req.setAttribute("gymmemberships", gymMemberships);
             req.setAttribute("currentPage", paging.getPage());
             req.setAttribute("totalPages", totalPage);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controller.util.exception.impl.BadRequestException;
-import controller.util.exception.impl.DaoException;
 import controller.util.exception.impl.InternalErrorException;
 import controller.util.exception.impl.NotFoundException;
 import dao.entity.Client;
@@ -29,7 +28,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public TrainerDto getById(Long id) throws Exception {
+    public TrainerDto getById(Long id) {
         Trainer trainer = trainerDao.get(id);
         if (trainer == null) {
             log.error("Trying to get not existing trainer, trainer id={}", id);
@@ -39,12 +38,12 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public List<TrainerDto> getAll() throws DaoException {
+    public List<TrainerDto> getAll() {
         return trainerDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public TrainerDto create(TrainerDto trainerDto) throws Exception {
+    public TrainerDto create(TrainerDto trainerDto) {
         Trainer existing = trainerDao.get(trainerDto.getId());
         if (existing != null) {
             log.error("Trying to create an existing trainer, trainer={}", trainerDto);
@@ -56,14 +55,14 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public TrainerDto update(TrainerDto trainerDto) throws DaoException {
+    public TrainerDto update(TrainerDto trainerDto) {
         Trainer trainer = toTrainer(trainerDto);
         Trainer updatedTrainer = trainerDao.update(trainer);
         return toDto(updatedTrainer);
     }
 
     @Override
-    public void delete(Long id) throws Exception {
+    public void delete(Long id) {
         if (!trainerDao.delete(id)) {
             log.error("Trainer wasn't delete, trainer id={}", id);
             throw new InternalErrorException("Internal Server Error. Trainer wasn't delete.");
@@ -72,7 +71,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public List<ClientDto> getAllClientsByTrainer(Long trainerId) throws DaoException {
+    public List<ClientDto> getAllClientsByTrainer(Long trainerId) {
         return trainerDao.getAllClientsByTrainer(trainerId).stream().map(e -> clientToDto(e)).toList();
     }
 

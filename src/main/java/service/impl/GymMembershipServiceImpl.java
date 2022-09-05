@@ -22,7 +22,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public GymMembershipDto getById(Long id) throws Exception {
+    public GymMembershipDto getById(Long id) {
         GymMembership gymMembership = gymMembershipDao.get(id);
         if (gymMembership == null) {
             log.error("Trying to get not existing gymmembership, gymmembership id={}", id);
@@ -32,19 +32,19 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public List<GymMembershipDto> getAll() throws Exception {
+    public List<GymMembershipDto> getAll() {
         return gymMembershipDao.getAll().stream().map(e -> toDto(e)).toList();
     }
 
     @Override
-    public GymMembershipDto create(GymMembershipDto gymMembershipDto) throws Exception {
+    public GymMembershipDto create(GymMembershipDto gymMembershipDto) {
         GymMembership gymMembership = toGymMembership(gymMembershipDto);
         GymMembership createdGymMembership = gymMembershipDao.create(gymMembership);
         return toDto(createdGymMembership);
     }
 
     @Override
-    public GymMembershipDto update(GymMembershipDto gymMembershipDto) throws Exception {
+    public GymMembershipDto update(GymMembershipDto gymMembershipDto) {
         GymMembership existing = gymMembershipDao.get(gymMembershipDto.getId());
         if (existing != null && existing.getId() != gymMembershipDto.getId()) {
             log.error("Trying to update not existing or incorrect gymmembership, gymmembership={}", gymMembershipDto);
@@ -56,7 +56,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public void delete(Long id) throws Exception {
+    public void delete(Long id) {
         if (!gymMembershipDao.delete(id)) {
             log.error("Gymmembership wasn't delete, gymmembership id={}", id);
             throw new InternalErrorException("Gymmembership wasn't delete. Id=" + id);
@@ -98,7 +98,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     }
 
     @Override
-    public List<GymMembershipDto> getAll(Paging paging) throws Exception {
+    public List<GymMembershipDto> getAll(Paging paging) {
         return gymMembershipDao.getAll(paging.getLimit(), paging.getOffset()).stream().map(e -> toDto(e)).toList();
     }
 

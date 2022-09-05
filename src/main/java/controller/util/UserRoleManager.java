@@ -25,7 +25,7 @@ public class UserRoleManager {
      * @return Class Object according to the role
      * @throws Exception
      */
-    public Object getUserRole(UserDto userDto) throws Exception {
+    public Object getUserRole(UserDto userDto) {
         switch (userDto.getRoleDto().toString()) {
         case "CLIENT":
             try {

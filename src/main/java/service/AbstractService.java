@@ -11,7 +11,7 @@ public interface AbstractService<K, T> {
      * @return Object
      * @throws Exception
      */
-    T getById(K id) throws Exception;
+    T getById(K id);
 
     /**
      * Method finds all objects from Dao
@@ -19,7 +19,7 @@ public interface AbstractService<K, T> {
      * @return List of Objects
      * @throws Exception
      */
-    List<T> getAll() throws Exception;
+    List<T> getAll();
 
     /**
      * Method is used to get Dto object and pass it to create in the data source
@@ -28,7 +28,7 @@ public interface AbstractService<K, T> {
      * @return created Dto object
      * @throws Exception
      */
-    T create(T entity) throws Exception;
+    T create(T entity);
 
     /**
      * Method is used to get Dto object and pass it to update in the data source
@@ -37,7 +37,7 @@ public interface AbstractService<K, T> {
      * @return updated Dto object
      * @throws Exception
      */
-    T update(T entity) throws Exception;
+    T update(T entity);
 
     /**
      * Method is used to delete object by id
@@ -45,6 +45,6 @@ public interface AbstractService<K, T> {
      * @param id Object id to delete
      * @throws Exception
      */
-    void delete(K id) throws Exception;
+    void delete(K id);
 
 }

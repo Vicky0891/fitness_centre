@@ -19,7 +19,7 @@ public class AllClientsByTypeCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         try {
             String type = req.getParameter("type");

@@ -15,7 +15,7 @@ public class OrderDetailsCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         Long id = Long.parseLong(req.getParameter("id"));
         List<OrderInfoDto> details = orderService.getById(id).getDetails();
         req.setAttribute("details", details);

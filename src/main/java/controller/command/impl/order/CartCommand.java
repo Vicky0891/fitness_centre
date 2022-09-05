@@ -18,7 +18,7 @@ public class CartCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         @SuppressWarnings("unchecked")
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");

@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User get(Long id) throws DaoException {
+    public User get(Long id) {
         log.debug("Accessing to database using \"get\" method, user id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -61,7 +61,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User get(Long id, Connection connection) throws DaoException {
+    public User get(Long id, Connection connection) {
         log.debug("Accessing to database using \"get\" method, user id={}", id);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
@@ -79,7 +79,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getByEmail(String email) throws DaoException {
+    public User getByEmail(String email) {
         log.debug("Accessing to database using \"getByEmail\" method, user email={}", email);
         Connection connection = dataSource.getConnection();
         try {
@@ -100,7 +100,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAll() throws DaoException {
+    public List<User> getAll() {
         log.debug("Accessing to database using \"getAll\" method");
         List<User> users = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -120,7 +120,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAll(int limit, Long offset) throws DaoException {
+    public List<User> getAll(int limit, Long offset) {
         log.debug("Accessing to database using \"getAll\" method");
         List<User> users = new ArrayList<>();
         Connection connection = dataSource.getConnection();
@@ -142,7 +142,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User create(User user) throws DaoException {
+    public User create(User user) {
         log.debug("Accessing to database using \"create\" method, user={}", user);
         Connection connection = dataSource.getConnection();
         try {
@@ -167,7 +167,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User update(User user) throws DaoException {
+    public User update(User user) {
         log.debug("Accessing to database using \"update\" method, user={}", user);
         Connection connection = dataSource.getConnection();
         try {
@@ -185,9 +185,9 @@ public class UserDaoImpl implements UserDao {
             close(connection);
         }
     }
-    
+
     @Override
-    public User updatePassword(User user) throws DaoException {
+    public User updatePassword(User user) {
         log.debug("Accessing to database using \"update password\" method, user={}", user);
         Connection connection = dataSource.getConnection();
         try {
@@ -207,7 +207,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean delete(Long id) throws DaoException {
+    public boolean delete(Long id) {
         log.debug("Accessing to database using \"delete\" method, user id={}", id);
         Connection connection = dataSource.getConnection();
         try {
@@ -231,7 +231,7 @@ public class UserDaoImpl implements UserDao {
      * @return User
      * @throws DaoException
      */
-    private User processUser(ResultSet result) throws DaoException {
+    private User processUser(ResultSet result) {
         try {
             User user = new User();
             user.setId(result.getLong("id"));
@@ -252,7 +252,7 @@ public class UserDaoImpl implements UserDao {
      * @return id of role
      * @throws DaoException
      */
-    private int getRoleId(String name, Connection connection) throws DaoException {
+    private int getRoleId(String name, Connection connection) {
         log.debug("Accessing to database using \"getRoleId\" method, role name={}", name);
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_ROLE_ID);
@@ -269,7 +269,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public long count() throws DaoException {
+    public long count() {
         log.debug("Accessing to database using \"count\" method");
         Connection connection = dataSource.getConnection();
         try {

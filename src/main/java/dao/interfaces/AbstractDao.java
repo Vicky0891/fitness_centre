@@ -13,7 +13,7 @@ public interface AbstractDao<K, T> {
      * @return Object
      * @throws DaoException
      */
-    T get(K id) throws DaoException;
+    T get(K id);
 
     /**
      * Method finds all Entity objects in the data source
@@ -21,7 +21,7 @@ public interface AbstractDao<K, T> {
      * @return List of Objects
      * @throws DaoException
      */
-    List<T> getAll() throws DaoException;
+    List<T> getAll();
 
     /**
      * Method is used to create Object in the data source
@@ -30,7 +30,7 @@ public interface AbstractDao<K, T> {
      * @return created Object
      * @throws DaoException
      */
-    T create(T entity) throws DaoException;
+    T create(T entity);
 
     /**
      * Method is used to update Object in the data source
@@ -39,7 +39,7 @@ public interface AbstractDao<K, T> {
      * @return updated Object
      * @throws DaoException
      */
-    T update(T entity) throws DaoException;
+    T update(T entity);
 
     /**
      * Method is used for "soft" deleting Object in the data source
@@ -48,6 +48,6 @@ public interface AbstractDao<K, T> {
      * @return boolean Object deleted
      * @throws DaoException
      */
-    boolean delete(K id) throws DaoException;
+    boolean delete(K id);
 
 }
