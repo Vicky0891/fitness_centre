@@ -1,5 +1,6 @@
 package controller.command.impl.user;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Properties;
@@ -7,6 +8,7 @@ import java.util.UUID;
 
 import controller.command.Command;
 import controller.util.MessageManager;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
@@ -25,7 +27,7 @@ public class EditCabinetCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req) throws Exception {
+    public String execute(HttpServletRequest req) throws IOException, ServletException {
         HttpSession session = req.getSession();
         TrainerDto currentTrainerDto = (TrainerDto) session.getAttribute("user");
         Part part = req.getPart("avatar");
