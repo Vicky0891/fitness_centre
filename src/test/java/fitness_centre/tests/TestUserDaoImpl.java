@@ -17,7 +17,7 @@ public class TestUserDaoImpl {
 
     @Before
     public void setUserInfo() {
-        this.user = new User();
+        user = new User();
         user.setId(1L);
         user.setEmail("admin@gmail.com");
         user.setPassword("D033E22AE348AEB5660FC2140AEC35850C4DA997");
@@ -28,6 +28,19 @@ public class TestUserDaoImpl {
     public void get() {
         User actual = userDao.get(1L);
         assertEquals(user, actual);
+    }
+
+    @Test
+    public void getByEmail() {
+        User actual = userDao.getByEmail("admin@gmail.com");
+        assertEquals(user, actual);
+    }
+
+    @Test
+    public void count() {
+        Long actual = userDao.count();
+        Long expected = 6L;
+        assertEquals(expected, actual);
     }
 
 }
