@@ -3,7 +3,6 @@ package controller.command.impl.gym;
 import java.math.BigDecimal;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import controller.util.ValidatorManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -33,9 +32,6 @@ public class EditGymmembershipCommand implements Command {
         currentGymMembershipDto.setCost(cost);
         GymMembershipDto updated = gymMembershipService.update(currentGymMembershipDto);
         log.info("Gymmembership was update, gymmembership={}", updated);
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("gymmembership", updated);
-        req.setAttribute("message", messageManager.getMessage("msg.update.gym"));
-        return "redirect:controller?command=gymmembership&id=" + updated.getId();
+        return "redirect:controller?command=gymmembership&id=" + updated.getId() + "&edit= ";
     }
 }

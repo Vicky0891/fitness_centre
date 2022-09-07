@@ -21,6 +21,14 @@
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>
+
+<c:if test="${param.delete != null}">
+<h4><fmt:message key="msg.delete.user"/></h4>
+</c:if>
+
+<c:if test="${param.update_user != null}">
+<h4><fmt:message key="msg.update.user"/></h4>
+</c:if>
 <table>
 <c:if test="${users.size() == 0}">
 <h1><fmt:message key="msg.allusers.nousers"/></h1>

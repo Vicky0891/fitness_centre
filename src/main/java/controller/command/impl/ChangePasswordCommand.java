@@ -1,7 +1,6 @@
 package controller.command.impl;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import controller.util.ValidatorManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -27,9 +26,7 @@ public class ChangePasswordCommand implements Command {
         userDto.setPassword(newpassword);
         UserDto updated = userService.changePassword(userDto);
         log.info("User password was update, user={}", updated);
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));
-        return "jsp/user/user.jsp";
+        return "redirect:controller?command=user&id=" + updated.getId() + "&update= ";
     }
 
 }

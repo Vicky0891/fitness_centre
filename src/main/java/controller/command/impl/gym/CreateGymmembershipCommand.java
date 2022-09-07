@@ -3,10 +3,8 @@ package controller.command.impl.gym;
 import java.math.BigDecimal;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import controller.util.ValidatorManager;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.GymMembershipService;
 import service.dto.GymMembershipDto;
@@ -26,17 +24,13 @@ public class CreateGymmembershipCommand implements Command {
         String numberOfVisits = req.getParameter("numberOfVisits");
         String typeOfTraining = req.getParameter("typeOfTraining");
         BigDecimal cost = validator.getCorrectCost(req);
-        HttpSession session = req.getSession();
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
         GymMembershipDto gymMembershipDto = new GymMembershipDto();
         gymMembershipDto.setNumberOfVisits(Integer.valueOf(numberOfVisits));
         gymMembershipDto.setTypeOfTraining(typeOfTraining);
         gymMembershipDto.setCost(cost);
         GymMembershipDto created = gymMembershipService.create(gymMembershipDto);
         log.info("Gymmembership was create, gymmembership={}", created);
-        req.setAttribute("gymmembership", created);
-        req.setAttribute("message", messageManager.getMessage("msg.create.gym"));
-        return "redirect:controller?command=gymmembership&id=" + created.getId();
+        return "redirect:controller?command=gymmembership&id=" + created.getId() + "&create= ";
     }
 
 }

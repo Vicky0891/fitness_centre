@@ -18,7 +18,9 @@
 <jsp:include page="../navbar.jsp"/>
 </header>
 <h1><fmt:message key="msg.allorders.title"/></h1>
-
+<c:if test="${param.update != null}">
+<h4><fmt:message key="msg.update.order"/></h4>
+</c:if>
 
 <table>
 <c:if test="${orders.size() == 0}">

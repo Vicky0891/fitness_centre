@@ -41,12 +41,10 @@ public class CreateOrderCommand implements Command {
         OrderDto processed = orderService.processCart(cart, userDto);
         OrderDto created = orderService.create(processed);
         log.info("Order was create, order={}", created);
-        req.setAttribute("order", created);
-        req.setAttribute("message", messageManager.getMessage("msg.create.order"));
         session.removeAttribute("cart");
         ClientDto createdClient = createClientDto(userDto);
         session.setAttribute("user", createdClient);
-        return "jsp/order/order.jsp";
+        return "redirect:controller?command=order&id=" + created.getId() + "&create= ";
     }
 
     /**

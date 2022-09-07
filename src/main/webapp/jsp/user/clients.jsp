@@ -18,6 +18,9 @@
 <jsp:include page="../navbar.jsp"/>
 </header>
 <h1><fmt:message key="msg.clients.maintitle"/></h1>
+<c:if test="${param.create != null}">
+<h4><fmt:message key="msg.create.prescription"/></h4>
+</c:if>
 <table>
 <c:if test="${clients.size() == 0}">
 <h1><fmt:message key="msg.clients.noclients"/></h1>

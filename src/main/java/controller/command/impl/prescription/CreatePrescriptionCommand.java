@@ -1,7 +1,6 @@
 package controller.command.impl.prescription;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -38,10 +37,7 @@ public class CreatePrescriptionCommand implements Command {
         prescriptionDto.setStatusDto(StatusDto.PENDING);
         PrescriptionDto created = prescriptionService.create(prescriptionDto);
         log.info("Prescription was create, prescription={}", created);
-        req.setAttribute("prescription", created);
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("message", messageManager.getMessage("msg.create.prescription"));
-        return "jsp/prescription/prescription.jsp";
+        return "redirect:controller?command=clients" + "&create= ";
     }
 
 }

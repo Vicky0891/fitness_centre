@@ -22,6 +22,10 @@
 <h5>${requestScope.message}</h5>
 </c:if>
 
+<c:if test="${param.update != null}">
+<h4><fmt:message key="msg.update.feedback"/></h4>
+</c:if>
+
 <c:if test="${sessionScope.user['class'].simpleName == 'ClientDto'}">
 <c:if test="${requestScope.prescription.id == null}">
 <h3><fmt:message key="msg.prescription.noprescription"/></h3>

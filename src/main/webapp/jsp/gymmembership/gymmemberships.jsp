@@ -21,6 +21,9 @@
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>
+<c:if test="${param.delete != null}">
+<h4><fmt:message key="msg.delete.gym"/></h4>
+</c:if>
 <c:if test="${sessionScope.user.roleDto.toString() == 'ADMIN'}">
 <form method="post" action="controller">
 <input type="hidden" name="command" value="create_gymmembership_form"/>

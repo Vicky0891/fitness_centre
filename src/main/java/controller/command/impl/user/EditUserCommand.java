@@ -3,9 +3,7 @@ package controller.command.impl.user;
 import java.time.LocalDate;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import service.TrainerService;
 import service.UserService;
@@ -36,10 +34,7 @@ public class EditUserCommand implements Command {
             createTrainerDto(updated);
             log.info("Trainer was create, trainer id={}", updated.getId());
         }
-        HttpSession session = req.getSession();
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("message", messageManager.getMessage("msg.update.user"));
-        return "redirect:controller?command=all_users";
+        return "redirect:controller?command=all_users&update= ";
     }
 
     /**

@@ -21,6 +21,9 @@
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>
+<c:if test="${param.create != null}">
+<h4><fmt:message key="msg.create.order"/></h4>
+</c:if>
 <h3>#: <c:out value="${requestScope.order.id}"/></h3>
 <h3><fmt:message key="msg.allorders.dateoforder"/>: <c:out value="${requestScope.order.dateOfOrder}"/></h3>
 <h3><fmt:message key="msg.allorders.totalcost"/>: <c:out value="${requestScope.order.totalCost}"/> USD</h3>

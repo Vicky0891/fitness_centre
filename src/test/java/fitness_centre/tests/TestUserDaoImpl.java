@@ -39,7 +39,7 @@ public class TestUserDaoImpl {
     @Test
     public void count() {
         Long actual = userDao.count();
-        Long expected = 6L;
+        Long expected = 5L;
         assertEquals(expected, actual);
     }
 

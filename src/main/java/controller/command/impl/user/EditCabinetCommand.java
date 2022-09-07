@@ -7,7 +7,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -58,9 +57,7 @@ public class EditCabinetCommand implements Command {
         TrainerDto updated = trainerService.update(currentTrainerDto);
         log.info("Trainer was update, trainer={}", updated);
         session.setAttribute("user", updated);
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));
-        return "jsp/user/user.jsp";
+        return "redirect:controller?command=user&id=" + updated.getId() + "&update= ";
     }
 
 }

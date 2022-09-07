@@ -21,7 +21,7 @@
 <h5>${requestScope.message}</h5>
 </c:if>
 
-<h2><fmt:message key="msg.order.addfeedback"/></h2>
+<h3><fmt:message key="msg.order.addfeedback"/></h3>
 <br/>
 <form method="post" action="controller">
 <input name="command" type="hidden" value="add_feedback"/>

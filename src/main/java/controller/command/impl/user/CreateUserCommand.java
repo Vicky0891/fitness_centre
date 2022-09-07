@@ -1,7 +1,6 @@
 package controller.command.impl.user;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -32,8 +31,6 @@ public class CreateUserCommand implements Command {
         HttpSession session = req.getSession();
         session.setAttribute("user", created);
 
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("message", messageManager.getMessage("msg.create.user"));
-        return "jsp/user/user.jsp";
+        return "redirect:controller?command=user&id=" + created.getId() + "&create= ";
     }
 }

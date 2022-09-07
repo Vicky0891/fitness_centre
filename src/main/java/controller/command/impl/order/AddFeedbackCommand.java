@@ -1,7 +1,6 @@
 package controller.command.impl.order;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -25,9 +24,6 @@ public class AddFeedbackCommand implements Command {
         currentOrderDto.setFeedback(feedback);
         OrderDto updated = orderService.addFeedback(currentOrderDto);
         log.info("Feedback was added, order={}", updated);
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("order", updated);
-        req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));
-        return "redirect:controller?command=orders";
+        return "redirect:controller?command=orders" + "&feedback= ";
     }
 }

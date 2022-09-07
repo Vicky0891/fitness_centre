@@ -21,6 +21,14 @@
 <h5>${requestScope.message}</h5>
 </c:if>
 
+<c:if test="${param.create != null}">
+<h4><fmt:message key="msg.create.user"/></h4>
+</c:if>
+
+<c:if test="${param.update != null}">
+<h4><fmt:message key="msg.update.feedback"/></h4>
+</c:if>
+
 <h3><fmt:message key="msg.user.account"/>: <c:out value="${user.id}"/></h3>
 <h3><fmt:message key="msg.login.email"/>: <c:out value="${user.email}"/></h3>
 <form method="post" action="controller">

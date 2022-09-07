@@ -22,6 +22,9 @@
 <c:if test="${orders.size() == 0}">
 <h1><fmt:message key="msg.orders.noorders"/></h1>
 </c:if>
+<c:if test="${param.feedback != null}">
+<h4><fmt:message key="msg.update.feedback"/></h4>
+</c:if>
 <c:if test="${orders.size() > 0}">
 <th>#</th><th><fmt:message key="msg.allorders.dateoforder"/></th><th><fmt:message key="msg.allorders.totalcost"/>, USD</th><th><fmt:message key="msg.allorders.status"/></th><th><fmt:message key="msg.allorders.feedback"/></th><th></th><th><fmt:message key="msg.allorders.orderdetails"/></th>
 <c:forEach items="${requestScope.orders}" var="order">

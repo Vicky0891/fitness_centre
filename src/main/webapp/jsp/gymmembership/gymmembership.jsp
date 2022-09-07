@@ -23,6 +23,14 @@
 <h5>${requestScope.message}</h5>
 </c:if>
 
+<c:if test="${param.create != null}">
+<h4><fmt:message key="msg.create.gym"/></h4>
+</c:if>
+
+<c:if test="${param.edit != null}">
+<h4><fmt:message key="msg.update.gym"/></h4>
+</c:if>
+
 <h3>#: <c:out value="${gymmembership.id}"/></h3>
 <h3><fmt:message key="msg.gymmembership.typeoftraining"/>: <c:out value="${gymmembership.typeOfTraining}"/></h3>
 <h3><fmt:message key="msg.gymmembership.numberofvisits"/>: <c:out value="${gymmembership.numberOfVisits}"/></h3>

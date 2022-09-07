@@ -7,7 +7,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 import controller.command.Command;
-import controller.util.MessageManager;
 import controller.util.ValidatorManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,8 +59,6 @@ public class EditProfileCommand implements Command {
         ClientDto updated = clientService.update(currentClientDto);
         log.info("Client was update, client={}", updated);
         session.setAttribute("user", updated);
-        MessageManager messageManager = (MessageManager) session.getAttribute("manager");
-        req.setAttribute("message", messageManager.getMessage("msg.update.feedback"));
-        return "jsp/user/user.jsp";
+        return "redirect:controller?command=user&id=" + updated.getId() + "&update= ";
     }
 }

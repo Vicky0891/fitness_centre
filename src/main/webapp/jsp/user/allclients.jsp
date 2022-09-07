@@ -21,6 +21,9 @@
 <c:if test="${requestScope.message != null}">
 <h5>${requestScope.message}</h5>
 </c:if>
+<c:if test="${param.update != null}">
+<h4><fmt:message key="msg.update.client"/></h4>
+</c:if>
 <table>
 <c:if test="${clients.size() == 0}">
 <h1><fmt:message key="msg.allclients.noclients"/></h1>
